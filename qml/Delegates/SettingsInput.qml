@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Dialogs 1.2
 import "../Dialogs" as DLG
+import "../Assets" as Assets
 
 Item {
     id: root
@@ -14,10 +15,11 @@ Item {
             id: content
             anchors.centerIn: parent
             font.pixelSize: 22
+            color: Assets.Style.colorTextForeground
         }
         border.width: 2
         border.color: "LightSteelBlue"
-        color: "lightgray"
+        color: Assets.Style.colorTextBackground
         radius: 5
         MouseArea {
             anchors.fill: parent
@@ -26,7 +28,7 @@ Item {
             }
             onReleased: {
                 console.log("released")
-                bg.color = "lightgray"
+                bg.color = Assets.Style.colorTextBackground
             }
 
         }

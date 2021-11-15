@@ -1,5 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
+import "../Assets" as Assets
 
 Item {
     property alias title: titleText.text
@@ -10,7 +11,8 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        implicitHeight: 60
+        implicitHeight: 50
+        radius: 5
         Text {
             id: titleText
             anchors.left: parent.left
@@ -36,7 +38,7 @@ Item {
 
         }
 
-        color: "lightsteelblue"
+        color: Assets.Style.colorSettingsSection
     }
 
 }
