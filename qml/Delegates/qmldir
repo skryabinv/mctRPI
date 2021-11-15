@@ -1,0 +1,3 @@
+module Delegates
+AxisSettingsDelegate 1.0 AxisSettingsDelegate.qml
+BoardSettingsDelegate 1.0 BoardSettingsDelegate.qml

@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/qml">
+        <file alias="main.qml">qml/main.qml</file>
+        <file alias="Views/OperatorView.qml">qml/Views/OperatorView.qml</file>
+        <file alias="Views/ManualView.qml">qml/Views/ManualView.qml</file>
+        <file alias="Views/SettingsView.qml">qml/Views/SettingsView.qml</file>
+        <file alias="Views/StartView.qml">qml/Views/StartView.qml</file>
+        <file alias="Delegates/AxisSettingsDelegate.qml">qml/Delegates/AxisSettingsDelegate.qml</file>
+        <file alias="Delegates/BoardSettingsDelegate.qml">qml/Delegates/BoardSettingsDelegate.qml</file>
+        <file alias="Delegates/qmldir">qml/Delegates/qmldir</file>
+        <file alias="Delegates/SettingsDelegate.qml">qml/Delegates/SettingsDelegate.qml</file>
+        <file alias="Delegates/SettingsLabel.qml">qml/Delegates/SettingsLabel.qml</file>
+        <file alias="Delegates/SettingsInput.qml">qml/Delegates/SettingsInput.qml</file>  
+        <file alias="Dialogs/DialogNumericInput.qml">qml/Dialogs/DialogNumericInput.qml</file>
+    </qresource>
+</RCC>
