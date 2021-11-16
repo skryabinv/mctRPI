@@ -29,13 +29,15 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.rightMargin: 20
             verticalAlignment: Text.AlignVCenter
-            font.pixelSize: 23
-            text: checked ? "\u02C4" : "\u02C5"
-            MouseArea {
-                anchors.fill: parent
-                onClicked: arrow.checked = !arrow.checked
-            }
-
+            font.pixelSize: 28
+            text: checked ? "\u1431" : "\u142f"
+        }
+        MouseArea {
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            width: 50
+            onClicked: arrow.checked = !arrow.checked
         }
 
         color: Assets.Style.colorSettingsSection

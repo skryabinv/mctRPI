@@ -6,7 +6,7 @@ Item {
     id: root
     property string axisName: ""
     property alias checked: titleDelegate.checked
-    implicitHeight: titleDelegate.implicitHeight + (titleDelegate.checked ? content.height : 0)
+    implicitHeight: titleDelegate.implicitHeight + (titleDelegate.checked ? content.implicitHeight : 0)
     SettingsDelegate {
         id: titleDelegate
         anchors.left: root.left
@@ -19,8 +19,10 @@ Item {
         anchors.top: titleDelegate.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.topMargin: 5
+        anchors.topMargin: 10
+        anchors.bottomMargin: 10
         anchors.leftMargin: 5
+        rowSpacing: 5
 
         visible: root.checked
         columns: 4
@@ -64,7 +66,7 @@ Item {
         // Скорость
 
         SettingsLabel {
-            text: "Максимальная скорость, см/мин:"
+            text: "Макс. скорость, см/мин:"
         }
 
         SettingsInput {

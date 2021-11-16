@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "../Assets" as Assets
 
 Item {
     id: root
@@ -48,7 +49,7 @@ Item {
             }
 
         }
-        color: "lightgray"
+        color: Assets.Style.colorBackground
     }
 
     Component {
@@ -81,9 +82,9 @@ Item {
                 }
             }
             gradient: Gradient {
-                GradientStop { position: 0.0; color: "#454647" }
-                GradientStop { position: 0.5; color: Qt.lighter("#454647") }
-                GradientStop { position: 1.0; color: "#454647" }
+                GradientStop { position: 0.0; color: Qt.lighter(Assets.Style.colorTextBackground) }
+                GradientStop { position: 0.5; color: Assets.Style.colorTextBackground }
+                GradientStop { position: 1.0; color: Qt.lighter(Assets.Style.colorTextBackground) }
             }
         }
     }
