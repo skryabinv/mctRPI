@@ -12,7 +12,8 @@ Item {
     Rectangle {
         id: bg
         anchors.fill: parent
-        Text {
+        TextInput {
+            inputMethodHints: Qt.ImhFormattedNumbersOnly
             id: content
             anchors.centerIn: parent
             font.pixelSize: 22
@@ -22,17 +23,27 @@ Item {
         border.color: Assets.Style.colorTextBorder
         color: Assets.Style.colorTextBackground
         radius: 5
-        MouseArea {
-            anchors.fill: parent
-            onPressed: {
-                bg.color = "gray"
-            }
-            onReleased: {
-                console.log("released")
-                bg.color = Assets.Style.colorTextBackground
-            }
+//        MouseArea {
+//            anchors.fill: parent
+//            onPressed: {
+//                bg.color = "gray"
+//            }
+//            onReleased: {
+//                console.log("released")
+//                bg.color = Assets.Style.colorTextBackground
+//                inputPanel.active = true
+//            }
 
-        }
+//        }
+
+//        InputPanel {
+//            id: inputPanel
+//            //: Qt.ImhFormattedNumbersOnly
+//            visible: active
+//            y: active ? parent.height - inputPanel.height : parent.height
+//            anchors.left: parent.left
+//            anchors.right: parent.right
+//        }
     }
 
 
