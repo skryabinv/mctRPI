@@ -12,8 +12,7 @@ Item {
     Rectangle {
         id: bg
         anchors.fill: parent
-        TextInput {
-            inputMethodHints: Qt.ImhFormattedNumbersOnly
+        Text {
             id: content
             anchors.centerIn: parent
             font.pixelSize: 22
@@ -23,27 +22,23 @@ Item {
         border.color: Assets.Style.colorTextBorder
         color: Assets.Style.colorTextBackground
         radius: 5
-//        MouseArea {
-//            anchors.fill: parent
-//            onPressed: {
-//                bg.color = "gray"
-//            }
-//            onReleased: {
-//                console.log("released")
-//                bg.color = Assets.Style.colorTextBackground
-//                inputPanel.active = true
-//            }
+        MouseArea {
+            anchors.fill: parent
+            onPressed: {
+                bg.color = "gray"
+            }
+            onReleased: {
+                console.log("released")
+                bg.color = Assets.Style.colorTextBackground
+                inputDialog.show()
+            }
 
-//        }
+        }
 
-//        InputPanel {
-//            id: inputPanel
-//            //: Qt.ImhFormattedNumbersOnly
-//            visible: active
-//            y: active ? parent.height - inputPanel.height : parent.height
-//            anchors.left: parent.left
-//            anchors.right: parent.right
-//        }
+        DLG.DialogNumericInput {
+            id: inputDialog
+            visible: false
+        }
     }
 
 

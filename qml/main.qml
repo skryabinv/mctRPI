@@ -1,6 +1,7 @@
 import QtQuick 2.14
 import QtQuick.Controls 2.12
 import QtQuick.Window 2.14
+import "Assets" as Assets
 
 Window {
     width: 1024
@@ -20,7 +21,8 @@ Window {
 
             Text {
                id: textArrow
-               text: "\u1438"
+               font.family: Assets.Style.fontAwesome
+               text: "\uf053"
                anchors.left: parent.left
                anchors.leftMargin: 20
                anchors.verticalCenter: parent.verticalCenter

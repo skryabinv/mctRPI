@@ -97,8 +97,9 @@ Item {
         anchors.rightMargin: 20
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 20
-        text: "\u23FB"
+        text: "\uf011"
         font.pixelSize: 28
+        font.family: Assets.Style.fontAwesome
         onPressAndHold: {
             console.log("Try to power off...")
         }

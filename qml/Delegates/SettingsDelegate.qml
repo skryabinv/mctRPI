@@ -30,7 +30,8 @@ Item {
             anchors.rightMargin: 20
             verticalAlignment: Text.AlignVCenter
             font.pixelSize: 28
-            text: checked ? "\u1431" : "\u142f"
+            font.family: Assets.Style.fontAwesome
+            text: checked ? "\uf077" : "\uf078"
         }
         MouseArea {
             anchors.right: parent.right

@@ -7,4 +7,11 @@ Item {
     readonly property color colorTextForeground: "white"
     readonly property color colorSettingsSection: "darkgray"
     readonly property color colorTextBorder: "lightsteelblue"
+    property alias fontAwesome: fontAwesomeLoader.name
+
+    FontLoader {
+        id: fontAwesomeLoader
+        source: "qrc:/fonts/fontawesome.ttf"
+    }
 }
+
