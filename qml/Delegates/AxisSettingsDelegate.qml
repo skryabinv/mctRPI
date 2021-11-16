@@ -6,6 +6,18 @@ Item {
     id: root
     property string axisName: ""
     property alias checked: titleDelegate.checked
+
+    property alias valueLimitLow: limitLow.text
+    property alias valueLimitHigh: limitHigh.text
+    property alias valueDistForSteps: distForSteps.text
+    property alias valueStepsForDist: stepsForDist.text
+    property alias valueSpeed: speed.text
+    property alias valueTimeToSpeed: timeToSpeed.text
+    property alias valuePortStep: portStep.text
+    property alias valuePortDir: portDir.text
+    property alias valuePortHome: portHome.text
+
+
     implicitHeight: titleDelegate.implicitHeight + (titleDelegate.checked ? content.implicitHeight : 0)
     SettingsDelegate {
         id: titleDelegate
@@ -30,19 +42,21 @@ Item {
         // Математические ограничения
 
         SettingsLabel {
-            text: "Мин. значение, мм:"
+            text: "Мин. значение, мм:"            
         }
 
         SettingsInput {
-            text: "123"
+            id: limitLow
+            text: appController.settingsModeController.getLimitLow(axisName)
         }
 
-        SettingsLabel {
+        SettingsLabel {            
             text: "Макс. значение, мм:"
         }
 
         SettingsInput {
-            text: "321"
+            id: limitHigh
+            text: appController.settingsModeController.getLimitHigh(axisName)
         }
 
         // Коэффициент передачи
@@ -52,7 +66,8 @@ Item {
         }
 
         SettingsInput {
-            text: "124"
+            id: distForSteps
+            text: appController.settingsModeController.getDistForSteps(axisName)
         }
 
         SettingsLabel {
@@ -60,7 +75,8 @@ Item {
         }
 
         SettingsInput {
-            text: "765"
+            id: stepsForDist
+            text: appController.settingsModeController.getStepsForDist(axisName)
         }
 
         // Скорость
@@ -70,7 +86,8 @@ Item {
         }
 
         SettingsInput {
-            text: "150"
+            id: speed
+            text: appController.settingsModeController.getSpeed(axisName)
         }
 
         SettingsLabel {
@@ -78,7 +95,8 @@ Item {
         }
 
         SettingsInput {
-            text: "400"
+            id: timeToSpeed
+            text: appController.settingsModeController.getTimeToSpeed(axisName)
         }
 
         // Порт ввода-вывода
@@ -88,14 +106,16 @@ Item {
         }
 
         SettingsInput {
+            id: portStep
             text: "1"
         }
 
-        SettingsLabel {
+        SettingsLabel {            
             text: "Порт DIR:"
         }
 
         SettingsInput {
+            id: portDir
             text: "2"
         }
 
@@ -104,6 +124,7 @@ Item {
         }
 
         SettingsInput {
+            id: portHome
             text: "3"
         }
 

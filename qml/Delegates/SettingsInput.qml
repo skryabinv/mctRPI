@@ -6,7 +6,9 @@ import QtQuick.VirtualKeyboard 2.14
 
 Item {
     id: root
+    property bool isInteger: false
     property alias text: content.text
+    property bool dirty: false
     implicitWidth: Math.max(150, content.implicitWidth)
     implicitHeight: content.height + 20
     Rectangle {
@@ -17,6 +19,9 @@ Item {
             anchors.centerIn: parent
             font.pixelSize: 22
             color: Assets.Style.colorTextForeground
+            onTextChanged: {
+                root.dirty = true
+            }
         }
         border.width: 2
         border.color: Assets.Style.colorTextBorder
@@ -32,13 +37,21 @@ Item {
                 bg.color = Assets.Style.colorTextBackground
                 inputDialog.show()
             }
-
         }
 
         DLG.DialogNumericInput {
             id: inputDialog
             visible: false
         }
+
+        Connections {
+            target: inputDialog
+            function onAccepted(data) {
+                console.log(data)
+                text = data
+            }
+        }
+
     }
 
 

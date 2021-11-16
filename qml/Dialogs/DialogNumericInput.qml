@@ -6,9 +6,10 @@ import "../Assets" as Assets
 
 Item {
     id: root        
-    signal accepted(double value)
+    signal accepted(string value)
     signal rejected()
     property string textData: ""
+    property bool isInteger: false
     anchors.fill: parent
 
     // Прямоугольник фона
@@ -59,7 +60,7 @@ Item {
             // Клавиши
 
             Repeater {
-                model: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "," ]
+                model: [1, 2, 3, 4, 5, 6, 7, 8, 9, 0, "." ]
                 Loader {
                     id: loader
                     sourceComponent: button
@@ -70,7 +71,14 @@ Item {
                     Connections {
                         target: loader.item
                         function onPressed(symbol) {
-                            root.textData += symbol
+                            let tmp = root.textData + symbol
+                            if(!isInteger) {
+                                // Проверить на соответстие double
+
+                            } else {
+                               // Проверит на разделеные точками int
+                            }
+                            root.textData = tmp
                         }
                     }
                 }
@@ -115,7 +123,9 @@ Item {
                     target: loaderOk.item
                     function onPressed(symbol) {
                         hide()
-                        accepted(root.textData)
+                        if(root.textData.length > 0) {
+                            accepted(root.textData)
+                        }
                     }
                 }
             }
