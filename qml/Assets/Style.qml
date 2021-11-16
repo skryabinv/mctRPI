@@ -6,4 +6,5 @@ Item {
     readonly property color colorTextBackground: "#0067D5"
     readonly property color colorTextForeground: "white"
     readonly property color colorSettingsSection: "darkgray"
+    readonly property color colorTextBorder: "lightsteelblue"
 }

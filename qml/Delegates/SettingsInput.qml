@@ -2,6 +2,7 @@ import QtQuick 2.0
 import QtQuick.Dialogs 1.2
 import "../Dialogs" as DLG
 import "../Assets" as Assets
+import QtQuick.VirtualKeyboard 2.14
 
 Item {
     id: root
@@ -18,7 +19,7 @@ Item {
             color: Assets.Style.colorTextForeground
         }
         border.width: 2
-        border.color: "LightSteelBlue"
+        border.color: Assets.Style.colorTextBorder
         color: Assets.Style.colorTextBackground
         radius: 5
         MouseArea {

@@ -1,4 +1,5 @@
-import QtQuick 2.0
+import QtQuick 2.12
+import QtQuick.Controls 2.12
 import "../Assets" as Assets
 
 Item {
@@ -86,6 +87,20 @@ Item {
                 GradientStop { position: 0.5; color: Assets.Style.colorTextBackground }
                 GradientStop { position: 1.0; color: Qt.lighter(Assets.Style.colorTextBackground) }
             }
+        }
+    }
+
+    RoundButton {
+        width: 60
+        height: width
+        anchors.right: parent.right
+        anchors.rightMargin: 20
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 20
+        text: "\u23FB"
+        font.pixelSize: 28
+        onPressAndHold: {
+            console.log("Try to power off...")
         }
     }
 
