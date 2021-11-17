@@ -8,6 +8,8 @@ Window {
     height: 600
     visible: true
 
+    // Верхняя панель
+
     Item {
         id: controlPanel
         property alias title: textTitle.text
@@ -53,6 +55,8 @@ Window {
            }
         }
     }
+
+    // Стэк с окнами
 
     StackView {
         id: stack

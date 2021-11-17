@@ -25,16 +25,15 @@ Item {
         }
         border.width: 2
         border.color: Assets.Style.colorTextBorder
-        color: Assets.Style.colorTextBackground
+        color: Assets.Style.colorBackgroundLight
         radius: 5
         MouseArea {
             anchors.fill: parent
             onPressed: {
-                bg.color = "gray"
+                // bg.color = "gray"
             }
-            onReleased: {
-                console.log("released")
-                bg.color = Assets.Style.colorTextBackground
+            onReleased: {                
+                // bg.color = Assets.Style.colorTextBackground
                 inputDialog.show()
             }
         }

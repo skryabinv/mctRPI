@@ -12,7 +12,7 @@ Item {
     property bool isInteger: false
     anchors.fill: parent
 
-    // Прямоугольник фона
+    // Прямоугольник фона (замылен, не пускает сообщения)
     Rectangle {
         anchors.fill: parent
         color: Assets.Style.colorBackground
@@ -21,6 +21,7 @@ Item {
         MouseArea {
             anchors.fill: parent
             propagateComposedEvents: false
+            onClicked: hide()
         }
     }
 

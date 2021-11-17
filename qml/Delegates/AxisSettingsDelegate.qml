@@ -13,6 +13,8 @@ Item {
     property alias valueStepsForDist: stepsForDist.text
     property alias valueSpeed: speed.text
     property alias valueTimeToSpeed: timeToSpeed.text
+    //property alias valueHomeForwardSpeed:
+    //property alias valueHomeBackwardSpeed:
     property alias valuePortStep: portStep.text
     property alias valuePortDir: portDir.text
     property alias valuePortHome: portHome.text
@@ -99,6 +101,24 @@ Item {
             text: appController.settingsModeController.getTimeToSpeed(axisName)
         }
 
+        SettingsLabel {
+            text: "Скорость HOME вперед, cм/мин:"
+        }
+
+        SettingsInput {
+            id: speedHomeForward
+            text: "2"
+        }
+
+        SettingsLabel {
+            text: "Скорость HOME назад, cм/мин:"
+        }
+
+        SettingsInput {
+            id: speedHomeBackward
+            text: "3"
+        }
+
         // Порт ввода-вывода
 
         SettingsLabel {
@@ -126,7 +146,7 @@ Item {
         SettingsInput {
             id: portHome
             text: "3"
-        }
+        }        
 
         // Включить дополнительную ось
 

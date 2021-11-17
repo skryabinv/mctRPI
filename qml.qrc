@@ -14,5 +14,9 @@
         <file alias="Dialogs/DialogNumericInput.qml">qml/Dialogs/DialogNumericInput.qml</file>
         <file alias="Assets/Style.qml">qml/Assets/Style.qml</file>
         <file alias="Assets/qmldir">qml/Assets/qmldir</file>
+        <file alias="Elements/AxesPanel.qml">qml/Elements/AxesPanel.qml</file>
+        <file alias="Elements/ManualControlPanel.qml">qml/Elements/ManualControlPanel.qml</file>
+        <file alias="Elements/Group.qml">qml/Elements/Group.qml</file>
+        <file alias="Elements/JoggingSettingsPanel.qml">qml/Elements/JoggingSettingsPanel.qml</file>
     </qresource>
 </RCC>

@@ -12,7 +12,7 @@ Item {
             anchors.centerIn: parent
             id: content
             font.pixelSize: 22
-            color: Assets.Style.colorTextForeground
+            color: "lightgray"
         }
     }
 }

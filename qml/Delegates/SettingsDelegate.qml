@@ -20,6 +20,7 @@ Item {
             anchors.leftMargin: 20
             verticalAlignment: Text.AlignVCenter
             font.pixelSize: 28
+            color: Assets.Style.colorTextForeground
         }
 
         Text {
@@ -32,6 +33,7 @@ Item {
             font.pixelSize: 28
             font.family: Assets.Style.fontAwesome
             text: checked ? "\uf077" : "\uf078"
+            color: Assets.Style.colorTextForeground
         }
         MouseArea {
             anchors.right: parent.right
@@ -41,7 +43,7 @@ Item {
             onClicked: arrow.checked = !arrow.checked
         }
 
-        color: Assets.Style.colorSettingsSection
+        color: Qt.lighter(Assets.Style.colorBackground)
     }
 
 }
