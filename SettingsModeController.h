@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QObject>
+#include <QVariant>
 
 // Режим настроек
 class SettingsModeController : public QObject
@@ -15,19 +16,34 @@ public:
     Q_INVOKABLE double getLimitHigh(const QString& axisName) const;
     Q_INVOKABLE double getDistForSteps(const QString& axisName) const;
     Q_INVOKABLE double getStepsForDist(const QString& axisName) const;
-    Q_INVOKABLE QList<int> getPortStep(const QString& axisName) const;
-    Q_INVOKABLE QList<int> getPortDir(const QString& axisName) const;
-    Q_INVOKABLE QList<int> getPortHome(const QString& axisName) const;
+    Q_INVOKABLE QVariantList getPortStep(const QString& axisName) const;
+    Q_INVOKABLE QVariantList getPortDir(const QString& axisName) const;
+    Q_INVOKABLE QVariantList getPortHome(const QString& axisName) const;
     Q_INVOKABLE double getSpeed(const QString& axisName) const;
     Q_INVOKABLE double getTimeToSpeed(const QString& axisName) const;
+    Q_INVOKABLE double getSpeedHomingForward(const QString& axisName) const;
+    Q_INVOKABLE double getSpeedHomingBackward(const QString& axisName) const;
 
     Q_INVOKABLE void setLimitLow(const QString& axisName, double value);
     Q_INVOKABLE void setLimitHigh(const QString& axisName, double value);
+    Q_INVOKABLE void setDistForSteps(const QString& axisName, double value);
+    Q_INVOKABLE void setStepsForDist(const QString& axisName, double value);
     Q_INVOKABLE void setSpeed(const QString& axisName, double value);
     Q_INVOKABLE void setTimeToSpeed(const QString& axisName, double value);
-    Q_INVOKABLE void setPortStep(const QString& axisName, const QList<int>& values);
-    Q_INVOKABLE void setPortHome(const QString& axisName, const QList<int>& values);
-    Q_INVOKABLE void setPortDir(const QString& axisName, const QList<int>& values);
+    Q_INVOKABLE void setPortStep(const QString& axisName, const QVariantList& values);
+    Q_INVOKABLE void setPortHome(const QString& axisName, const QVariantList& values);
+    Q_INVOKABLE void setPortDir(const QString& axisName, const QVariantList& values);
+    Q_INVOKABLE void setSpeedHomingForward(const QString& axisName, double value);
+    Q_INVOKABLE void setSpeedHomingBackward(const QString& axisName, double value);
+
+    Q_INVOKABLE QVariant getAxisSettings(const QString& axisName) const;
+    Q_INVOKABLE void setAxisSettings(const QString& axisName, const QVariantMap& axisSettings);
+
+    Q_INVOKABLE void save() const;
+
+    // Преобразование настроек в таблицу QVariant
+    QVariant toQVariant() const;
+    void fromQVariat(const QVariant& variant);
 
 signals:
 public slots:

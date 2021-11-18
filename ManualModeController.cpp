@@ -31,3 +31,15 @@ bool ManualModeController::homeAllAxes()
     qDebug() << __FUNCTION__ << getSelectedAxis();
     return false;
 }
+
+bool ManualModeController::jogStart(double speedFactor, double distance)
+{
+    qDebug() << __FUNCTION__ << speedFactor << distance;
+    return false;
+}
+
+bool ManualModeController::jogStop()
+{
+    qDebug() << __FUNCTION__;
+    return false;
+}

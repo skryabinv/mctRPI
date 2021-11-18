@@ -13,7 +13,9 @@ public:
     QString getSelectedAxis() const;
     void setSelectedAxis(const QString& axis);
     Q_INVOKABLE bool homeSelectedAxis();
-    Q_INVOKABLE bool homeAllAxes();
+    Q_INVOKABLE bool homeAllAxes();  
+    Q_INVOKABLE bool jogStart(double speedFactor, double distance);    
+    Q_INVOKABLE bool jogStop();
 signals:
     void selectedAxisChanged(const QString axis);
 private:

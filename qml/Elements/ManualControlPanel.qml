@@ -104,26 +104,22 @@ Item {
             }
         }
 
-//        JoggingSettingsPanel {
-//            id: joggingSettings
-//            Layout.fillWidth: true
-//        }
-
-
         StepChooser {
+            id: stepChooser
             Layout.fillWidth: true
             height: 80
             model: [0.0, 0.5, 1.0, 2.5, 5.0, 10.0, 25.0, 50.0]
-            onSelectedValueChanged: {
-                console.log(selectedValue)
+            onStepValueChanged: {
+                console.log(stepValue)
             }
         }
 
         SpeedChooser {
+            id: speedChooser
             Layout.fillWidth: true
             height: 80
             sliderWidth: 560
-            sliderHeight: 24
+            sliderHeight: 28
         }
 
         // Ручное перемещение
@@ -154,9 +150,18 @@ Item {
                     font.pixelSize: 18
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
+                }               
+                onPressed: {
+                    if(stepChooser.stepValue === 0.0) {
+                        appController.manualModeController.jogStart(speedChooser.speedValue, 0.0);
+                    }
                 }
-                onPressAndHold: {
-                   console.log(modelData.text)
+                onReleased: {
+                    if(stepChooser.stepValue === 0.0) {
+                        appController.manualModeController.jogStop()
+                    } else {
+                        appController.manualModeController.jogStart(speedChooser.speedValue, stepChooser.stepValue);
+                    }
                 }
             }
         }

@@ -8,6 +8,10 @@ Rectangle {
     id: root
     color: Assets.Style.colorBackground
 
+    property var settingsAxisX: appController.settingsModeController.getAxisSettings("X")
+    property var settingsAxisY: appController.settingsModeController.getAxisSettings("Y")
+    property var settingsAxisZ: appController.settingsModeController.getAxisSettings("Z")
+
     ListView {
         id: listView
         anchors.top: parent.top
@@ -18,38 +22,53 @@ Rectangle {
 
         ListModel {
             id: listModel
-            ListElement { type: "X" }
-            ListElement { type: "Y" }
-            ListElement { type: "Z" }
-            ListElement { type: "board" }
+            ListElement {
+                type: "X"
+            }
+            ListElement {
+                type: "Y"
+            }
+            ListElement {
+                type: "Z"
+            }
+            ListElement {
+                type: "board"
+            }
         }
 
         DelegateChooser {
             id: chooser
             role: "type"
-            DelegateChoice { roleValue: "X"; delegate:
-                    DLG.AxisSettingsDelegate {
-                    id: xSettingsDelegate
+            DelegateChoice {
+                roleValue: "X";
+                delegate: DLG.AxisSettingsDelegate {
+                    id: xSettingsDelegate                    
                     axisName: "X"
+                    axisData: settingsAxisX
                     width: listView.width
                 }
             }
-            DelegateChoice { roleValue: "Y"; delegate:
-                    DLG.AxisSettingsDelegate {
+            DelegateChoice {
+                roleValue: "Y";
+                delegate: DLG.AxisSettingsDelegate {
                     id: ySettingsDelegate
                     axisName: "Y"
+                    axisData: settingsAxisY
                     width: listView.width
                 }
             }
-            DelegateChoice { roleValue: "Z"; delegate:
-                    DLG.AxisSettingsDelegate {
+            DelegateChoice {
+                roleValue: "Z";
+                delegate: DLG.AxisSettingsDelegate {
                     id: zSettingsDelegate
                     axisName: "Z"
+                    axisData: settingsAxisZ
                     width: listView.width
                 }
             }
-            DelegateChoice { roleValue: "board"; delegate:
-                    DLG.BoardSettingsDelegate {
+            DelegateChoice {
+                roleValue: "board";
+                delegate: DLG.BoardSettingsDelegate {
                     id: boardSettingsDelegate
                     width: listView.width
                 }
@@ -80,6 +99,7 @@ Rectangle {
             spacing: 40
 
             Text {
+                id: clearChanges
                 font.family: Assets.Style.fontAwesome
                 font.pixelSize: 36
                 text: "\uf057"
@@ -88,11 +108,22 @@ Rectangle {
             }
 
             Text {
+                id: saveChanges
                 font.family: Assets.Style.fontAwesome
                 font.pixelSize: 36
                 text: "\uf058"
                 color: "green"
                 verticalAlignment: Text.AlignVCenter
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        // Устанавливаем значения
+                        // Сохраняем в файл
+                        console.log(settingsAxisX.time_to_speed)
+                        console.log(appController.settingsModeController.getTimeToSpeed("X"))
+                    }
+                }
             }
 
             anchors.rightMargin: spacing

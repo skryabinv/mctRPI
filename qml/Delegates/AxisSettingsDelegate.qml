@@ -4,20 +4,22 @@ import QtQuick.Layouts 1.12
 
 Item {
     id: root
+    // Имя оси
     property string axisName: ""
+    property var axisData: ({})
     property alias checked: titleDelegate.checked
 
-    property alias valueLimitLow: limitLow.text
-    property alias valueLimitHigh: limitHigh.text
-    property alias valueDistForSteps: distForSteps.text
-    property alias valueStepsForDist: stepsForDist.text
-    property alias valueSpeed: speed.text
-    property alias valueTimeToSpeed: timeToSpeed.text
-    //property alias valueHomeForwardSpeed:
-    //property alias valueHomeBackwardSpeed:
-    property alias valuePortStep: portStep.text
-    property alias valuePortDir: portDir.text
-    property alias valuePortHome: portHome.text
+//    property alias valueLimitLow: limitLow.text
+//    property alias valueLimitHigh: limitHigh.text
+//    property alias valueDistForSteps: distForSteps.text
+//    property alias valueStepsForDist: stepsForDist.text
+//    property alias valueSpeed: speed.text
+//    property alias valueTimeToSpeed: timeToSpeed.text
+//    property alias valueHomeForwardSpeed: speedHomeForward.text
+//    property alias valueHomeBackwardSpeed: speedHomeBackward.text
+//    property alias valuePortStep: portStep.text
+//    property alias valuePortDir: portDir.text
+//    property alias valuePortHome: portHome.text
 
 
     implicitHeight: titleDelegate.implicitHeight + (titleDelegate.checked ? content.implicitHeight : 0)
@@ -49,7 +51,8 @@ Item {
 
         SettingsInput {
             id: limitLow
-            text: appController.settingsModeController.getLimitLow(axisName)
+            input: axisData.limit_low
+            onInputChanged: axisData.limit_low = input
         }
 
         SettingsLabel {            
@@ -58,7 +61,7 @@ Item {
 
         SettingsInput {
             id: limitHigh
-            text: appController.settingsModeController.getLimitHigh(axisName)
+            input: axisData.limit_high
         }
 
         // Коэффициент передачи
@@ -69,7 +72,7 @@ Item {
 
         SettingsInput {
             id: distForSteps
-            text: appController.settingsModeController.getDistForSteps(axisName)
+            input: axisData.dist_for_steps
         }
 
         SettingsLabel {
@@ -78,7 +81,7 @@ Item {
 
         SettingsInput {
             id: stepsForDist
-            text: appController.settingsModeController.getStepsForDist(axisName)
+            input: axisData.steps_for_dist
         }
 
         // Скорость
@@ -89,7 +92,7 @@ Item {
 
         SettingsInput {
             id: speed
-            text: appController.settingsModeController.getSpeed(axisName)
+            input: axisData.speed
         }
 
         SettingsLabel {
@@ -98,7 +101,8 @@ Item {
 
         SettingsInput {
             id: timeToSpeed
-            text: appController.settingsModeController.getTimeToSpeed(axisName)
+            input: axisData.time_to_speed
+            onInputChanged: axisData.time_to_speed = input
         }
 
         SettingsLabel {
@@ -107,7 +111,7 @@ Item {
 
         SettingsInput {
             id: speedHomeForward
-            text: "2"
+            input: axisData.speed_homing_forward
         }
 
         SettingsLabel {
@@ -116,7 +120,7 @@ Item {
 
         SettingsInput {
             id: speedHomeBackward
-            text: "3"
+            input: axisData.speed_homing_backward
         }
 
         // Порт ввода-вывода
@@ -127,7 +131,7 @@ Item {
 
         SettingsInput {
             id: portStep
-            text: "1"
+            input: axisData.port_step.join(".")
         }
 
         SettingsLabel {            
@@ -136,7 +140,7 @@ Item {
 
         SettingsInput {
             id: portDir
-            text: "2"
+            input: axisData.port_dir.join(".")
         }
 
         SettingsLabel {
@@ -145,10 +149,8 @@ Item {
 
         SettingsInput {
             id: portHome
-            text: "3"
+            input: axisData.port_home.join(".")
         }        
-
-        // Включить дополнительную ось
 
     }    
 

@@ -3,12 +3,12 @@ import "../Assets" as Assets
 
 Item {
     id: root
-    property int selectedIndex: 0
-    property var selectedValue: ({})
+    property int stepIndex: 0
+    property var stepValue: model[stepIndex]
     property var model: []
 
     function getColor(index) {
-        return selectedIndex === index ? Assets.Style.colorTextBackground : Assets.Style.colorBackgroundLight
+        return stepIndex === index ? Assets.Style.colorTextBackground : Assets.Style.colorBackgroundLight
     }
 
     Text {
@@ -39,7 +39,7 @@ Item {
             delegate: Rectangle {
                 id: box
                 implicitWidth: 70
-                implicitHeight: text.implicitHeight + 4
+                implicitHeight: text.implicitHeight + 8
                 color: getColor(index)
                 border.color: Assets.Style.colorTextBorder
                 Text {
@@ -51,10 +51,7 @@ Item {
                 }
                 MouseArea {
                     anchors.fill: parent
-                    onClicked: {
-                        selectedIndex = index
-                        selectedValue = modelData
-                    }
+                    onClicked: stepIndex = index
                 }
             }
         }
@@ -73,10 +70,10 @@ Item {
         radius: 5
     }
 
-
-    Behavior on selectedIndex {
+    Behavior on stepIndex {
         NumberAnimation {
             duration: 100
         }
     }
+
 }

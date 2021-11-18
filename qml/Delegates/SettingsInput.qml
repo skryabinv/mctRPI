@@ -6,8 +6,8 @@ import QtQuick.VirtualKeyboard 2.14
 
 Item {
     id: root
+    property var input: ({})    
     property bool isInteger: false
-    property alias text: content.text
     property bool dirty: false
     implicitWidth: Math.max(150, content.implicitWidth)
     implicitHeight: content.height + 20
@@ -21,7 +21,8 @@ Item {
             color: Assets.Style.colorTextForeground
             onTextChanged: {
                 root.dirty = true
-            }
+            }            
+            text: input
         }
         border.width: 2
         border.color: Assets.Style.colorTextBorder
@@ -45,13 +46,12 @@ Item {
 
         Connections {
             target: inputDialog
-            function onAccepted(data) {
-                console.log(data)
-                text = data
-            }
+            function onAccepted(data) { input = data }
         }
 
     }
+
+
 
 
 

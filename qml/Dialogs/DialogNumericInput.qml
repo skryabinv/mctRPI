@@ -15,7 +15,7 @@ Item {
     // Прямоугольник фона (замылен, не пускает сообщения)
     Rectangle {
         anchors.fill: parent
-        color: Assets.Style.colorBackground
+        color: Assets.Style.colorBackground        
         opacity: 0.75
         // Для модальности
         MouseArea {
@@ -44,12 +44,14 @@ Item {
                 width: str.width
                 height: str.height
                 color: Assets.Style.colorBackgroundLight
+                border.color: Assets.Style.colorTextBorder
+                radius: 5
                 Layout.columnSpan: 3
                 Text {
                     id: str
                     text: root.textData
-                    height: 60
-                    width: 180 + 2 * keyboard.columnSpacing
+                    height: 80
+                    width: 240 + 2 * keyboard.columnSpacing
                     color: Assets.Style.colorTextForeground
                     font.pixelSize: 28
                     clip: true
@@ -173,15 +175,16 @@ Item {
             signal pressed(string symbol)
             property string symbol: ""
             property alias fontName: text.font.family
-            implicitWidth: 60;
-            implicitHeight: 60
+            implicitWidth: 80;
+            implicitHeight: 80
             color: Assets.Style.colorTextBackground
+            radius: 5
             Text {
                 id: text
                 color: Assets.Style.colorTextForeground
                 anchors.centerIn: parent
                 text: symbol
-                font.pixelSize: 18
+                font.pixelSize: 20
             }
             MouseArea {
                 anchors.fill: parent
