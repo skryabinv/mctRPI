@@ -1,6 +1,6 @@
 QT += quick virtualkeyboard
 
-CONFIG += c++11
+CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -12,6 +12,8 @@ SOURCES += \
         OperatorModeController.cpp \
         SettingsModeController.cpp \
         main.cpp
+
+include(core/core.pri)
 
 RESOURCES += qml.qrc \
     fonts.qrc

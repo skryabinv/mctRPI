@@ -121,6 +121,7 @@ Rectangle {
                         // Устанавливаем значения
                         // Сохраняем в файл
                         console.log(settingsAxisX.time_to_speed)
+                        appController.settingsModeController.setAxisSettings("X", settingsAxisX)
                         console.log(appController.settingsModeController.getTimeToSpeed("X"))
                     }
                 }

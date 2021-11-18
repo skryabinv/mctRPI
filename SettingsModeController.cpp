@@ -147,6 +147,7 @@ QVariant SettingsModeController::getAxisSettings(const QString& axisName) const
 
 void SettingsModeController::setAxisSettings(const QString& axisName, const QVariantMap& axisSettings)
 {
+    qDebug() << __FUNCTION__ << axisSettings;
     setLimitLow(axisName, axisSettings["limit_low"].toDouble());
     setLimitHigh(axisName, axisSettings["limit_high"].toDouble());
     setDistForSteps(axisName, axisSettings["dist_for_steps"].toDouble());

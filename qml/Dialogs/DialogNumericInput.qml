@@ -21,7 +21,8 @@ Item {
         MouseArea {
             anchors.fill: parent
             propagateComposedEvents: false
-            onClicked: hide()
+            onPressAndHold: hide()
+            pressAndHoldInterval: 50
         }
     }
 

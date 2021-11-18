@@ -9,19 +9,6 @@ Item {
     property var axisData: ({})
     property alias checked: titleDelegate.checked
 
-//    property alias valueLimitLow: limitLow.text
-//    property alias valueLimitHigh: limitHigh.text
-//    property alias valueDistForSteps: distForSteps.text
-//    property alias valueStepsForDist: stepsForDist.text
-//    property alias valueSpeed: speed.text
-//    property alias valueTimeToSpeed: timeToSpeed.text
-//    property alias valueHomeForwardSpeed: speedHomeForward.text
-//    property alias valueHomeBackwardSpeed: speedHomeBackward.text
-//    property alias valuePortStep: portStep.text
-//    property alias valuePortDir: portDir.text
-//    property alias valuePortHome: portHome.text
-
-
     implicitHeight: titleDelegate.implicitHeight + (titleDelegate.checked ? content.implicitHeight : 0)
     SettingsDelegate {
         id: titleDelegate
