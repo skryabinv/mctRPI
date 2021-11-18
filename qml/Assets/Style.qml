@@ -13,10 +13,16 @@ Item {
     readonly property color colorHomeButtonPressed: "green"
     readonly property color colorHomeButtonReleased: colorTextBackground
     property alias fontAwesome: fontAwesomeLoader.name
+    property alias fontMontserrat: fontMontserratLoader.name
 
     FontLoader {
         id: fontAwesomeLoader
         source: "qrc:/fonts/fontawesome.ttf"
+    }
+
+    FontLoader {
+        id: fontMontserratLoader
+        source: "qrc:/fonts/montserrat.ttf"
     }
 }
 

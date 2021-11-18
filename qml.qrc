@@ -18,5 +18,7 @@
         <file alias="Elements/ManualControlPanel.qml">qml/Elements/ManualControlPanel.qml</file>
         <file alias="Elements/Group.qml">qml/Elements/Group.qml</file>
         <file alias="Elements/JoggingSettingsPanel.qml">qml/Elements/JoggingSettingsPanel.qml</file>
+        <file alias="Elements/StepChooser.qml">qml/Elements/StepChooser.qml</file>
+        <file alias="Elements/SpeedChooser.qml">qml/Elements/SpeedChooser.qml</file>
     </qresource>
 </RCC>

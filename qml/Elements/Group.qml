@@ -16,6 +16,7 @@ Item {
         anchors.leftMargin: 5        
         color: Assets.Style.colorTextForeground
         font.pixelSize: 18
+//        font.family: Assets.Style.fontMontserrat
     }    
     Rectangle {
         id: bg

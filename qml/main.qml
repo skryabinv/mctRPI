@@ -39,7 +39,7 @@ Window {
                 anchors.left: textArrow.right
                 anchors.leftMargin: 50
                 anchors.verticalCenter: parent.verticalCenter
-                font.pixelSize: 32
+                font.pixelSize: 32                
                 color: "white"
             }
 

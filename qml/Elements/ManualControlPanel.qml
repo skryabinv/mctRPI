@@ -104,16 +104,33 @@ Item {
             }
         }
 
-        JoggingSettingsPanel {
-            id: joggingSettings
+//        JoggingSettingsPanel {
+//            id: joggingSettings
+//            Layout.fillWidth: true
+//        }
+
+
+        StepChooser {
             Layout.fillWidth: true
+            height: 80
+            model: [0.0, 0.5, 1.0, 2.5, 5.0, 10.0, 25.0, 50.0]
+            onSelectedValueChanged: {
+                console.log(selectedValue)
+            }
+        }
+
+        SpeedChooser {
+            Layout.fillWidth: true
+            height: 80
+            sliderWidth: 560
+            sliderHeight: 24
         }
 
         // Ручное перемещение
         Group {
             id: groupJogging
             Layout.fillWidth: true
-            height: 150
+            height: 120
             spacing: 40
             title: "Перемещение"
             model: [
