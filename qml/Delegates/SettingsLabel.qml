@@ -11,7 +11,7 @@ Item {
         Text {
             anchors.centerIn: parent
             id: content
-            font.pixelSize: 22
+            font.pixelSize: 18
             color: "lightgray"
         }
     }

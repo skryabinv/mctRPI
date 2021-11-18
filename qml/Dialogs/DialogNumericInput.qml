@@ -43,7 +43,7 @@ Item {
             Rectangle {
                 width: str.width
                 height: str.height
-                color: Assets.Style.colorBackground
+                color: Assets.Style.colorBackgroundLight
                 Layout.columnSpan: 3
                 Text {
                     id: str
