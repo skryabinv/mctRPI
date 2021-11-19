@@ -29,6 +29,7 @@ private:
     // Название, например, "X" : указатель на ось
     std::unordered_map<std::string, axis_ptr_t> mAxisMap;
     // Порт с выходами (для реле например)
+
 };
 
 } // namespace core

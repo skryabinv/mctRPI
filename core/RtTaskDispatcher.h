@@ -15,7 +15,6 @@ class RtTaskDispatcher {
 public:
     // Запланированное действие
     using task_t = std::function<bool()>;
-    RtTaskDispatcher();
     ~RtTaskDispatcher();
     // Добавить задачу в очередь задач
     void scheduleTask(task_t task);
@@ -27,7 +26,9 @@ public:
     void waitForTask(task_t task);
     // Закончить работу
     void scheduleEndTask();
+
 private:
+    RtTaskDispatcher();
     // Непосредственно цикл обработки задач
     void execImpl();
     // Очередь для хранения задач
