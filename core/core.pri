@@ -8,10 +8,12 @@ HEADERS += \
     $$PWD/BitsDecoder.h \
     $$PWD/Board.h \
     $$PWD/GPIO.h \
-    $$PWD/Initializer.h
+    $$PWD/Initializer.h \
+    $$PWD/RtTaskDispatcher.h
 
 SOURCES += \
     $$PWD/Axis.cpp \
     $$PWD/Board.cpp \
     $$PWD/GPIO.cpp \
-    $$PWD/Initializer.cpp
+    $$PWD/Initializer.cpp \
+    $$PWD/RtTaskDispatcher.cpp

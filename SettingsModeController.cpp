@@ -28,7 +28,6 @@ void SettingsModeController::saveToFile(const QString& path) const
 {
     QFile file(path);
     if(file.open(QIODevice::WriteOnly)) {
-//        qDebug() << toVariant();
         file.write(QJsonDocument::fromVariant(toVariant()).toJson());
         file.close();
     }

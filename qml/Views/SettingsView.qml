@@ -90,27 +90,53 @@ Rectangle {
             propagateComposedEvents: false
         }
 
-        Row {
+        Row {            
+            spacing: 40  
+            anchors.rightMargin: spacing
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
-            spacing: 40
+            Rectangle {
+                id: bgClearChanges
+                width: 60
+                height: parent.height
+                color: panel.color
+                Text {
+                    anchors.centerIn: parent
+                    id: clearChanges
+                    font.family: Assets.Style.fontAwesome
+                    font.pixelSize: 36
+                    text: "\uf057"
+                    color: "red"
+                    verticalAlignment: Text.AlignVCenter
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    onPressed: {
+                        bgClearChanges.color = Assets.Style.colorBackgroundLight
+                    }
+                    onReleased: {
+                        bgClearChanges.color = panel.color
+                    }
+                }
 
-            Text {
-                id: clearChanges
-                font.family: Assets.Style.fontAwesome
-                font.pixelSize: 36
-                text: "\uf057"
-                color: "red"
-                verticalAlignment: Text.AlignVCenter
             }
 
-            Text {
-                id: saveChanges
-                font.family: Assets.Style.fontAwesome
-                font.pixelSize: 36
-                text: "\uf058"
-                color: "green"
-                verticalAlignment: Text.AlignVCenter
-
+            Rectangle {
+                id: bgSaveChanges
+                width: 60
+                height: parent.height
+                color: panel.color
+                Text {
+                    anchors.centerIn: parent
+                    id: saveChanges
+                    font.family: Assets.Style.fontAwesome
+                    font.pixelSize: 36
+                    text: "\uf058"
+                    color: "green"
+                    verticalAlignment: Text.AlignVCenter
+                }
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
@@ -121,12 +147,14 @@ Rectangle {
                         appController.settingsModeController.setAxisSettings("Z", settingsAxisZ)
                         appController.settingsModeController.save();
                     }
+                    onPressed: {
+                        bgSaveChanges.color = Assets.Style.colorBackgroundLight
+                    }
+                    onReleased: {
+                        bgSaveChanges.color = panel.color
+                    }
                 }
             }
-
-            anchors.rightMargin: spacing
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
 
         }
 
