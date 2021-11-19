@@ -30,7 +30,7 @@ Item {
         visible: root.checked
         columns: 4
 
-        // Математические ограничения
+        // Нижнее ограничение
 
         SettingsLabel {
             text: "Мин. значение, мм:"            
@@ -38,9 +38,11 @@ Item {
 
         SettingsInput {
             id: limitLow
-            input: axisData.limit_low
-            onInputChanged: axisData.limit_low = input
+            text: axisData.limit_low
+            onTextChanged: axisData.limit_low = parseFloat(text)
         }
+
+        // Верхнее ограничение
 
         SettingsLabel {            
             text: "Макс. значение, мм:"
@@ -48,7 +50,8 @@ Item {
 
         SettingsInput {
             id: limitHigh
-            input: axisData.limit_high
+            text: axisData.limit_high
+            onTextChanged: axisData.limit_high = parseFloat(text)
         }
 
         // Коэффициент передачи
@@ -59,7 +62,9 @@ Item {
 
         SettingsInput {
             id: distForSteps
-            input: axisData.dist_for_steps
+            text: axisData.dist_for_steps
+            onTextChanged: axisData.dist_for_steps = parseFloat(text)
+
         }
 
         SettingsLabel {
@@ -68,7 +73,8 @@ Item {
 
         SettingsInput {
             id: stepsForDist
-            input: axisData.steps_for_dist
+            text: axisData.steps_for_dist
+            onTextChanged: axisData.steps_for_dist = parseFloat(text)
         }
 
         // Скорость
@@ -79,7 +85,8 @@ Item {
 
         SettingsInput {
             id: speed
-            input: axisData.speed
+            text: axisData.speed
+            onTextChanged: axisData.speed = parseFloat(text)
         }
 
         SettingsLabel {
@@ -88,8 +95,8 @@ Item {
 
         SettingsInput {
             id: timeToSpeed
-            input: axisData.time_to_speed
-            onInputChanged: axisData.time_to_speed = input
+            text: axisData.time_to_speed
+            onTextChanged: axisData.time_to_speed = parseFloat(text)
         }
 
         SettingsLabel {
@@ -97,8 +104,9 @@ Item {
         }
 
         SettingsInput {
-            id: speedHomeForward
-            input: axisData.speed_homing_forward
+            id: speedHomeForward            
+            text: axisData.speed_homing_forward
+            onTextChanged: axisData.speed_homing_forward = parseFloat(text)
         }
 
         SettingsLabel {
@@ -106,8 +114,9 @@ Item {
         }
 
         SettingsInput {
-            id: speedHomeBackward
-            input: axisData.speed_homing_backward
+            id: speedHomeBackward            
+            text: axisData.speed_homing_backward
+            onTextChanged: axisData.speed_homing_backward = parseFloat(text)
         }
 
         // Порт ввода-вывода
@@ -118,7 +127,12 @@ Item {
 
         SettingsInput {
             id: portStep
-            input: axisData.port_step.join(".")
+            text: axisData.port_step.join(".")
+            onTextChanged: {
+                if(text !== axisData.port_step.join(".")) {
+                    axisData.port_step = text.split(".").map((item) => { return parseInt(item) })
+                }
+            }
         }
 
         SettingsLabel {            
@@ -127,7 +141,12 @@ Item {
 
         SettingsInput {
             id: portDir
-            input: axisData.port_dir.join(".")
+            text: axisData.port_dir.join(".")
+            onTextChanged: {
+                if(text !== axisData.port_dir.join(".")) {
+                    axisData.port_dir = text.split(".").map((item) => { return parseInt(item) })
+                }
+            }
         }
 
         SettingsLabel {
@@ -136,7 +155,12 @@ Item {
 
         SettingsInput {
             id: portHome
-            input: axisData.port_home.join(".")
+            text: axisData.port_home.join(".")
+            onTextChanged: {
+                if(text !== axisData.port_home.join(".")) {
+                    axisData.port_home = text.split(".").map((item) => { return parseInt(item) })
+                }
+            }
         }        
 
     }    

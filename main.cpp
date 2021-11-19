@@ -6,10 +6,12 @@
 #include "ManualModeController.h"
 #include "OperatorModeController.h"
 #include "SettingsModeController.h"
-
+#include "core/Initializer.h"
 
 int main(int argc, char *argv[])
 {
+
+    core::Initializer coreInitializer;
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);

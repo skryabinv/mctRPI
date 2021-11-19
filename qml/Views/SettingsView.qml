@@ -42,7 +42,6 @@ Rectangle {
             DelegateChoice {
                 roleValue: "X";
                 delegate: DLG.AxisSettingsDelegate {
-                    id: xSettingsDelegate                    
                     axisName: "X"
                     axisData: settingsAxisX
                     width: listView.width
@@ -51,7 +50,6 @@ Rectangle {
             DelegateChoice {
                 roleValue: "Y";
                 delegate: DLG.AxisSettingsDelegate {
-                    id: ySettingsDelegate
                     axisName: "Y"
                     axisData: settingsAxisY
                     width: listView.width
@@ -60,7 +58,6 @@ Rectangle {
             DelegateChoice {
                 roleValue: "Z";
                 delegate: DLG.AxisSettingsDelegate {
-                    id: zSettingsDelegate
                     axisName: "Z"
                     axisData: settingsAxisZ
                     width: listView.width
@@ -69,7 +66,6 @@ Rectangle {
             DelegateChoice {
                 roleValue: "board";
                 delegate: DLG.BoardSettingsDelegate {
-                    id: boardSettingsDelegate
                     width: listView.width
                 }
             }
@@ -120,9 +116,10 @@ Rectangle {
                     onClicked: {
                         // Устанавливаем значения
                         // Сохраняем в файл
-                        console.log(settingsAxisX.time_to_speed)
                         appController.settingsModeController.setAxisSettings("X", settingsAxisX)
-                        console.log(appController.settingsModeController.getTimeToSpeed("X"))
+                        appController.settingsModeController.setAxisSettings("Y", settingsAxisY)
+                        appController.settingsModeController.setAxisSettings("Z", settingsAxisZ)
+                        appController.settingsModeController.save();
                     }
                 }
             }

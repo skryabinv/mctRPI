@@ -1,36 +1,37 @@
-//
-// Created by VLADIMIR on 08.09.2021.
-//
-
-#include "board.h"
-#include "axis.h"
+#include "Board.h"
+#include "Axis.h"
+#include <stdexcept>
+#include <utility>
 
 namespace core {
 
-const axis &board::get_axis(const std::string &name) const {
-    auto it = axis_map_.find(name);
-    if(it == axis_map_.end()) {
-        throw std::invalid_argument("Wrong axis name");        
+Board::~Board() = default;
+
+Board::Board() {
+    mAxisMap["X"] = std::make_unique<Axis>();
+    mAxisMap["Y"] = std::make_unique<Axis>();
+    mAxisMap["Z"] = std::make_unique<Axis>();
+}
+
+Axis& Board::getAxis(const std::string& name) const
+{
+    auto it = mAxisMap.find(name);
+    if(it == mAxisMap.end()) {
+        throw std::invalid_argument("Wrong axis name");
     }
     return *it->second;
 }
 
-void board::init_instance() {
-    instance_.reset(new board());
+void Board::initInstance()
+{
+    sInstance.reset(new Board());
 }
 
-void board::load_settings() {
-
-}
-
-board &board::instance() {
-    if(!instance_)
+Board& Board::instance()
+{
+    if(!sInstance)
         throw std::logic_error("Instance of board object need to be initialized");
-    return *instance_;
+    return *sInstance;
 }
 
-board::board() = default;
-
-board::~board() = default;
-
-}
+} // namespace core

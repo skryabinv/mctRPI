@@ -1,9 +1,4 @@
-//
-// Created by VLADIMIR on 09.09.2021.
-//
-
-#ifndef MOTIONPI_ACC_DEC_PULSE_GENERATOR_H
-#define MOTIONPI_ACC_DEC_PULSE_GENERATOR_H
+#pragma once
 
 #include <cassert>
 #include <cmath>
@@ -15,15 +10,15 @@ namespace core {
 // Выступает как итератор:
 // Далее по запросу выдает длительности следующего интервала
 // в микросекундах
-class acc_dec_pulse_generator {
+class AccDecPulseGenerator {
 public:
     // Инициализация по параметрам движения
-    acc_dec_pulse_generator(double total_dist,    // целевое перемещение (мм)
-                           double dist_per_pulse, // перемещение на имульс (мм)
-                           double speed,          // скорость (мм/мин)
-                           double acc,            // ускорение (мм/сек/сек)
-                           double dec             // замедление (мм/сек/сек)
-                           ) {
+    AccDecPulseGenerator(double total_dist,    // целевое перемещение (мм)
+                         double dist_per_pulse, // перемещение на имульс (мм)
+                         double speed,          // скорость (мм/мин)
+                         double acc,            // ускорение (мм/сек/сек)
+                         double dec             // замедление (мм/сек/сек)
+                         ) {
         assert(dist_per_pulse > 0.0);
         assert(total_dist > 0.0);
         assert(speed > 0.0);
@@ -40,7 +35,7 @@ public:
         calc_stops();
     }
     // Todo: Рассмотреть блок ускорения замедления без ограничения
-    acc_dec_pulse_generator(double dist_per_pulse, double speed, double acc) {
+    AccDecPulseGenerator(double dist_per_pulse, double speed, double acc) {
         assert(dist_per_pulse > 0.0);
         assert(speed > 0.0);
         assert(acc > 0.0);
@@ -58,7 +53,7 @@ public:
         return pulse_counter_ < pulses_;
     }
     // Переход к следующему импульсу
-    acc_dec_pulse_generator& operator++() noexcept {
+    AccDecPulseGenerator& operator++() noexcept {
         ++pulse_counter_;
         current_delay_ = get_delay();
         return *this;
@@ -133,5 +128,3 @@ private:
 };
 
 }
-
-#endif //MOTIONPI_ACC_DEC_PULSE_GENERATOR_H

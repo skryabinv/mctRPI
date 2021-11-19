@@ -8,8 +8,7 @@ Item {
     id: root        
     signal accepted(string value)
     signal rejected()
-    property string textData: ""
-    property bool isInteger: false
+    property string textData: ""    
     anchors.fill: parent
 
     // Прямоугольник фона (замылен, не пускает сообщения)
@@ -30,8 +29,13 @@ Item {
         id: bg
         anchors.centerIn: parent
         color: "black"
-        width: keyboard.implicitWidth + 20
-        height: keyboard.implicitHeight + 20
+        width: keyboard.implicitWidth + 50
+        height: keyboard.implicitHeight + 50
+
+        MouseArea {
+            anchors.fill: parent
+        }
+
         GridLayout {
             id: keyboard
             anchors.centerIn: parent
@@ -76,12 +80,7 @@ Item {
                         target: loader.item
                         function onPressed(symbol) {
                             let tmp = root.textData + symbol
-                            if(!isInteger) {
-                                // Проверить на соответстие double
-
-                            } else {
-                               // Проверит на разделеные точками int
-                            }
+                            // Проверить данные
                             root.textData = tmp
                         }
                     }

@@ -1,39 +1,35 @@
 #pragma once
 
+#include <memory>
 #include <unordered_map>
 #include <string>
-#include <memory>
 
 namespace core {
 
-class axis;
+class Axis;
 
 // Абстракция платы
-class board {
+class Board {
 public:
-    using board_ptr_t = std::unique_ptr<board>;
-    using axis_ptr_t = std::unique_ptr<axis>;
     // Дестркутор
-    ~board();
+    ~Board();
     // Получить ось по имени
     // Если такой оси не существует бросается исключение std::invalid_argument
-    const axis& get_axis(const std::string& name) const;
-    // Инициализация платы
-    // - создание указателя на объект платы
-    // - создание объектов осей и карты портов
-    static void init_instance();
+    Axis& getAxis(const std::string& name) const;
+    static void initInstance();
     // Ссылка на объект платы
-    static board& instance();
-    // Загрузка настроек платы
-    void load_settings();
+    static Board& instance();
 private:
-    board();
+    Board();
+    using board_ptr_t = std::unique_ptr<Board>;
+    using axis_ptr_t = std::unique_ptr<Axis>;
     // Указатель на единственный экземпляр платы
-    inline static board_ptr_t instance_;
+    inline static board_ptr_t sInstance;
     // Таблица осей
     // Название, например, "X" : указатель на ось
-    std::unordered_map<std::string, axis_ptr_t> axis_map_;
+    std::unordered_map<std::string, axis_ptr_t> mAxisMap;
     // Порт с выходами (для реле например)
 };
 
-}
+} // namespace core
+

@@ -10,7 +10,6 @@ class SettingsModeController : public QObject
     Q_PROPERTY(QString descritpion MEMBER mDescription CONSTANT)
 public:
     explicit SettingsModeController(QObject *parent = nullptr);
-    void loadFromFile(const QString& path);
 
     Q_INVOKABLE double getLimitLow(const QString& axisName) const;
     Q_INVOKABLE double getLimitHigh(const QString& axisName) const;
@@ -40,15 +39,16 @@ public:
     Q_INVOKABLE void setAxisSettings(const QString& axisName, const QVariantMap& axisSettings);
 
     Q_INVOKABLE void save() const;
+    Q_INVOKABLE void load();
 
     // Преобразование настроек в таблицу QVariant
-    QVariant toQVariant() const;
-    void fromQVariat(const QVariant& variant);
+    QVariant toVariant() const;
+    void fromVariant(const QVariant& variant);
 
-signals:
-public slots:
-    void saveToFile(const QString& path) const;
+signals:    
 private:
+    void saveToFile(const QString& path) const;
+    void loadFromFile(const QString& path);
     const QString mDescription = tr("Настройки");
 };
 
