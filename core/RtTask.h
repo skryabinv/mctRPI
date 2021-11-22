@@ -16,7 +16,6 @@ public:
     bool isCanceled() const noexcept { return mCanceled; }
     bool isDone() const noexcept { return mDone; }
     void cancel() noexcept { mCanceled = true; }
-    bool canceled() const noexcept { return mCanceled; }
     const auto& getDescription() const noexcept { return mDescription; }
 private:
     std::string mDescription;

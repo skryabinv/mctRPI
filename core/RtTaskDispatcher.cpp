@@ -77,7 +77,11 @@ void RtTaskDispatcher::execImpl() {
         auto task = std::move(mQueue.front());
         mQueue.pop();
         lock.unlock();
-        if(!task->run()) break;
+        mBusyFlag = true;
+        if(!task->run()) {
+            break;
+        }
+        mBusyFlag = false;
         lock.lock();
     }
 }
@@ -107,6 +111,18 @@ void RtTaskDispatcher::scheduleEndTask() {
         std::cout << "EndTask" << std::endl;
         return false;
     }));
+}
+
+void RtTaskDispatcher::cancelCurrentTask()
+{
+    if(mCurrentTask) {
+        mCurrentTask->cancel();
+    }
+}
+
+bool RtTaskDispatcher::getBusyFlag() const noexcept
+{
+    return mBusyFlag;
 }
 
 RtTaskDispatcher &RtTaskDispatcher::getInstance()

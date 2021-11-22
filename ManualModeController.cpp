@@ -1,5 +1,7 @@
 #include "ManualModeController.h"
 #include <QDebug>
+#include "core/Board.h"
+#include "core/Axis.h"
 
 ManualModeController::ManualModeController(QObject *parent) : QObject(parent)
 {
@@ -18,6 +20,20 @@ void ManualModeController::setSelectedAxis(const QString& axis)
         mSelectedAxis = axis;
         emit selectedAxisChanged(mSelectedAxis);
     }
+}
+
+double ManualModeController::getAxisPos(const QString &axis) const
+{
+    return core::Board::instance()
+            .getAxis(axis.toStdString())
+            .getCurrentPos();
+}
+
+double ManualModeController::getSelectedAxisPos() const
+{
+    return core::Board::instance()
+            .getAxis(mSelectedAxis.toStdString())
+            .getCurrentPos();
 }
 
 bool ManualModeController::homeSelectedAxis()
@@ -42,4 +58,9 @@ bool ManualModeController::jogStop()
 {
     qDebug() << __FUNCTION__;
     return false;
+}
+
+void ManualModeController::cancel()
+{
+
 }

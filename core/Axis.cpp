@@ -31,7 +31,7 @@ RtTaskSharedPtr Axis::createTaskJog(double speedFraction, double distance)
     auto func = [outDir, outStep, speed, acc, dec, dpp, distance, this](RtTask& self) {
         AccDecPulseGenerator gen{ distance, dpp, std::abs(speed), acc, dec };
         outDir.setValue(speed > 0);
-        while (self.canceled() && gen) {
+        while (self.isCanceled() && gen) {
            auto delay = gen.getDelayFuncUs<delay::ProxyDelay>();
            outStep.set();
            delay();
@@ -61,7 +61,7 @@ RtTaskSharedPtr Axis::createTaskMoveHome()
         AccDecPulseGenerator gen_fwd{ dpp, speed_fwd, acc };
         out_dir.set();
         while (true) {
-            if(self.canceled()) return true;
+            if(self.isCanceled()) return true;
             auto sw_mask = in_switch.read();
             if(!sw_mask) break; // Концевик размокнут
             // Перекаодируем в маску степов
@@ -79,7 +79,7 @@ RtTaskSharedPtr Axis::createTaskMoveHome()
         out_dir.clr();
         AccDecPulseGenerator gen_back{dpp, speed_back, acc};
         while (true) {
-            if(self.canceled()) return true;
+            if(self.isCanceled()) return true;
             auto sw_mask = in_switch.read();
             if(sw_mask) break; // Концевик размокнут
             // Перекаодируем в маску степов
@@ -111,7 +111,7 @@ RtTaskSharedPtr Axis::createTaskMoveTo(double speedFraction, double position)
     auto func = [=](RtTask& self) {
         AccDecPulseGenerator gen{dist, dpp, std::abs(speed), acc, acc };
         out_dir.setValue(dist > 0);
-        while (!self.canceled() && gen) {
+        while (!self.isCanceled() && gen) {
             auto delay_func = gen.getDelayFuncUs<delay::ProxyDelay, 2>();
             out_step.set();
             delay_func();

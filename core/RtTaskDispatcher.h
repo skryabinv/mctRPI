@@ -26,6 +26,8 @@ public:
     void waitForTask(RtTaskSharedPtr task);
     // Закончить работу
     void scheduleEndTask();
+    void cancelCurrentTask();
+    bool getBusyFlag() const noexcept;
 
     static RtTaskDispatcher& getInstance();
 private:
@@ -40,6 +42,8 @@ private:
     std::mutex mMutex;
     // Фьючер цикла обработки комманд
     std::future<void> mThread;
+    RtTaskSharedPtr mCurrentTask{};
+    std::atomic_bool mBusyFlag{false};
 };
 
 } // namespace core

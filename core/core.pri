@@ -13,7 +13,8 @@ HEADERS += \
     $$PWD/GPIO.h \
     $$PWD/RtTask.h \
     $$PWD/RtTaskDispatcher.h \
-    $$PWD/RtTaskGeneric.h
+    $$PWD/RtTaskGeneric.h \
+    $$PWD/RtTaskMulti.h
 
 SOURCES += \
     $$PWD/AppInit.cpp \
@@ -24,4 +25,5 @@ SOURCES += \
     $$PWD/GPIO.cpp \
     $$PWD/RtTask.cpp \
     $$PWD/RtTaskDispatcher.cpp \
-    $$PWD/RtTaskGeneric.cpp
+    $$PWD/RtTaskGeneric.cpp \
+    $$PWD/RtTaskMulti.cpp

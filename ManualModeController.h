@@ -12,10 +12,13 @@ public:
     explicit ManualModeController(QObject *parent = nullptr);    
     QString getSelectedAxis() const;
     void setSelectedAxis(const QString& axis);
+    Q_INVOKABLE double getAxisPos(const QString& axis) const;
+    Q_INVOKABLE double getSelectedAxisPos() const;
     Q_INVOKABLE bool homeSelectedAxis();
     Q_INVOKABLE bool homeAllAxes();  
     Q_INVOKABLE bool jogStart(double speedFactor, double distance);    
     Q_INVOKABLE bool jogStop();
+    Q_INVOKABLE void cancel();
 signals:
     void selectedAxisChanged(const QString axis);
 private:
