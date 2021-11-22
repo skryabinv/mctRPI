@@ -1,5 +1,6 @@
 #pragma once
 
+#include "RtTask.h"
 #include <future>
 #include <mutex>
 #include <condition_variable>
@@ -14,25 +15,25 @@ namespace core {
 class RtTaskDispatcher {
 public:
     // Запланированное действие
-    using task_t = std::function<bool()>;
     ~RtTaskDispatcher();
     // Добавить задачу в очередь задач
-    void scheduleTask(task_t task);
+    void scheduleTask(RtTaskSharedPtr task);
     // Запустить поток исполнения задач
     bool exec();
     // Блокировать вызывающий поток, пока цикл не завершиться
     void wait();
     // Спланировать задачу и ждать ее завершения
-    void waitForTask(task_t task);
+    void waitForTask(RtTaskSharedPtr task);
     // Закончить работу
     void scheduleEndTask();
 
+    static RtTaskDispatcher& getInstance();
 private:
     RtTaskDispatcher();
     // Непосредственно цикл обработки задач
     void execImpl();
     // Очередь для хранения задач
-    std::queue<task_t> mQueue;
+    std::queue<RtTaskSharedPtr> mQueue;
     // Условная переменная для оповещения
     std::condition_variable mCondition;
     // Мьютекс очереди задач

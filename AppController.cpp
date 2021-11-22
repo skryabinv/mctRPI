@@ -34,3 +34,4 @@ bool AppController::resetMode()
     emit modeReseted();
     return true;
 }
+

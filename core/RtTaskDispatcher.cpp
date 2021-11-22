@@ -1,5 +1,5 @@
 #include "RtTaskDispatcher.h"
-#include "RtTaskDispatcher.h"
+#include "RtTaskGeneric.h"
 #include <pthread.h>
 #include <sched.h>
 #include <iostream>
@@ -11,12 +11,12 @@ static bool configure_realtime(pthread_t thread_id) {
     if (pthread_setschedparam(thread_id, SCHED_FIFO, &sch)) {
         return false;
     }
-//    cpu_set_t cpu_set;
-//    CPU_ZERO(&cpu_set);
-//    CPU_SET(3, &cpu_set);
-//    if (pthread_setaffinity_np(thread_id, sizeof(cpu_set), &cpu_set)) {
-//        return false;
-//    }
+    cpu_set_t cpu_set;
+    CPU_ZERO(&cpu_set);
+    CPU_SET(3, &cpu_set);
+    if (pthread_setaffinity_np(thread_id, sizeof(cpu_set), &cpu_set)) {
+        return false;
+    }
     return true;
 }
 
@@ -38,7 +38,7 @@ RtTaskDispatcher::~RtTaskDispatcher() {
             "/sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq");
 }
 
-void RtTaskDispatcher::scheduleTask(task_t task) {
+void RtTaskDispatcher::scheduleTask(RtTaskSharedPtr task) {
     {
         std::lock_guard<std::mutex> lock{mMutex};
         mQueue.push(std::move(task));
@@ -77,23 +77,25 @@ void RtTaskDispatcher::execImpl() {
         auto task = std::move(mQueue.front());
         mQueue.pop();
         lock.unlock();
-        if(!task()) break;
+        if(!task->run()) break;
         lock.lock();
     }
 }
 
-void RtTaskDispatcher::waitForTask(task_t task) {
+void RtTaskDispatcher::waitForTask(RtTaskSharedPtr task) {
     std::atomic_bool done{false};
-    task_t func = [task{std::move(task)}, &done](){
+    auto func = makeSharedGenericTask(
+            [task{std::move(task)}, &done](auto&){
         try {
-            auto result = task();
+            auto result = task->run();
             done = true;
             return result;
         } catch (std::exception&) {
             done = true;
             throw;
         }
-    };
+    }
+    );
     scheduleTask(std::move(func));
     while (!done) {
         std::this_thread::sleep_for(10ms);
@@ -101,7 +103,15 @@ void RtTaskDispatcher::waitForTask(task_t task) {
 }
 
 void RtTaskDispatcher::scheduleEndTask() {
-    scheduleTask([]{ return false; });
+    scheduleTask(
+                makeSharedGenericTask([](auto&){ return false; })
+                );
+}
+
+RtTaskDispatcher &RtTaskDispatcher::getInstance()
+{
+    static RtTaskDispatcher instance;
+    return instance;
 }
 
 } // namespace core

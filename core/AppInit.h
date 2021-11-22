@@ -1,14 +1,15 @@
 #pragma once
-
+#include <memory>
 
 namespace core {
 
 // RAII Инициализатор
-class Initializer
+class AppInit
 {
 public:
-    Initializer();
-    ~Initializer();
+    AppInit();
+    ~AppInit();
+private:
 };
 
 } // namespace core

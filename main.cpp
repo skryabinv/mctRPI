@@ -6,18 +6,18 @@
 #include "ManualModeController.h"
 #include "OperatorModeController.h"
 #include "SettingsModeController.h"
-#include "core/Initializer.h"
+#include "core/AppInit.h"
 
 int main(int argc, char *argv[])
 {
 
-    core::Initializer coreInitializer;
+    core::AppInit coreInitializer;
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
     QGuiApplication app(argc, argv);
-//    app.setOverrideCursor(Qt::BlankCursor);
+    app.setOverrideCursor(Qt::BlankCursor);
 
     AppController appController;
     QQmlApplicationEngine engine;

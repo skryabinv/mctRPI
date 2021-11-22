@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "Axis.h"
+#include "ExternalOut.h"
 #include <stdexcept>
 #include <utility>
 
@@ -11,6 +12,7 @@ Board::Board() {
     mAxisMap["X"] = std::make_unique<Axis>();
     mAxisMap["Y"] = std::make_unique<Axis>();
     mAxisMap["Z"] = std::make_unique<Axis>();
+    mOut = std::make_unique<ExternalOut>(gpio::pins::UNKNOWN);
 }
 
 Axis& Board::getAxis(const std::string& name) const
@@ -20,6 +22,11 @@ Axis& Board::getAxis(const std::string& name) const
         throw std::invalid_argument("Wrong axis name");
     }
     return *it->second;
+}
+
+ExternalOut &Board::getExternalOut() const
+{
+    return *mOut;
 }
 
 void Board::initInstance()

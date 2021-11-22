@@ -19,9 +19,13 @@ public:
     AxisLimits limits;
     AxisGearRatio gearRatio;
     AxisPorts ports;
+    double getCurrentPos() const;
+    bool isHomingDone() const;
 private:
     // Атомарная позиция в шагах двигателя
-    std::atomic_int64_t mPosInSteps{};
+    std::atomic_int64_t mPosInSteps{0};
+    // Find home flag
+    std::atomic_bool mHomingDone{false};
 
 };
 

@@ -102,6 +102,8 @@ Item {
         font.family: Assets.Style.fontAwesome
         onPressAndHold: {
             console.log("Try to power off...")
+            close();
+            // Notify closing
         }
     }
 

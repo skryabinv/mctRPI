@@ -12,12 +12,13 @@
 template <typename ResType, typename HoldType = double>
 static std::vector<ResType> toStdVector(const QVariantList& variantList) {
     std::vector<ResType> result;
-    for(auto val: variantList) {
+    for(const auto& val: variantList) {
         result.push_back(ResType(val.value<HoldType>()));
     }
     return result;
 }
 
+static constexpr const char* FilePath = ".config";
 
 SettingsModeController::SettingsModeController(QObject *parent) : QObject(parent)
 {
@@ -193,8 +194,6 @@ void SettingsModeController::setTimeToSpeed(const QString& axisName, double valu
 
 void SettingsModeController::setPortStep(const QString& axisName, const QVariantList& values)
 {    
-    qDebug() << __FUNCTION__;
-    qDebug() << values;
     core::Board::instance()
             .getAxis(axisName.toStdString())
             .ports
@@ -267,13 +266,15 @@ void SettingsModeController::setAxisSettings(const QString& axisName, const QVar
 
 void SettingsModeController::save() const
 {    
-    auto path = QDir(QCoreApplication::applicationDirPath()).filePath(".config");
+    auto path = QDir(QCoreApplication::applicationDirPath())
+            .filePath(FilePath);
     saveToFile(path);
 }
 
 void SettingsModeController::load()
 {
-    auto path = QDir(QCoreApplication::applicationDirPath()).filePath(".config");
+    auto path = QDir(QCoreApplication::applicationDirPath())
+            .filePath(FilePath);
     loadFromFile(path);
 }
 
