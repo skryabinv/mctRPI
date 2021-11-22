@@ -115,6 +115,12 @@ public:
         });
 
     }
+    // Set port by logical value
+    void setValue(bool value) const noexcept {
+        if(value) set();
+        else clr();
+    }
+
     // Установить значение порта в 1
     void set() const noexcept {
         set_impl(mask_);

@@ -22,8 +22,8 @@ private:
 };
 
 template <typename Func>
-auto makeSharedGenericTask(Func func) {
-    return std::make_shared<RtTaskGeneric>(std::move(func));
+auto makeSharedGenericTask(Func func, std::string description = {}) {
+    return std::make_shared<RtTaskGeneric>(std::move(func), std::move(description));
 }
 
 }

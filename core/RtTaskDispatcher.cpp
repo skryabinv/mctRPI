@@ -103,9 +103,10 @@ void RtTaskDispatcher::waitForTask(RtTaskSharedPtr task) {
 }
 
 void RtTaskDispatcher::scheduleEndTask() {
-    scheduleTask(
-                makeSharedGenericTask([](auto&){ return false; })
-                );
+    scheduleTask(makeSharedGenericTask([](auto&){
+        std::cout << "EndTask" << std::endl;
+        return false;
+    }));
 }
 
 RtTaskDispatcher &RtTaskDispatcher::getInstance()

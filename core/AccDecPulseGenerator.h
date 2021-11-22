@@ -60,12 +60,12 @@ public:
     }
     // Длительность следующего импульса в микросекундах
     template<typename DelayType = double, uint32_t divider = 1>
-    DelayType delay_us() const noexcept {
+    DelayType getDelayFuncUs() const noexcept {
         return DelayType(1.e6 * (current_delay_ / divider));
     }
     // Длительность следующего импульса в микросекундах
     double operator*() const noexcept {
-        return delay_us();
+        return getDelayFuncUs();
     }
 private:
     // Вычислить длительность для следующего шага

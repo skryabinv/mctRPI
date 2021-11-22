@@ -109,6 +109,11 @@ public:
         return selectSpeedUnits<unit>(mSpeedHomeBack);
     }
 
+    template<SpeedUnits unit>
+    auto getSpeed(double fract) const noexcept {
+        return fract * getSpeed<unit>();
+    }
+
 private:
 
     template<SpeedUnits unit>
