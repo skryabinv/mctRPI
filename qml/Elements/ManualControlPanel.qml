@@ -130,8 +130,14 @@ Item {
             spacing: 40
             title: "Перемещение"
             model: [
-                {  text: "\uf060"  },
-                {  text: "\uf061", }
+                {
+                    text: "\uf060",
+                    dir: -1
+                },
+                {
+                    text: "\uf061",
+                    dir: 1
+                }
             ]
             Button {
                 id: btnJog
@@ -151,16 +157,16 @@ Item {
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }               
-                onPressed: {
+                onPressed: {                    
                     if(stepChooser.stepValue === 0.0) {
-                        appController.manualModeController.jogStart(speedChooser.speedValue, 0.0);
+                        appController.manualModeController.jogStart(modelData.dir * speedChooser.speedValue, 0.0);
                     }
                 }
-                onReleased: {
+                onReleased: {                    
                     if(stepChooser.stepValue === 0.0) {
                         appController.manualModeController.jogStop()
                     } else {
-                        appController.manualModeController.jogStart(speedChooser.speedValue, stepChooser.stepValue);
+                        appController.manualModeController.jogStart(modelData.dir * speedChooser.speedValue, stepChooser.stepValue);
                     }
                 }
             }

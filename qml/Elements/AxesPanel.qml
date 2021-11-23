@@ -52,7 +52,7 @@ Item {
                     id: textPosition
                     Layout.fillWidth: true
                     height: row.height
-                    text: "0000.0000"
+                    text: "0.0"
                     color: root.getAxisColor(modelData)
                     font.pixelSize: 32
                     verticalAlignment: Text.AlignVCenter
@@ -62,6 +62,17 @@ Item {
                         ColorAnimation {
                             duration: 200
                         }
+                    }
+                }
+
+                Timer {
+                    id: timerUpdatePos
+                    running: true
+                    interval: 250
+                    repeat: true
+                    onTriggered: {
+                        let pos = appController.manualModeController.getAxisPos(modelData)
+                        textPosition.text = pos.toFixed(4)
                     }
                 }
             }

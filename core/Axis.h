@@ -28,7 +28,7 @@ public:
     RtTaskSharedPtr createTaskJog(double speedFraction, double distance);
 
     // Task homing (speed settings from speedSettings)
-    RtTaskSharedPtr createTaskMoveHome();
+    RtTaskSharedPtr createTaskFindHome();
 
     // speed - number between 0.0 and 1.0
     // position - pos in mm from home

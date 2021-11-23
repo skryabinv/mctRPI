@@ -78,9 +78,11 @@ void RtTaskDispatcher::execImpl() {
         mQueue.pop();
         lock.unlock();
         mBusyFlag = true;
+        std::cout << "RunTask: " << task->getDescription() << std::endl;
         if(!task->run()) {
             break;
         }
+        std::cout << "EndTask: " << task->getDescription() << std::endl;
         mBusyFlag = false;
         lock.lock();
     }
@@ -90,8 +92,8 @@ void RtTaskDispatcher::waitForTask(RtTaskSharedPtr task) {
     std::atomic_bool done{false};
     auto func = makeSharedGenericTask(
             [task{std::move(task)}, &done](auto&){
-        try {
-            auto result = task->run();
+        try {            
+            auto result = task->run();            
             done = true;
             return result;
         } catch (std::exception&) {

@@ -10,4 +10,20 @@ bool RtTask::run()
     return result;
 }
 
+void RtTask::cancel()
+{
+    mCanceled = true;
+    cancelImpl();
+}
+
+bool RtTask::runImpl()
+{
+    return false;
+}
+
+void RtTask::cancelImpl()
+{
+    // For overriding
+}
+
 } // namespace core

@@ -15,7 +15,7 @@ public:
     // Инициализация по параметрам движения
     AccDecPulseGenerator(double total_dist,    // целевое перемещение (мм)
                          double dist_per_pulse, // перемещение на имульс (мм)
-                         double speed,          // скорость (мм/мин)
+                         double speed,          // скорость (мм/s)
                          double acc,            // ускорение (мм/сек/сек)
                          double dec             // замедление (мм/сек/сек)
                          ) {
@@ -27,7 +27,7 @@ public:
         pulses_ = total_dist / dist_per_pulse;
         acc_ = acc;
         dec_ = dec;
-        speed_ = speed / 60.0;
+        speed_ = speed;
         dist_per_pulse_ = dist_per_pulse;
         acc_scale_ = std::sqrt(2.0 * dist_per_pulse / acc_);
         dec_scale_ = std::sqrt(2.0 * dist_per_pulse / dec_);
@@ -42,7 +42,7 @@ public:
         pulses_ = std::numeric_limits<uint32_t>::max(); // Ставим максимально возможное число импульсов
         acc_ = acc;
         dec_ = acc; // Переписать класс
-        speed_ = speed / 60.0;
+        speed_ = speed;
         dist_per_pulse_ = dist_per_pulse;
         acc_scale_ = std::sqrt(2.0 * dist_per_pulse / acc_);
         dec_scale_ = std::sqrt(2.0 * dist_per_pulse / dec_);
@@ -90,6 +90,7 @@ private:
     void calc_stops() noexcept {
         double s1 = 0.5 * speed_ * speed_ / acc_ / dist_per_pulse_;
         double s2 = 0.5 * speed_ * speed_ / dec_ / dist_per_pulse_;
+        std::cout << __FUNCTION__ << " " << s1 << " " << s2 << std::endl;
         if(s1 + s2 >= pulses_) {
             // Скорость не будет достигнута с заданными параметрами
             stop1_ = static_cast<uint32_t>(dec_ * pulses_ / (dec_ + acc_));

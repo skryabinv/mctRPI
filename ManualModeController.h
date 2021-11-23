@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QObject>
+#include "core/RtTask.h"
+
 
 // Ручной режим управления
 class ManualModeController : public QObject
@@ -24,5 +26,6 @@ signals:
 private:
     const QString mDescription = tr("Режим ручного управления");
     QString mSelectedAxis{"X"};
+    core::RtTaskSharedPtr mCurrentTask{};
 };
 

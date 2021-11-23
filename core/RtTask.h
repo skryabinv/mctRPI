@@ -10,16 +10,17 @@ namespace core {
 class RtTask
 {
 public:
-    RtTask(std::string description = {})
-        : mDescription{std::move(description)} {}
+    RtTask(std::string description = {}, bool done = false)
+        : mDescription{std::move(description)}, mDone{done} {}
     bool run();
     bool isCanceled() const noexcept { return mCanceled; }
     bool isDone() const noexcept { return mDone; }
-    void cancel() noexcept { mCanceled = true; }
+    void cancel();
     const auto& getDescription() const noexcept { return mDescription; }
-private:
-    std::string mDescription;
-    virtual bool runImpl() = 0;
+private:    
+    virtual bool runImpl();
+    virtual void cancelImpl();
+    std::string mDescription{};
     std::atomic_bool mDone{false};
     std::atomic_bool mCanceled{false};
 };

@@ -38,7 +38,7 @@ Item {
 
         SettingsInput {
             id: limitLow
-            text: axisData.limit_low
+            text: axisData.limit_low.toFixed(1)
             onTextChanged: axisData.limit_low = parseFloat(text)
         }
 
@@ -50,19 +50,19 @@ Item {
 
         SettingsInput {
             id: limitHigh
-            text: axisData.limit_high
+            text: axisData.limit_high.toFixed(1)
             onTextChanged: axisData.limit_high = parseFloat(text)
         }
 
         // Коэффициент передачи
 
         SettingsLabel {
-            text: "Перемещение, мкм:"
+            text: "Перемещение, мм:"
         }
 
         SettingsInput {
             id: distForSteps
-            text: axisData.dist_for_steps
+            text: axisData.dist_for_steps.toFixed(1)
             onTextChanged: axisData.dist_for_steps = parseFloat(text)
 
         }
@@ -73,19 +73,19 @@ Item {
 
         SettingsInput {
             id: stepsForDist
-            text: axisData.steps_for_dist
+            text: axisData.steps_for_dist.toFixed(1)
             onTextChanged: axisData.steps_for_dist = parseFloat(text)
         }
 
         // Скорость
 
         SettingsLabel {
-            text: "Макс. скорость, см/мин:"
+            text: "Макс. скорость, мм/мин:"
         }
 
         SettingsInput {
             id: speed
-            text: axisData.speed
+            text: axisData.speed.toFixed(1)
             onTextChanged: axisData.speed = parseFloat(text)
         }
 
@@ -95,7 +95,7 @@ Item {
 
         SettingsInput {
             id: timeToSpeed
-            text: axisData.time_to_speed
+            text: axisData.time_to_speed.toFixed(1)
             onTextChanged: axisData.time_to_speed = parseFloat(text)
         }
 
@@ -105,7 +105,7 @@ Item {
 
         SettingsInput {
             id: speedHomeForward            
-            text: axisData.speed_homing_forward
+            text: axisData.speed_homing_forward.toFixed(1)
             onTextChanged: axisData.speed_homing_forward = parseFloat(text)
         }
 
@@ -115,7 +115,7 @@ Item {
 
         SettingsInput {
             id: speedHomeBackward            
-            text: axisData.speed_homing_backward
+            text: axisData.speed_homing_backward.toFixed(1)
             onTextChanged: axisData.speed_homing_backward = parseFloat(text)
         }
 

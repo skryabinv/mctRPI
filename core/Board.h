@@ -1,5 +1,6 @@
 #pragma once
 
+#include "RtTask.h"
 #include <memory>
 #include <unordered_map>
 #include <string>
@@ -12,12 +13,12 @@ class ExternalOut;
 class Board {
 public:
     ~Board();
-
+    RtTaskSharedPtr createHomeAllTask() const;
     Axis& getAxis(const std::string& name) const;
     ExternalOut& getExternalOut() const;
     static void initInstance();
     // Ссылка на объект платы
-    static Board& instance();
+    static Board& getInstance();
 private:
     Board();
     using board_ptr_t = std::unique_ptr<Board>;

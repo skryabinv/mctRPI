@@ -46,7 +46,7 @@ void SettingsModeController::loadFromFile(const QString& path)
 
 double SettingsModeController::getLimitLow(const QString& axisName) const
 {
-    return core::Board::instance()
+    return core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .limits
             .getLow();
@@ -54,7 +54,7 @@ double SettingsModeController::getLimitLow(const QString& axisName) const
 
 double SettingsModeController::getLimitHigh(const QString& axisName) const
 {
-    return core::Board::instance()
+    return core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .limits
             .getHigh();
@@ -62,7 +62,7 @@ double SettingsModeController::getLimitHigh(const QString& axisName) const
 
 double SettingsModeController::getDistForSteps(const QString& axisName) const
 {
-    return core::Board::instance()
+    return core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .gearRatio
             .getDist();
@@ -70,7 +70,7 @@ double SettingsModeController::getDistForSteps(const QString& axisName) const
 
 double SettingsModeController::getStepsForDist(const QString& axisName) const
 {
-    return core::Board::instance()
+    return core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .gearRatio
             .getSteps();
@@ -79,7 +79,7 @@ double SettingsModeController::getStepsForDist(const QString& axisName) const
 QVariantList SettingsModeController::getPortStep(const QString& axisName) const
 {    
     QVariantList result;
-    for(auto port: core::Board::instance()
+    for(auto port: core::Board::getInstance()
         .getAxis(axisName.toStdString())
         .ports
         .getPortsStep()) {
@@ -91,7 +91,7 @@ QVariantList SettingsModeController::getPortStep(const QString& axisName) const
 QVariantList SettingsModeController::getPortDir(const QString& axisName) const
 {
     QVariantList result;
-    for(auto port: core::Board::instance()
+    for(auto port: core::Board::getInstance()
         .getAxis(axisName.toStdString())
         .ports
         .getPortsDir()) {
@@ -103,7 +103,7 @@ QVariantList SettingsModeController::getPortDir(const QString& axisName) const
 QVariantList SettingsModeController::getPortHome(const QString& axisName) const
 {
     QVariantList result;
-    for(auto port: core::Board::instance()
+    for(auto port: core::Board::getInstance()
         .getAxis(axisName.toStdString())
         .ports
         .getPortsHome()) {
@@ -114,7 +114,7 @@ QVariantList SettingsModeController::getPortHome(const QString& axisName) const
 
 double SettingsModeController::getSpeed(const QString& axisName) const
 {
-    return core::Board::instance()
+    return core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .speedSettings
             .getSpeed<core::SpeedUnits::MM_PER_MIN>();
@@ -122,7 +122,7 @@ double SettingsModeController::getSpeed(const QString& axisName) const
 
 double SettingsModeController::getTimeToSpeed(const QString& axisName) const
 {
-    return core::Board::instance()
+    return core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .speedSettings
             .getSpeedTimeAcc();
@@ -130,7 +130,7 @@ double SettingsModeController::getTimeToSpeed(const QString& axisName) const
 
 double SettingsModeController::getSpeedHomingForward(const QString& axisName) const
 {
-    return core::Board::instance()
+    return core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .speedSettings
             .getSpeedHomeFwd<core::SpeedUnits::MM_PER_MIN>();
@@ -138,7 +138,7 @@ double SettingsModeController::getSpeedHomingForward(const QString& axisName) co
 
 double SettingsModeController::getSpeedHomingBackward(const QString& axisName) const
 {
-    return core::Board::instance()
+    return core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .speedSettings
             .getSpeedHomeBack<core::SpeedUnits::MM_PER_MIN>();
@@ -146,7 +146,7 @@ double SettingsModeController::getSpeedHomingBackward(const QString& axisName) c
 
 void SettingsModeController::setLimitLow(const QString& axisName, double value)
 {
-    core::Board::instance()
+    core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .limits
             .setLow(value);
@@ -154,7 +154,7 @@ void SettingsModeController::setLimitLow(const QString& axisName, double value)
 
 void SettingsModeController::setLimitHigh(const QString& axisName, double value)
 {
-    core::Board::instance()
+    core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .limits
             .setHigh(value);
@@ -162,7 +162,7 @@ void SettingsModeController::setLimitHigh(const QString& axisName, double value)
 
 void SettingsModeController::setDistForSteps(const QString& axisName, double value)
 {
-    core::Board::instance()
+    core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .gearRatio
             .setDist(value);
@@ -170,7 +170,7 @@ void SettingsModeController::setDistForSteps(const QString& axisName, double val
 
 void SettingsModeController::setStepsForDist(const QString& axisName, double value)
 {
-    core::Board::instance()
+    core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .gearRatio
             .setSteps(value);
@@ -178,7 +178,7 @@ void SettingsModeController::setStepsForDist(const QString& axisName, double val
 
 void SettingsModeController::setSpeed(const QString& axisName, double value)
 {
-    core::Board::instance()
+    core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .speedSettings
             .setSpeed(value);
@@ -186,7 +186,7 @@ void SettingsModeController::setSpeed(const QString& axisName, double value)
 
 void SettingsModeController::setTimeToSpeed(const QString& axisName, double value)
 {
-    core::Board::instance()
+    core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .speedSettings
             .setSpeedTime(value);
@@ -194,7 +194,7 @@ void SettingsModeController::setTimeToSpeed(const QString& axisName, double valu
 
 void SettingsModeController::setPortStep(const QString& axisName, const QVariantList& values)
 {    
-    core::Board::instance()
+    core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .ports
             .setPortsStep(toStdVector<uint32_t>(values));
@@ -202,7 +202,7 @@ void SettingsModeController::setPortStep(const QString& axisName, const QVariant
 
 void SettingsModeController::setPortHome(const QString& axisName, const QVariantList& values)
 {    
-    core::Board::instance()
+    core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .ports
             .setPortsHome(toStdVector<uint32_t>(values));
@@ -210,7 +210,7 @@ void SettingsModeController::setPortHome(const QString& axisName, const QVariant
 
 void SettingsModeController::setPortDir(const QString& axisName, const QVariantList& values)
 {
-    core::Board::instance()
+    core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .ports
             .setPortsDir(toStdVector<uint32_t>(values));
@@ -218,7 +218,7 @@ void SettingsModeController::setPortDir(const QString& axisName, const QVariantL
 
 void SettingsModeController::setSpeedHomingForward(const QString& axisName, double value)
 {
-    core::Board::instance()
+    core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .speedSettings
             .setSpeedHomeFwd(value);
@@ -226,7 +226,7 @@ void SettingsModeController::setSpeedHomingForward(const QString& axisName, doub
 
 void SettingsModeController::setSpeedHomingBackward(const QString& axisName, double value)
 {
-    core::Board::instance()
+    core::Board::getInstance()
             .getAxis(axisName.toStdString())
             .speedSettings
             .setSpeedNomeBack(value);

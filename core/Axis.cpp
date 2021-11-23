@@ -3,12 +3,13 @@
 #include "AccDecPulseGenerator.h"
 #include "Delay.h"
 #include <exception>
+#include <QDebug>
 
 namespace core {
 
 double Axis::getCurrentPos() const
 {
-    return 0.0;
+    return mPosInSteps * gearRatio.getMmsPerStep();
 }
 
 bool Axis::isHomingDone() const
@@ -23,29 +24,36 @@ RtTaskSharedPtr Axis::createTaskJog(double speedFraction, double distance)
     auto speed = speedSettings.getSpeed<SpeedUnits::MM_PER_SEC>(speedFraction);
     auto acc = speedSettings.getAcceleration();
     auto dec = speedSettings.getDeceleration();
-    auto dpp = gearRatio.getMmsPerStep();
+    auto dpp = gearRatio.getMmsPerStep();   
     if(distance == 0.0) {
         // Moving continuously
         distance = speed < 0 ? getCurrentPos() - limits.getLow() : limits.getHigh() - getCurrentPos();
+    } else {
+        // Moving by steps
+        auto nextPos = getCurrentPos() + (speed > 0 ? distance : -distance);
+        distance = std::abs(limits.clamp(nextPos) - getCurrentPos());
     }
+    qDebug() << __FUNCTION__ << distance << dpp << speed << acc << dec;
     auto func = [outDir, outStep, speed, acc, dec, dpp, distance, this](RtTask& self) {
+        if(distance == 0.0) return true;
         AccDecPulseGenerator gen{ distance, dpp, std::abs(speed), acc, dec };
         outDir.setValue(speed > 0);
-        while (self.isCanceled() && gen) {
+        int inc = speed > 0 ? 1 : -1;
+        while (!self.isCanceled() && gen) {
            auto delay = gen.getDelayFuncUs<delay::ProxyDelay>();
            outStep.set();
            delay();
            outStep.clr();
            delay();
-           ++gen;
-           ++mPosInSteps;
+           ++gen;           
+           mPosInSteps += inc;
         }
         return true;
     };
     return makeSharedGenericTask(std::move(func), "TaskAxisJog");
 }
 
-RtTaskSharedPtr Axis::createTaskMoveHome()
+RtTaskSharedPtr Axis::createTaskFindHome()
 {
     auto out_dir = ports.getPortDir();
     auto out_step = ports.getPortStep();
@@ -73,7 +81,7 @@ RtTaskSharedPtr Axis::createTaskMoveHome()
             out_step.clr(mask);
             delay_func();
             ++gen_fwd;
-            ++mPosInSteps;
+            --mPosInSteps;
         }
         // Едем назад пока концевики разомкнуты
         out_dir.clr();
@@ -91,8 +99,12 @@ RtTaskSharedPtr Axis::createTaskMoveHome()
             delay_func();
             ++gen_back;
             ++mPosInSteps;
-        }
+        }        
+        mPosInSteps = 0;
         mHomingDone = true;
+        // Move in positive direction
+        // AccDecPulseGenerator gen_pos{dpp, speed_back, acc};
+
         return true;
     };
     return makeSharedGenericTask(std::move(func), "TaskAxisHoming");

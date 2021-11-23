@@ -2,8 +2,10 @@
 #include <QDebug>
 #include "core/Board.h"
 #include "core/Axis.h"
+#include "core/RtTaskDispatcher.h"
 
-ManualModeController::ManualModeController(QObject *parent) : QObject(parent)
+ManualModeController::ManualModeController(QObject *parent) : QObject(parent),
+    mCurrentTask{std::make_shared<core::RtTask>("TaskEmpty", true)}
 {
 
 }
@@ -14,8 +16,7 @@ QString ManualModeController::getSelectedAxis() const
 }
 
 void ManualModeController::setSelectedAxis(const QString& axis)
-{
-    qDebug() << __FUNCTION__ << axis;
+{    
     if(mSelectedAxis != axis) {
         mSelectedAxis = axis;
         emit selectedAxisChanged(mSelectedAxis);
@@ -24,43 +25,64 @@ void ManualModeController::setSelectedAxis(const QString& axis)
 
 double ManualModeController::getAxisPos(const QString &axis) const
 {
-    return core::Board::instance()
+    return core::Board::getInstance()
             .getAxis(axis.toStdString())
             .getCurrentPos();
 }
 
 double ManualModeController::getSelectedAxisPos() const
 {
-    return core::Board::instance()
+    return core::Board::getInstance()
             .getAxis(mSelectedAxis.toStdString())
             .getCurrentPos();
 }
 
 bool ManualModeController::homeSelectedAxis()
-{
-    qDebug() << __FUNCTION__ << getSelectedAxis();
+{    
+    if(mCurrentTask->isDone()) {
+        mCurrentTask = core::Board::getInstance()
+                .getAxis(getSelectedAxis().toStdString())
+                .createTaskFindHome();
+        core::RtTaskDispatcher::getInstance()
+                .scheduleTask(mCurrentTask);
+        return true;
+    }
     return false;
 }
 
 bool ManualModeController::homeAllAxes()
 {
-    qDebug() << __FUNCTION__ << getSelectedAxis();
+    if(mCurrentTask->isDone()) {
+        mCurrentTask = core::Board::getInstance()
+                .createHomeAllTask();
+        core::RtTaskDispatcher::getInstance()
+                .scheduleTask(mCurrentTask);
+        return true;
+    }
     return false;
 }
 
 bool ManualModeController::jogStart(double speedFactor, double distance)
-{
-    qDebug() << __FUNCTION__ << speedFactor << distance;
+{    
+    if(mCurrentTask->isDone()) {
+        qDebug() << __FUNCTION__ << mCurrentTask->isDone();
+        mCurrentTask = core::Board::getInstance()
+                .getAxis(getSelectedAxis().toStdString())
+                .createTaskJog(speedFactor, distance);
+        core::RtTaskDispatcher::getInstance()
+                .scheduleTask(mCurrentTask);
+        return true;
+    }
     return false;
 }
 
 bool ManualModeController::jogStop()
 {
-    qDebug() << __FUNCTION__;
-    return false;
+    mCurrentTask->cancel();
+    return true;
 }
 
 void ManualModeController::cancel()
 {
-
+    mCurrentTask->cancel();
 }

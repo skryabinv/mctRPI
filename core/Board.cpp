@@ -1,8 +1,10 @@
 #include "Board.h"
 #include "Axis.h"
 #include "ExternalOut.h"
+#include "RtTaskMulti.h"
 #include <stdexcept>
 #include <utility>
+#include <initializer_list>
 
 namespace core {
 
@@ -13,6 +15,17 @@ Board::Board() {
     mAxisMap["Y"] = std::make_unique<Axis>();
     mAxisMap["Z"] = std::make_unique<Axis>();
     mOut = std::make_unique<ExternalOut>(gpio::pins::UNKNOWN);
+}
+
+RtTaskSharedPtr Board::createHomeAllTask() const
+{
+    auto result = std::make_shared<RtTaskMulti>(
+                std::initializer_list<RtTaskSharedPtr>{
+                    getAxis("X").createTaskFindHome(),
+                    getAxis("Y").createTaskFindHome(),
+                    getAxis("Z").createTaskFindHome()
+                });
+    return result;
 }
 
 Axis& Board::getAxis(const std::string& name) const
@@ -34,7 +47,7 @@ void Board::initInstance()
     sInstance.reset(new Board());
 }
 
-Board& Board::instance()
+Board& Board::getInstance()
 {
     if(!sInstance)
         throw std::logic_error("Instance of board object need to be initialized");

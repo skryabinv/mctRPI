@@ -19,6 +19,18 @@ Item {
         anchors.top:  parent.top
         anchors.right: parent.right
         anchors.bottom: parent.bottom
+
+        Elem.CancelButton {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.margins: 20
+            height: 60
+            onPressed: {
+                appController.manualModeController.cancel()
+            }
+        }
+
     }
 
 }

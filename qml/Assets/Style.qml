@@ -12,6 +12,8 @@ Item {
     readonly property color colorTextSelectedAxis: "limegreen"
     readonly property color colorHomeButtonPressed: "green"
     readonly property color colorHomeButtonReleased: colorTextBackground
+    readonly property color colorCancelButtonReleased: "#dd4533"
+    readonly property color colorCancelButtonPressed: "#45aa33"
     property alias fontAwesome: fontAwesomeLoader.name
     property alias fontMontserrat: fontMontserratLoader.name
 

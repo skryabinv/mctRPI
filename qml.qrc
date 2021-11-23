@@ -19,5 +19,6 @@
         <file alias="Elements/Group.qml">qml/Elements/Group.qml</file>
         <file alias="Elements/StepChooser.qml">qml/Elements/StepChooser.qml</file>
         <file alias="Elements/SpeedChooser.qml">qml/Elements/SpeedChooser.qml</file>
+        <file alias="Elements/CancelButton.qml">qml/Elements/CancelButton.qml</file>
     </qresource>
 </RCC>
