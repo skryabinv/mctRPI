@@ -62,43 +62,32 @@ Item {
         // Кнопки базирования
         Group {
             id: groupHoming
+
             Layout.fillWidth: true
             title: "Поиск HOME"
             height: 100
             model: [
                 {
-                    id: 0,
+                    action: "homeSelectedAxis",
                     text: "Выбранная ось",
                 },
                 {
-                    id: 1,
+                    action: "homeAllAxes",
                     text: "Все оси",
                 }
             ]
-            Button {
 
-                id: btnHome
+            DelayButtonExt {
                 text: modelData.text
-                background: Rectangle {
-                    color: parent.pressed ? Assets.Style.colorTextBackground : Qt.lighter(Assets.Style.colorBackground)
-                    border.color: Assets.Style.colorTextBorder
-                    implicitWidth: 250
-                    implicitHeight: 40
-                    radius: 5
-                }
-                contentItem:  Text {
-                    anchors.centerIn: parent
-                    text: btnHome.text
-                    color: Assets.Style.colorTextForeground
-                    font.pixelSize: 18
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-                onPressAndHold: {
-                    if(modelData.id === 0) {
-                        appController.manualModeController.homeSelectedAxis()
-                    } else {
-                        appController.manualModeController.homeAllAxes()
+                keepChecked: false
+                implicitWidth: 250
+                implicitHeight: 40
+                font.pixelSize: 18
+                delay: 1000
+                onActivated: {
+                    switch(modelData.action) {
+                    case "homeSelectedAxis": appController.manualModeController.homeSelectedAxis(); break;
+                    case "homeAllAxes": appController.manualModeController.homeAllAxes(); break;
                     }
                 }
             }

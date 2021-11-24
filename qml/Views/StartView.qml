@@ -64,7 +64,7 @@ Item {
             radius: 15
             border {
                 width: 4
-                color: "black"
+                color: mouseArea.pressed ?  Assets.Style.colorTextBorder : Assets.Style.colorBackgroundLight
             }
             Text {
                 id: text
@@ -77,6 +77,7 @@ Item {
                 color: "white"
             }
             MouseArea {
+                id: mouseArea
                 anchors.fill: parent
                 onClicked: {
                     rect.clicked();

@@ -20,5 +20,6 @@
         <file alias="Elements/StepChooser.qml">qml/Elements/StepChooser.qml</file>
         <file alias="Elements/SpeedChooser.qml">qml/Elements/SpeedChooser.qml</file>
         <file alias="Elements/CancelButton.qml">qml/Elements/CancelButton.qml</file>
+        <file alias="Elements/DelayButtonExt.qml">qml/Elements/DelayButtonExt.qml</file>
     </qresource>
 </RCC>

@@ -85,4 +85,5 @@ bool ManualModeController::jogStop()
 void ManualModeController::cancel()
 {
     mCurrentTask->cancel();
+    emit taskCanceled();
 }

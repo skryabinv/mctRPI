@@ -23,6 +23,7 @@ public:
     Q_INVOKABLE void cancel();
 signals:
     void selectedAxisChanged(const QString axis);
+    void taskCanceled();
 private:
     const QString mDescription = tr("Режим ручного управления");
     QString mSelectedAxis{"X"};

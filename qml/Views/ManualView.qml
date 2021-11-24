@@ -20,7 +20,9 @@ Item {
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
+
         Elem.CancelButton {
+            id: cancelBtn
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
@@ -28,6 +30,20 @@ Item {
             height: 60
             onPressed: {
                 appController.manualModeController.cancel()
+            }
+        }
+
+        Elem.DelayButtonExt {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: cancelBtn.top
+            anchors.margins: 20
+            height: 60
+            delay: 2000
+            text: checked ? "Выключить разряд" : "Включить разряд"
+            font.pixelSize: 28
+            onActivated: {
+                console.log("Plazma")
             }
         }
 
