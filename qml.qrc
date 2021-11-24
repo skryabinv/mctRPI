@@ -21,5 +21,7 @@
         <file alias="Elements/SpeedChooser.qml">qml/Elements/SpeedChooser.qml</file>
         <file alias="Elements/CancelButton.qml">qml/Elements/CancelButton.qml</file>
         <file alias="Elements/DelayButtonExt.qml">qml/Elements/DelayButtonExt.qml</file>
+        <file alias="Elements/InfoPanel.qml">qml/Elements/InfoPanel.qml</file>
+        <file alias="Elements/InfoSymbol.qml">qml/Elements/InfoSymbol.qml</file>
     </qresource>
 </RCC>

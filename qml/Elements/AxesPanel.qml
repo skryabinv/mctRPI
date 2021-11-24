@@ -5,6 +5,7 @@ import "../Assets" as Assets
 
 Item {
     id: root
+    implicitHeight: listView.implicitHeight
     property string selectedAxis: appController.manualModeController.selectedAxis
 
     function getAxisColor(axis) {
@@ -31,7 +32,7 @@ Item {
             anchors.leftMargin: 10
             anchors.rightMargin: 10
             color: Qt.lighter(Assets.Style.colorBackground)
-            border.color: Assets.Style.colorTextBorder
+//            border.color: Assets.Style.colorTextBorder
             radius: 5
             RowLayout {
                 id: row

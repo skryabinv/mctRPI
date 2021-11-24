@@ -11,6 +11,7 @@ SOURCES += \
         ManualModeController.cpp \
         OperatorModeController.cpp \
         SettingsModeController.cpp \
+        TaskAdapter.cpp \
         main.cpp
 
 include(core/core.pri)
@@ -33,4 +34,5 @@ HEADERS += \
     AppController.h \
     ManualModeController.h \
     OperatorModeController.h \
-    SettingsModeController.h
+    SettingsModeController.h \
+    TaskAdapter.h
