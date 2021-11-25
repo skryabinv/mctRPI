@@ -19,7 +19,7 @@ Text {
     property color colorActive: "limegreen"
     property color colorAlert: "red"
     property alias alertAnimationDuration: alertAnimation.duration
-    font.pixelSize: 24
+    font.pixelSize: 32
     font.family: Assets.Style.fontAwesome
 
     onModeChanged: {

@@ -4,8 +4,11 @@
 #include "core/RtTaskDispatcher.h"
 #include "core/ExternalOut.h"
 #include "TaskAdapter.h"
+#include <QDebug>
 
-BoardController::BoardController(QObject *parent) : QObject(parent)
+BoardController::BoardController(QObject *parent)
+    : QObject(parent),
+    mCurrentTask{std::make_shared<core::RtTask>("TaskEmpty", true)}
 {
 
 }
@@ -20,11 +23,12 @@ double BoardController::getAxisPos(const QString &axis) const
 bool BoardController::homeAxis(const QString &axis)
 {
     if(mCurrentTask->isDone()) {
-        mCurrentTask = wrapTask(
-                core::Board::getInstance()
-                .getAxis(axis.toStdString())
-                .createTaskFindHome()
-                );
+        mCurrentTask = wrapHomingTask(
+                    core::Board::getInstance()
+                    .getAxis(axis.toStdString())
+                    .createTaskFindHome(),
+                    axis
+                    );
         core::RtTaskDispatcher::getInstance()
                 .scheduleTask(mCurrentTask);
         return true;
@@ -35,9 +39,10 @@ bool BoardController::homeAxis(const QString &axis)
 bool BoardController::homeAllAxis()
 {
     if(mCurrentTask->isDone()) {
-        mCurrentTask = wrapTask(
+        mCurrentTask = wrapHomingTask(
                     core::Board::getInstance()
-                    .createHomeAllTask()
+                    .createHomeAllTask(),
+                    QStringLiteral("XYZ")
                     );
         core::RtTaskDispatcher::getInstance()
                 .scheduleTask(mCurrentTask);
@@ -73,9 +78,21 @@ bool BoardController::isHomingDone(const QString &axis) const
             .isHomingDone();
 }
 
-bool BoardController::setOutEnabled(bool value)
+bool BoardController::setOutputEnabled(bool value)
 {
+    qDebug() << __FUNCTION__ << value;
     Q_UNUSED(value)
+    emit outputStateChanged(value);
+    return true;
+}
+
+bool BoardController::isBusy() const
+{
+    return !mCurrentTask->isDone();
+}
+
+bool BoardController::getOutputState() const
+{
     return false;
 }
 
@@ -92,5 +109,21 @@ core::RtTaskSharedPtr BoardController::wrapTask(core::RtTaskSharedPtr task)
             this, &BoardController::taskStarted);
     connect(result.get(), &TaskAdapter::taskFinished,
             this, &BoardController::taskFinished);
+    return result;
+}
+
+core::RtTaskSharedPtr BoardController::wrapHomingTask(core::RtTaskSharedPtr task,
+                                                      const QString &axes)
+{
+    auto result = createTaskAdapter(std::move(task));
+    connect(result.get(), &TaskAdapter::taskStarted,
+            this, &BoardController::taskStarted);
+    connect(result.get(), &TaskAdapter::taskFinished,
+            this, [axes, this](bool canceled){
+        if(!canceled) {
+            emit axesHomingDone(axes);
+        }
+        emit taskFinished(canceled);
+    });
     return result;
 }

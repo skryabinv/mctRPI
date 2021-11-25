@@ -3,11 +3,11 @@ import "../Assets" as Assets
 
 Item {
     id: root
-    property int modeHomeX: 0
-    property int modeHomeY: 0
-    property int modeHomeZ: 0
-    property int modePlasma: 0
-    property int modeBusy: 0
+    property int modeHomeX: boardController.isHomingDone("X") ? InfoSymbol.Modes.Active : InfoSymbol.Modes.Alert
+    property int modeHomeY: boardController.isHomingDone("Y") ? InfoSymbol.Modes.Active : InfoSymbol.Modes.Alert
+    property int modeHomeZ: boardController.isHomingDone("Z") ? InfoSymbol.Modes.Active : InfoSymbol.Modes.Alert
+    property int modePlasma: boardController.getOutputState() ? InfoSymbol.Modes.Active : InfoSymbol.Modes.Inactive
+    property int modeBusy: boardController.isBusy() ? InfoSymbol.Modes.Active : InfoSymbol.Modes.Inactive
     Rectangle {
         anchors.fill: parent
         color: Assets.Style.colorBackgroundLight
@@ -32,5 +32,41 @@ Item {
                 }
             }
         }
+    }
+
+    Connections {
+        target: boardController
+        function onTaskStarted() {
+            modeBusy = InfoSymbol.Modes.Active
+        }
+
+        function onTaskFinished(canceled) {
+            modeBusy = InfoSymbol.Modes.Inactive
+        }
+
+        function onOutputStateChanged(value) {
+            if(value) {
+                modePlasma = InfoSymbol.Modes.Active
+            } else {
+                modePlasma = InfoSymbol.Modes.Inactive
+            }
+        }
+
+        function onAxesHomingDone(axes) {
+            if(axes.includes("X")) {
+                modeHomeX = InfoSymbol.Modes.Active
+            }
+            if(axes.includes("Y")) {
+                modeHomeY = InfoSymbol.Modes.Active
+            }
+            if(axes.includes("Z")) {
+                modeHomeZ = InfoSymbol.Modes.Active
+            }
+        }
+    }
+
+    Component.onCompleted:  {
+        console.log("completed", boardController.isHomingDone("X"), modeHomeX)
+
     }
 }

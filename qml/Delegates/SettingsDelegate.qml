@@ -11,7 +11,7 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        implicitHeight: 50
+        implicitHeight: 40
         radius: 5
         Text {
             id: titleText
@@ -36,14 +36,11 @@ Item {
             color: Assets.Style.colorTextForeground
         }
         MouseArea {
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            width: 50
+            anchors.fill: parent
             onClicked: arrow.checked = !arrow.checked
         }
 
-        color: Qt.lighter(Assets.Style.colorBackground)
+        color: arrow.checked ? Assets.Style.colorTextBackground : Assets.Style.colorBackgroundLight
     }
 
 }

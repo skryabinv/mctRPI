@@ -4,6 +4,7 @@
 #include "core/Axis.h"
 #include "core/RtTaskDispatcher.h"
 #include "TaskAdapter.h"
+#include "BoardController.h"
 
 ManualModeController::ManualModeController(QObject *parent) : QObject(parent),
     mCurrentTask{std::make_shared<core::RtTask>("TaskEmpty", true)}
@@ -26,79 +27,44 @@ void ManualModeController::setSelectedAxis(const QString& axis)
 
 double ManualModeController::getAxisPos(const QString &axis) const
 {
-    return core::Board::getInstance()
-            .getAxis(axis.toStdString())
-            .getCurrentPos();
+    return BoardController::getInstance()
+            .getAxisPos(axis);
 }
 
 double ManualModeController::getSelectedAxisPos() const
 {
-    return core::Board::getInstance()
-            .getAxis(mSelectedAxis.toStdString())
-            .getCurrentPos();
+    return BoardController::getInstance()
+            .getAxisPos(mSelectedAxis);
 }
 
 bool ManualModeController::homeSelectedAxis()
 {    
-    if(mCurrentTask->isDone()) {
-        mCurrentTask = wrapTask(
-                core::Board::getInstance()
-                .getAxis(getSelectedAxis().toStdString())
-                .createTaskFindHome()
-                );
-        core::RtTaskDispatcher::getInstance()
-                .scheduleTask(mCurrentTask);
-        return true;
-    }
-    return false;
+    return BoardController::getInstance()
+            .homeAxis(mSelectedAxis);
 }
 
 bool ManualModeController::homeAllAxes()
 {
-    if(mCurrentTask->isDone()) {
-        mCurrentTask = wrapTask(
-                core::Board::getInstance()
-                .createHomeAllTask()
-                );
-        core::RtTaskDispatcher::getInstance()
-                .scheduleTask(mCurrentTask);
-        return true;
-    }
-    return false;
+    return BoardController::getInstance()
+            .homeAllAxis();
 }
 
 bool ManualModeController::jogStart(double speedFactor, double distance)
 {    
-    if(mCurrentTask->isDone()) {        
-        mCurrentTask = wrapTask(
-                    core::Board::getInstance()
-                    .getAxis(getSelectedAxis().toStdString())
-                    .createTaskJog(speedFactor, distance)
-                                );
-        core::RtTaskDispatcher::getInstance()
-                .scheduleTask(mCurrentTask);
-        return true;
-    }
-    return false;
+    return BoardController::getInstance()
+            .jogStart(getSelectedAxis(), speedFactor, distance);
 }
 
 bool ManualModeController::jogStop()
-{
-    mCurrentTask->cancel();
+{    
+    BoardController::getInstance()
+            .cancel();
     return true;
 }
 
 void ManualModeController::cancel()
 {
-    mCurrentTask->cancel();    
+    BoardController::getInstance()
+            .cancel();
 }
 
-core::RtTaskSharedPtr ManualModeController::wrapTask(core::RtTaskSharedPtr task)
-{
-    auto result = createTaskAdapter(std::move(task));
-    connect(result.get(), &TaskAdapter::taskStarted,
-            this, &ManualModeController::taskStarted);
-    connect(result.get(), &TaskAdapter::taskFinished,
-            this, &ManualModeController::taskFinished);
-    return result;
-}

@@ -22,9 +22,7 @@ public:
     Q_INVOKABLE bool jogStop();
     Q_INVOKABLE void cancel();   
 signals:
-    void selectedAxisChanged(const QString axis);
-    void taskFinished(bool canceled);
-    void taskStarted();
+    void selectedAxisChanged(const QString axis);    
 private:    
     core::RtTaskSharedPtr wrapTask(core::RtTaskSharedPtr task);
     const QString mDescription = tr("Режим ручного управления");

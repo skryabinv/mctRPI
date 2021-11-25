@@ -28,12 +28,7 @@ Item {
             anchors.top: parent.top
             anchors.leftMargin: 10
             anchors.rightMargin: 10
-            height: 50
-            modeHomeX: Elem.InfoSymbol.Modes.Alert
-            modeHomeY: Elem.InfoSymbol.Modes.Alert
-            modeHomeZ: Elem.InfoSymbol.Modes.Alert
-            modePlasma: Elem.InfoSymbol.Modes.Inactive
-            modeBusy: Elem.InfoSymbol.Modes.Inactive
+            height: 50           
         }
 
         Elem.AxesPanel {
@@ -70,26 +65,9 @@ Item {
             text: checked ? "Выключить разряд" : "Включить разряд"
             font.pixelSize: 28
             onClicked: {
-                if(checked) {
-                    infoPanel.modePlasma = Elem.InfoSymbol.Modes.Active
-                    // Enavle plasma
-                } else {
-                    infoPanel.modePlasma = Elem.InfoSymbol.Modes.Inactive
-                    // Disable plasma
-                }
+                boardController.setOutputEnabled(checked)
             }
-        }
-
-        Connections {
-            target: appController.manualModeController
-            function onTaskStarted() {
-                infoPanel.modeBusy = Elem.InfoSymbol.Modes.Active
-            }
-
-            function onTaskFinished(canceled) {
-                infoPanel.modeBusy = Elem.InfoSymbol.Modes.Inactive
-            }
-        }
+        }        
 
     }
 
