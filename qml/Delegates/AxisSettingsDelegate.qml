@@ -4,7 +4,6 @@ import QtQuick.Layouts 1.12
 
 Item {
     id: root
-    // Имя оси
     property string axisName: ""
     property var axisData: ({})
     property alias checked: titleDelegate.checked
@@ -15,7 +14,7 @@ Item {
         anchors.left: root.left
         anchors.right:  root.right
         title: "Ось " + axisName
-    }
+    }    
 
     GridLayout {
         id: content
