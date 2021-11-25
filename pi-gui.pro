@@ -8,6 +8,7 @@ CONFIG += c++17
 
 SOURCES += \
         AppController.cpp \
+        BoardController.cpp \
         ManualModeController.cpp \
         OperatorModeController.cpp \
         SettingsModeController.cpp \
@@ -32,6 +33,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     AppController.h \
+    BoardController.h \
     ManualModeController.h \
     OperatorModeController.h \
     SettingsModeController.h \

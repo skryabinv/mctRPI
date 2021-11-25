@@ -6,6 +6,7 @@
 #include "ManualModeController.h"
 #include "OperatorModeController.h"
 #include "SettingsModeController.h"
+#include "BoardController.h"
 #include "core/AppInit.h"
 
 int main(int argc, char *argv[])
@@ -23,11 +24,13 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
 
     qmlRegisterType<AppController>("AppController", 1, 0, "AppController");
+    qmlRegisterType<BoardController>("BoardController", 1, 0, "BoardController");
     qmlRegisterType<ManualModeController>("ManualModeController", 1, 0, "ManualModeController");
     qmlRegisterType<OperatorModeController>("OperatorModeController", 1, 0, "OperatorModeController");
     qmlRegisterType<SettingsModeController>("SettingsModeController", 1, 0, "SettingsModeController");
 
     engine.rootContext()->setContextProperty("appController", &appController);
+    engine.rootContext()->setContextProperty("boardController", &BoardController::getInstance());
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
