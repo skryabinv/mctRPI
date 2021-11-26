@@ -46,6 +46,7 @@ Item {
             // Поле текстового ввода
 
             Rectangle {
+                id: inputArea
                 width: str.width
                 height: str.height
                 color: Assets.Style.colorBackgroundLight
@@ -80,7 +81,6 @@ Item {
                         target: loader.item
                         function onPressed(symbol) {
                             let tmp = root.textData + symbol
-                            // Проверить данные
                             root.textData = tmp
                         }
                     }
@@ -126,7 +126,7 @@ Item {
                     target: loaderOk.item
                     function onPressed(symbol) {
                         hide()
-                        if(root.textData.length > 0) {
+                        if(root.textData.length > 0 && validate(root.textData)) {
                             accepted(root.textData)
                         }
                     }
@@ -201,6 +201,9 @@ Item {
 
     function hide() {
         visible = false
-    }
+    }   
 
+    function validate(value) {        
+        return true
+    }
 }

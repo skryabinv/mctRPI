@@ -37,6 +37,9 @@ Item {
             anchors.top: infoPanel.bottom
             anchors.right: parent.right
             height: 210
+            onAxisClicked: {
+                appController.manualModeController.selectedAxis = axisName
+            }
         }
 
 

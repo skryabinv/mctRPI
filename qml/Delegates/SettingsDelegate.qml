@@ -11,7 +11,7 @@ Item {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        implicitHeight: 40
+        implicitHeight: 60
         radius: 5
         Text {
             id: titleText

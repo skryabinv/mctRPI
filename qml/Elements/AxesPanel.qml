@@ -5,6 +5,7 @@ import "../Assets" as Assets
 
 Item {
     id: root
+    signal axisClicked(string axisName)
     implicitHeight: listView.implicitHeight
     property string selectedAxis: appController.manualModeController.selectedAxis
 
@@ -32,8 +33,17 @@ Item {
             anchors.leftMargin: 10
             anchors.rightMargin: 10
             color: Qt.lighter(Assets.Style.colorBackground)
-//            border.color: Assets.Style.colorTextBorder
             radius: 5
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    axisClicked(modelData)
+                    console.log(modelData)
+                }
+            }
+
+
             RowLayout {
                 id: row
                 anchors.fill: parent

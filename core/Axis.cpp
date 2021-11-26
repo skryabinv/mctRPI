@@ -1,5 +1,6 @@
 #include "Axis.h"
 #include "RtTaskGeneric.h"
+#include "RtTaskMulti.h"
 #include "AccDecPulseGenerator.h"
 #include "Delay.h"
 #include <exception>
@@ -25,16 +26,21 @@ RtTaskSharedPtr Axis::createTaskJog(double speedFraction, double distance)
     auto acc = speedSettings.getAcceleration();
     auto dec = speedSettings.getDeceleration();
     auto dpp = gearRatio.getMmsPerStep();   
-    if(distance == 0.0) {
-        // Moving continuously
-        distance = speed < 0 ? getCurrentPos() - limits.getLow() : limits.getHigh() - getCurrentPos();
-    } else {
-        // Moving by steps
-        auto nextPos = getCurrentPos() + (speed > 0 ? distance : -distance);
-        distance = std::abs(limits.clamp(nextPos) - getCurrentPos());
-    }
+
+    auto dist = [this, speed, distance]() {
+        if(distance == 0.0) {
+            return speed < 0  ? -10000.0 : 10000.0;
+            // Moving continuously
+//            return speed < 0 ? getCurrentPos() - limits.getLow() : limits.getHigh() - getCurrentPos();
+        } else {
+            // Moving by steps
+            auto nextPos = getCurrentPos() + (speed > 0 ? distance : -distance);
+            return std::abs(limits.clamp(nextPos) - getCurrentPos());
+        }
+    };
     qDebug() << __FUNCTION__ << distance << dpp << speed << acc << dec;
-    auto func = [outDir, outStep, speed, acc, dec, dpp, distance, this](RtTask& self) {
+    auto func = [outDir, outStep, speed, acc, dec, dpp, dist, this](RtTask& self) {
+        double distance = dist();
         if(distance == 0.0) return true;
         AccDecPulseGenerator gen{ distance, dpp, std::abs(speed), acc, dec };
         outDir.setValue(speed > 0);
@@ -90,7 +96,7 @@ RtTaskSharedPtr Axis::createTaskFindHome()
             if(self.isCanceled()) return true;
             auto sw_mask = in_switch.read();
             if(sw_mask) break; // Концевик размокнут
-            // Перекаодируем в маску степов
+            // Перекодируем в маску степов
             auto mask = step_decoder.decodeLeftToRight(sw_mask);
             auto delay_func = gen_back.getDelayFuncUs<delay::ProxyDelay>();
             out_step.set(~mask);
@@ -101,26 +107,33 @@ RtTaskSharedPtr Axis::createTaskFindHome()
             ++mPosInSteps;
         }        
         mPosInSteps = 0;
-        mHomingDone = true;
-        // Move in positive direction
-        // AccDecPulseGenerator gen_pos{dpp, speed_back, acc};
-
+        mHomingDone = true;           
         return true;
     };
-    return makeSharedGenericTask(std::move(func), "TaskAxisHoming");
+
+    // Move in positive direction
+    // Move for low limit
+
+    auto taskHome = makeSharedGenericTask(std::move(func), "TaskAxisHoming");
+//    auto taskMove = createTaskMoveTo(0.05, limits.getLow(), false);
+//    return std::make_shared<RtTaskMulti>(std::initializer_list<RtTaskSharedPtr>{
+//                                   std::move(taskHome),
+//                                   std::move(taskMove)
+//                               });
+    return taskHome;
 }
 
-RtTaskSharedPtr Axis::createTaskMoveTo(double speedFraction, double position)
-{
-    checkHome();
+RtTaskSharedPtr Axis::createTaskMoveTo(double speedFraction, double position, bool checkLimits)
+{    
     auto out_dir = ports.getPortDir();
     auto out_step = ports.getPortStep();
-    // Расстояние, которое нужно проехать
-    auto dist = limits.clamp(position) - getCurrentPos();
+    // Расстояние, которое нужно проехать        
     auto speed = speedSettings.getSpeed<SpeedUnits::MM_PER_SEC>(speedFraction);
     auto dpp = gearRatio.getMmsPerStep();
     auto acc = speedSettings.getAcceleration();
     auto func = [=](RtTask& self) {
+        if(!mHomingDone) return true;
+        auto dist = (checkLimits ? limits.clamp(position) : position) - getCurrentPos();
         AccDecPulseGenerator gen{dist, dpp, std::abs(speed), acc, acc };
         out_dir.setValue(dist > 0);
         while (!self.isCanceled() && gen) {
@@ -136,13 +149,5 @@ RtTaskSharedPtr Axis::createTaskMoveTo(double speedFraction, double position)
     };
     return makeSharedGenericTask(std::move(func), "TaskAxisMoveTo");
 }
-
-void Axis::checkHome()
-{
-    if(mHomingDone) {
-        throw std::logic_error("Axis didn't homing");
-    }
-}
-
 
 } // namespace core

@@ -32,7 +32,7 @@ public:
 
     // speed - number between 0.0 and 1.0
     // position - pos in mm from home
-    RtTaskSharedPtr createTaskMoveTo(double speedFraction, double position);
+    RtTaskSharedPtr createTaskMoveTo(double speedFraction, double position, bool checkLimits = true);
 
 private:
     void checkHome();
