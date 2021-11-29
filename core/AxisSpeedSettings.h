@@ -9,6 +9,11 @@ enum class SpeedUnits {
     MM_PER_SEC
 };
 
+enum class HomeDirection {
+    Negative,
+    Positive
+};
+
 // Настройки движения по оси
 class AxisSpeedSettings {
 public:
@@ -114,6 +119,14 @@ public:
         return fract * getSpeed<unit>();
     }
 
+    auto getHomeDirection() const noexcept {
+        return mHomeDiretion;
+    }
+
+    void setHomeDirection(HomeDirection value) noexcept {
+        mHomeDiretion = value;
+    }
+
 private:
 
     template<SpeedUnits unit>
@@ -135,6 +148,8 @@ private:
     double mSpeedHomeFwd = 100.0;
     // Обратная скорость поиска концевика, мм/мин
     double mSpeedHomeBack = 10.0;
+    // Direction home search
+    HomeDirection mHomeDiretion{HomeDirection::Negative};
 };
 
 }

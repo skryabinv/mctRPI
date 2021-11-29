@@ -6,6 +6,7 @@
 #include <QDir>
 #include <QDebug>
 #include <QCoreApplication>
+#include <QStringLiteral>
 #include "core/Board.h"
 #include "core/Axis.h"
 
@@ -144,6 +145,15 @@ double SettingsModeController::getSpeedHomingBackward(const QString& axisName) c
             .getSpeedHomeBack<core::SpeedUnits::MM_PER_MIN>();
 }
 
+SettingsModeController::HomeDirection SettingsModeController::getHomeDirection(const QString &axisName) const
+{
+    auto dir = core::Board::getInstance()
+            .getAxis(axisName.toStdString())
+            .speedSettings
+            .getHomeDirection();
+    return dir == core::HomeDirection::Negative ? HomeDirection::HomeDirection_Negative : HomeDirection::HomeDirection_Positive;
+}
+
 void SettingsModeController::setLimitLow(const QString& axisName, double value)
 {
     core::Board::getInstance()
@@ -232,6 +242,14 @@ void SettingsModeController::setSpeedHomingBackward(const QString& axisName, dou
             .setSpeedNomeBack(value);
 }
 
+void SettingsModeController::setHomeDirection(const QString &axisName, HomeDirection value)
+{
+    auto dir = value == HomeDirection::HomeDirection_Negative ? core::HomeDirection::Negative : core::HomeDirection::Positive;
+    core::Board::getInstance()
+            .getAxis(axisName.toStdString())
+            .speedSettings.setHomeDirection(dir);
+}
+
 QVariant SettingsModeController::getAxisSettings(const QString& axisName) const
 {    
     QVariantMap axisSettings;
@@ -245,7 +263,10 @@ QVariant SettingsModeController::getAxisSettings(const QString& axisName) const
     axisSettings["speed"] = getSpeed(axisName);
     axisSettings["time_to_speed"] = getTimeToSpeed(axisName);
     axisSettings["speed_homing_forward"] = getSpeedHomingForward(axisName);
-    axisSettings["speed_homing_backward"] = getSpeedHomingBackward(axisName);
+    axisSettings["speed_homing_backward"] = getSpeedHomingBackward(axisName);    
+    axisSettings["home_direction"] = getHomeDirection(axisName) == HomeDirection_Negative ?
+                "neg" :
+                "pos";
     return axisSettings;
 }
 
@@ -261,7 +282,10 @@ void SettingsModeController::setAxisSettings(const QString& axisName, const QVar
     setSpeed(axisName, axisSettings["speed"].toDouble());
     setTimeToSpeed(axisName, axisSettings["time_to_speed"].toDouble());
     setSpeedHomingForward(axisName, axisSettings["speed_homing_forward"].toDouble());
-    setSpeedHomingBackward(axisName, axisSettings["speed_homing_backward"].toDouble());
+    setSpeedHomingBackward(axisName, axisSettings["speed_homing_backward"].toDouble());    
+    setHomeDirection(axisName, axisSettings["home_direction"].toString() == QStringLiteral("pos") ?
+                HomeDirection_Positive :
+                HomeDirection_Negative);
 }
 
 void SettingsModeController::save() const

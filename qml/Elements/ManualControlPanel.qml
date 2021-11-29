@@ -145,19 +145,21 @@ Item {
                     font.pixelSize: 18
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                }               
-                onPressed: {                    
-                    if(stepChooser.stepValue === 0.0) {
-                        appController.manualModeController.jogStart(modelData.dir * speedChooser.speedValue, 0.0);
-                    }
                 }
-                onReleased: {                    
-                    if(stepChooser.stepValue === 0.0) {
-                        appController.manualModeController.jogStop()
+                onPressedChanged: {
+                    if(pressed) {
+                        if(stepChooser.stepValue === 0.0) {
+                            appController.manualModeController.jogStart(modelData.dir * speedChooser.speedValue, 0.0);
+                        } else {
+                            appController.manualModeController.jogStart(modelData.dir * speedChooser.speedValue, stepChooser.stepValue);
+                        }
                     } else {
-                        appController.manualModeController.jogStart(modelData.dir * speedChooser.speedValue, stepChooser.stepValue);
+                        if(stepChooser.stepValue === 0.0) {
+                            appController.manualModeController.jogStop()
+                        }
                     }
                 }
+
             }
         }
 

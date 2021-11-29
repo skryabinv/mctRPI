@@ -11,6 +11,7 @@
         <file alias="Delegates/SettingsDelegate.qml">qml/Delegates/SettingsDelegate.qml</file>
         <file alias="Delegates/SettingsLabel.qml">qml/Delegates/SettingsLabel.qml</file>
         <file alias="Delegates/SettingsInput.qml">qml/Delegates/SettingsInput.qml</file>
+        <file alias="Delegates/SettingsSwitch.qml">qml/Delegates/SettingsSwitch.qml</file>
         <file alias="Dialogs/DialogNumericInput.qml">qml/Dialogs/DialogNumericInput.qml</file>
         <file alias="Assets/Style.qml">qml/Assets/Style.qml</file>
         <file alias="Assets/qmldir">qml/Assets/qmldir</file>

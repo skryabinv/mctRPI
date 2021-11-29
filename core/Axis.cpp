@@ -4,6 +4,7 @@
 #include "AccDecPulseGenerator.h"
 #include "Delay.h"
 #include <exception>
+#include <iostream>
 #include <QDebug>
 
 namespace core {
@@ -38,18 +39,18 @@ RtTaskSharedPtr Axis::createTaskJog(double speedFraction, double distance)
             return std::abs(limits.clamp(nextPos) - getCurrentPos());
         }
     };
-    qDebug() << __FUNCTION__ << distance << dpp << speed << acc << dec;
+    qDebug() << "Log: " << __FUNCTION__ << distance << dpp << speed << acc << dec;
     auto func = [outDir, outStep, speed, acc, dec, dpp, dist, this](RtTask& self) {
         double distance = dist();
         if(distance == 0.0) return true;
-        AccDecPulseGenerator gen{ distance, dpp, std::abs(speed), acc, dec };
+        AccDecPulseGenerator gen{ std::abs(distance), dpp, std::abs(speed), acc, dec };
         outDir.setValue(speed > 0);
         int inc = speed > 0 ? 1 : -1;
         while (!self.isCanceled() && gen) {
            auto delay = gen.getDelayFuncUs<delay::ProxyDelay>();
-           outStep.set();
-           delay();
            outStep.clr();
+           delay();
+           outStep.set();
            delay();
            ++gen;           
            mPosInSteps += inc;
@@ -74,12 +75,15 @@ RtTaskSharedPtr Axis::createTaskFindHome()
         // Едем вперед, пока концевики замкнуты
         AccDecPulseGenerator gen_fwd{ dpp, speed_fwd, acc };
         out_dir.set();
+
         while (true) {
             if(self.isCanceled()) return true;
-            auto sw_mask = in_switch.read();
-            if(!sw_mask) break; // Концевик размокнут
-            // Перекаодируем в маску степов
-            auto mask = step_decoder.decodeLeftToRight(sw_mask);
+            auto sw_mask = in_switch.read();            
+            if(!sw_mask) {
+                break; // Концевик размокнут
+            }
+            // Перекодируем в маску степов
+            auto mask = step_decoder.decodeLeftToRight(sw_mask);            
             // Устанавливаем степы с перекаодированной маской
             auto delay_func = gen_fwd.getDelayFuncUs<delay::ProxyDelay>();
             out_step.set(mask);
@@ -94,8 +98,10 @@ RtTaskSharedPtr Axis::createTaskFindHome()
         AccDecPulseGenerator gen_back{dpp, speed_back, acc};
         while (true) {
             if(self.isCanceled()) return true;
-            auto sw_mask = in_switch.read();
-            if(sw_mask) break; // Концевик размокнут
+            auto sw_mask = in_switch.read();            
+            if(sw_mask == in_switch.mask()) {
+                break; // Концевик размокнут
+            }
             // Перекодируем в маску степов
             auto mask = step_decoder.decodeLeftToRight(sw_mask);
             auto delay_func = gen_back.getDelayFuncUs<delay::ProxyDelay>();

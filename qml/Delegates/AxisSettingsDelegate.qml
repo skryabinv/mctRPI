@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.12
 import QtQuick.Layouts 1.12
+import SettingsModeController 1.0
 
 Item {
     id: root
@@ -161,6 +162,24 @@ Item {
                 }
             }
         }        
+
+        SettingsLabel {
+            text: "Направление поиска Home:"
+        }
+
+        SettingsSwitch {
+            textItems: [
+                "+",
+                "-"
+            ]
+            currentIndex: axisData.home_direction === SettingsModeController.HomeDirection_Negative ? 1 : 0
+            onCurrentIndexChanged: {
+                console.log(currentIndex)
+                axisData.home_direction = [SettingsModeController.HomeDirection_Positive,
+                                           SettingsModeController.HomeDirection_Negative]
+                        [currentIndex]
+            }
+        }
 
     }    
 

@@ -89,6 +89,9 @@ public:
     uint32_t read(uint32_t mask) const noexcept {
         return read_impl(mask_ & mask);
     }
+    auto mask() const noexcept {
+        return mask_;
+    }
 private:
     inline static void init(uint32_t pin) noexcept {
         *(gpio_base +  pin / 10) &= ~(7 << (3 * (pin % 10)));
@@ -136,6 +139,9 @@ public:
     // Очистить с применение дополнительной маски
     void clr(uint32_t mask) const noexcept {
         clr_impl(mask & mask_);
+    }
+    auto mask() const noexcept {
+        return mask_;
     }
 private:
     inline static void set_impl(uint32_t mask) noexcept {
