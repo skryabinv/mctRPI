@@ -99,7 +99,7 @@ Rectangle {
 
             Rectangle {
                 id: bgClearChanges
-                width: 60
+                width: 150
                 height: parent.height
                 color: panel.color
                 Text {
@@ -125,7 +125,7 @@ Rectangle {
 
             Rectangle {
                 id: bgSaveChanges
-                width: 60
+                width: 150
                 height: parent.height
                 color: panel.color
                 Text {
@@ -137,7 +137,7 @@ Rectangle {
                     color: "green"
                     verticalAlignment: Text.AlignVCenter
                 }
-                MouseArea {
+                MouseArea {                    
                     anchors.fill: parent
                     onClicked: {
                         // Устанавливаем значения

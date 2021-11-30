@@ -172,12 +172,10 @@ Item {
                 "+",
                 "-"
             ]
-            currentIndex: axisData.home_direction === SettingsModeController.HomeDirection_Negative ? 1 : 0
+            currentIndex: axisData.home_direction === "positive" ? 0 : 1
             onCurrentIndexChanged: {
                 console.log(currentIndex)
-                axisData.home_direction = [SettingsModeController.HomeDirection_Positive,
-                                           SettingsModeController.HomeDirection_Negative]
-                        [currentIndex]
+                axisData.home_direction = ["positive", "negative"][currentIndex]
             }
         }
 

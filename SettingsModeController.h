@@ -7,12 +7,7 @@
 class SettingsModeController : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString descritpion MEMBER mDescription CONSTANT)
-public:
-    enum HomeDirection {
-        HomeDirection_Negative,
-        HomeDirection_Positive
-    };
+    Q_PROPERTY(QString descritpion MEMBER mDescription CONSTANT)  
 public:
     explicit SettingsModeController(QObject *parent = nullptr);
 
@@ -27,7 +22,7 @@ public:
     Q_INVOKABLE double getTimeToSpeed(const QString& axisName) const;
     Q_INVOKABLE double getSpeedHomingForward(const QString& axisName) const;
     Q_INVOKABLE double getSpeedHomingBackward(const QString& axisName) const;
-    Q_INVOKABLE HomeDirection getHomeDirection(const QString& axisName) const;
+    Q_INVOKABLE QString getHomeDirection(const QString& axisName) const;
 
 
     Q_INVOKABLE void setLimitLow(const QString& axisName, double value);
@@ -41,7 +36,7 @@ public:
     Q_INVOKABLE void setPortDir(const QString& axisName, const QVariantList& values);
     Q_INVOKABLE void setSpeedHomingForward(const QString& axisName, double value);
     Q_INVOKABLE void setSpeedHomingBackward(const QString& axisName, double value);
-    Q_INVOKABLE void setHomeDirection(const QString& axisName, HomeDirection value);
+    Q_INVOKABLE void setHomeDirection(const QString& axisName, const QString &value);
 
 
     Q_INVOKABLE QVariant getAxisSettings(const QString& axisName) const;
