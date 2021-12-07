@@ -8,6 +8,11 @@ Window {
     height: 600
     visible: true
 
+    Rectangle {
+        anchors.fill: parent
+        color: Assets.Style.colorBackground
+    }
+
     // Верхняя панель
 
     Item {
@@ -16,7 +21,7 @@ Window {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        height: stack.depth > 1 ? 60: 0
+        height: stack.depth > 1 ? 60 : 0
         Rectangle {
             anchors.fill: parent
             color: "black"
@@ -63,7 +68,7 @@ Window {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: controlPanel.bottom
-        anchors.bottom: parent.bottom
+        anchors.bottom: parent.bottom        
         clip: true
         initialItem: "qrc:/qml/Views/StartView.qml"
     }
@@ -72,18 +77,18 @@ Window {
         target: appController
         function onModeOperatorActivated() {
             stack.push("qrc:/qml/Views/OperatorView.qml")
-            controlPanel.title = appController.operatorModeController.description
+            controlPanel.title = appController.operatorModeController.description            
         }
         function onModeManualActivated() {
             stack.push("qrc:/qml/Views/ManualView.qml")
-            controlPanel.title = appController.manualModeController.description
+            controlPanel.title = appController.manualModeController.description            
         }
         function onModeSettingsActivated() {
             stack.push("qrc:/qml/Views/SettingsView.qml")
-            controlPanel.title = appController.settingsModeController.descritpion
+            controlPanel.title = appController.settingsModeController.descritpion            
         }
         function onModeReseted() {
-            stack.pop()
+            stack.pop()            
         }
     }
 }

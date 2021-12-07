@@ -9,6 +9,8 @@ Item {
     signal accepted(string value)
     signal rejected()
     property string textData: ""    
+    property var regExp: /^\d+\.?\d*$/
+
     anchors.fill: parent
 
     // Прямоугольник фона (замылен, не пускает сообщения)
@@ -80,8 +82,9 @@ Item {
                     Connections {
                         target: loader.item
                         function onPressed(symbol) {
-                            let tmp = root.textData + symbol
-                            root.textData = tmp
+                            let tmp = root.textData + symbol                            
+                            if(regExp.test(tmp))
+                                root.textData = tmp
                         }
                     }
                 }

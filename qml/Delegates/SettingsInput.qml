@@ -33,25 +33,11 @@ Item {
                 // bg.color = "gray"
             }
             onReleased: {                
-                // bg.color = Assets.Style.colorTextBackground
-                inputDialog.show()
+                let comp = Qt.createComponent("../Dialogs/DialogNumericInput.qml")
+                let obj = comp.createObject(root, {x:0, y:0})
+                obj.show()
+                obj.accepted.connect((data)=>{text = data});
             }
         }
-
-        DLG.DialogNumericInput {
-            id: inputDialog
-            visible: false
-        }
-
-        Connections {
-            target: inputDialog
-            function onAccepted(data) { text = data }
-        }
-
     }
-
-
-
-
-
 }

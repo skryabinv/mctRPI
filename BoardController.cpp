@@ -52,7 +52,7 @@ bool BoardController::homeAllAxis()
 }
 
 bool BoardController::jogStart(const QString& axis, double speedFactor, double distance)
-{
+{    
     if(mCurrentTask->isDone()) {
         mCurrentTask = wrapTask(
                     core::Board::getInstance()
@@ -67,7 +67,7 @@ bool BoardController::jogStart(const QString& axis, double speedFactor, double d
 }
 
 void BoardController::cancel()
-{
+{    
     mCurrentTask->cancel();
 }
 

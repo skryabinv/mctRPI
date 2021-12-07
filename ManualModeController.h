@@ -28,5 +28,6 @@ private:
     const QString mDescription = tr("Режим ручного управления");
     QString mSelectedAxis{"X"};
     core::RtTaskSharedPtr mCurrentTask{};
+    bool mJogStarted{false};
 };
 

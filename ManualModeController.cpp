@@ -51,14 +51,17 @@ bool ManualModeController::homeAllAxes()
 
 bool ManualModeController::jogStart(double speedFactor, double distance)
 {    
-    return BoardController::getInstance()
+    mJogStarted = BoardController::getInstance()
             .jogStart(getSelectedAxis(), speedFactor, distance);
+    return mJogStarted;
 }
 
 bool ManualModeController::jogStop()
 {    
-    BoardController::getInstance()
-            .cancel();
+    if(mJogStarted) {
+        BoardController::getInstance()
+                .cancel();
+    }
     return true;
 }
 

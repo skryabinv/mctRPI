@@ -26,14 +26,15 @@ RtTaskSharedPtr Axis::createTaskJog(double speedFraction, double distance)
     auto outStep = ports.getPortStep();
 
     auto speed = speedSettings.getSpeed<SpeedUnits::MM_PER_SEC>(speedFraction);
-    // Make copy to avoid data race
     auto gear = gearRatio;
     auto sspeed = speedSettings;
-    if(distance == 0.0) distance = limits.getMaxDist(getCurrentPos(), speed);
-    else distance = limits.clampDistance(getCurrentPos(), distance, speed);
+
     auto func = [outDir, outStep, sspeed, gear, distance, speed, this](RtTask& self) {
-        if(distance == 0.0) return true;
-        AccDecPulseGenerator gen{ distance,
+        double dist = 0.0;
+        if(distance == 0.0) dist = limits.getMaxDist(getCurrentPos(), speed);
+        else dist = limits.clampDistance(getCurrentPos(), distance, speed);
+        if(dist == 0.0) return true;
+        AccDecPulseGenerator gen{ dist,
                     gear.getMmsPerStep(),
                     std::abs(speed),
                     sspeed.getAcceleration(),
@@ -122,15 +123,10 @@ RtTaskSharedPtr Axis::createTaskFindHome()
         mHomingDone = true;           
         return true;
     };
-
-
-
     return std::make_shared<RtTaskMulti>( std::initializer_list<RtTaskSharedPtr>{
                 makeSharedGenericTask(std::move(func), "TaskAxisHoming"),
                 createTaskJog(0.1 * speedSettings.getHomeIncrement(true), speedSettings.getSafePos())
                 } );
-
-
 //    return makeSharedGenericTask(std::move(func), "TaskAxisHoming");
 }
 
