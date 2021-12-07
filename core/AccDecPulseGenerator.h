@@ -67,6 +67,12 @@ public:
     double operator*() const noexcept {
         return getDelayFuncUs();
     }
+
+    void startDec() {
+        pulse_counter_ = stop2_;
+        ++(*this);
+    }
+
 private:
     // Вычислить длительность для следующего шага
     double get_delay() const noexcept {

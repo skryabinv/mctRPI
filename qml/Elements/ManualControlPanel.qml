@@ -97,7 +97,7 @@ Item {
             id: stepChooser
             Layout.fillWidth: true
             height: 80
-            model: [0.0, 0.5, 1.0, 2.5, 5.0, 10.0, 25.0, 50.0]
+            model: [0.0, 0.5, 1.0, 2.5, 5.0, 10.0, 25.0, 32.0]
             onStepValueChanged: {
                 console.log(stepValue)
             }

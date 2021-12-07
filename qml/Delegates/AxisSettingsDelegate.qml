@@ -179,6 +179,28 @@ Item {
             }
         }
 
+        SettingsLabel {
+            text: "Координата HOME:"
+        }
+
+        SettingsInput {
+            text: axisData.pos_home
+            onTextChanged: {
+                axisData.pos_home = parseFloat(text)
+            }
+        }
+
+        SettingsLabel {
+            text: "Отъезд от HOME:"
+        }
+
+        SettingsInput {
+            text: axisData.pos_safe
+            onTextChanged: {
+                axisData.pos_safe = parseFloat(text)
+            }
+        }
+
     }    
 
 }

@@ -9,7 +9,9 @@ class AxisGearRatio {
 public:
     AxisGearRatio() = default;
     AxisGearRatio(uint32_t steps, uint32_t dist)
-        : mSteps{steps}, mDistMm{dist} {}
+        : mSteps{steps},
+          mDistMm{dist}
+    {}
     // Установить значения
     void setValues(uint32_t steps, uint32_t dist) noexcept {
         mSteps = steps;
@@ -22,20 +24,24 @@ public:
         mDistMm = value;
     }
 
+    double getMmsForSteps(double steps) const noexcept {
+        return steps * getMmsPerStep();
+    }
+
     // Количество шагов
-    auto getSteps() const noexcept {
+    uint32_t getSteps() const noexcept {
         return mSteps;
     }
     // Расстояние
-    auto getDist() const noexcept {
+    uint32_t getDist() const noexcept {
         return mDistMm;
     }
     // Шагов на мм
-    auto getStepsPerMm() const noexcept {
+    double getStepsPerMm() const noexcept {
         return static_cast<double>(getSteps()) / getDist();
     }
     // Мм на шаг
-    auto getMmsPerStep() const noexcept {
+    double getMmsPerStep() const noexcept {
         return 1.0 / getStepsPerMm();
     }
 private:

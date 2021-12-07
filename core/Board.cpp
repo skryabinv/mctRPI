@@ -21,9 +21,9 @@ RtTaskSharedPtr Board::createHomeAllTask() const
 {
     auto result = std::make_shared<RtTaskMulti>(
                 std::initializer_list<RtTaskSharedPtr>{
+                    getAxis("Z").createTaskFindHome(),
                     getAxis("X").createTaskFindHome(),
-                    getAxis("Y").createTaskFindHome(),
-                    getAxis("Z").createTaskFindHome()
+                    getAxis("Y").createTaskFindHome()
                 });
     return result;
 }

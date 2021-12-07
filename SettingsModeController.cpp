@@ -163,6 +163,22 @@ QString SettingsModeController::getHomeDirection(const QString &axisName) const
                 HomeDirection::Positive;
 }
 
+double SettingsModeController::getPosHome(const QString &axisName) const
+{
+    return core::Board::getInstance()
+            .getAxis(axisName.toStdString())
+            .speedSettings
+            .getPosHome();
+}
+
+double SettingsModeController::getPosSafe(const QString &axisName) const
+{
+    return core::Board::getInstance()
+            .getAxis(axisName.toStdString())
+            .speedSettings
+            .getSafePos();
+}
+
 void SettingsModeController::setLimitLow(const QString& axisName, double value)
 {
     core::Board::getInstance()
@@ -258,7 +274,24 @@ void SettingsModeController::setHomeDirection(const QString &axisName, const QSt
                 core::HomeDirection::Positive;
     core::Board::getInstance()
             .getAxis(axisName.toStdString())
-            .speedSettings.setHomeDirection(dir);
+            .speedSettings
+            .setHomeDirection(dir);
+}
+
+void SettingsModeController::setPosHome(const QString &axisName, double pos)
+{
+    core::Board::getInstance()
+            .getAxis(axisName.toStdString())
+            .speedSettings
+            .setPosHome(pos);
+}
+
+void SettingsModeController::setPosSafe(const QString &axisName, double value)
+{
+    core::Board::getInstance()
+            .getAxis(axisName.toStdString())
+            .speedSettings
+            .setSafePos(value);
 }
 
 QVariant SettingsModeController::getAxisSettings(const QString& axisName) const
@@ -276,6 +309,8 @@ QVariant SettingsModeController::getAxisSettings(const QString& axisName) const
     axisSettings["speed_homing_forward"] = getSpeedHomingForward(axisName);
     axisSettings["speed_homing_backward"] = getSpeedHomingBackward(axisName);    
     axisSettings["home_direction"] = getHomeDirection(axisName);
+    axisSettings["pos_home"] = getPosHome(axisName);    
+    axisSettings["pos_safe"] = getPosSafe(axisName);
     return axisSettings;
 }
 
@@ -293,6 +328,8 @@ void SettingsModeController::setAxisSettings(const QString& axisName, const QVar
     setSpeedHomingForward(axisName, axisSettings["speed_homing_forward"].toDouble());
     setSpeedHomingBackward(axisName, axisSettings["speed_homing_backward"].toDouble());    
     setHomeDirection(axisName, axisSettings["home_direction"].toString());
+    setPosHome(axisName, axisSettings["pos_home"].toDouble());
+    setPosSafe(axisName, axisSettings["pos_safe"].toDouble());
 }
 
 void SettingsModeController::save() const

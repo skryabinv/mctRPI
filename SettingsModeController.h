@@ -23,6 +23,8 @@ public:
     Q_INVOKABLE double getSpeedHomingForward(const QString& axisName) const;
     Q_INVOKABLE double getSpeedHomingBackward(const QString& axisName) const;
     Q_INVOKABLE QString getHomeDirection(const QString& axisName) const;
+    Q_INVOKABLE double getPosHome(const QString& axisName) const;
+    Q_INVOKABLE double getPosSafe(const QString& axisName) const;
 
 
     Q_INVOKABLE void setLimitLow(const QString& axisName, double value);
@@ -37,6 +39,8 @@ public:
     Q_INVOKABLE void setSpeedHomingForward(const QString& axisName, double value);
     Q_INVOKABLE void setSpeedHomingBackward(const QString& axisName, double value);
     Q_INVOKABLE void setHomeDirection(const QString& axisName, const QString &value);
+    Q_INVOKABLE void setPosHome(const QString& axisName, double pos);
+    Q_INVOKABLE void setPosSafe(const QString& axisName, double value);
 
 
     Q_INVOKABLE QVariant getAxisSettings(const QString& axisName) const;

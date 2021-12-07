@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cmath>
+#include <stdexcept>
+#include "GPIO.h"
 
 namespace core {
 
@@ -52,15 +54,7 @@ public:
         mSpeed = speed_mm_per_min;
         mAcc = (1000.0 / 60.0) * speed_mm_per_min / target_time_acc_ms;
         mDec = (1000.0 / 60.0) * speed_mm_per_min / target_time_dec_ms;
-    }
-
-    // Ограничение скорости
-    auto limitSpeed(double speed_mm_per_sec) const noexcept {
-        if(std::abs(speed_mm_per_sec) > mSpeed) {
-            return speed_mm_per_sec < 0 ? -mSpeed : mSpeed;
-        }
-        return speed_mm_per_sec;
-    }
+    }   
 
     // Время до набора целевой скорости
     double getSpeedTimeAcc() const noexcept {
@@ -127,6 +121,43 @@ public:
         mHomeDiretion = value;
     }
 
+    void applyHomeDir(gpio::PortOut port, bool inverse = false) const noexcept {
+        switch (mHomeDiretion) {
+        case HomeDirection::Negative:
+            port.setValue(inverse);
+            break;
+        case HomeDirection::Positive:
+            port.setValue(!inverse);
+            break;
+        }
+    }
+
+    int getHomeIncrement(bool inverse = false) const noexcept {
+        switch (mHomeDiretion) {
+        case HomeDirection::Negative:
+            return inverse ? 1 : -1;
+        case HomeDirection::Positive:
+            return inverse ? -1 : 1;
+        }
+        return 1;
+    }
+
+    double getPosHome() const noexcept {
+        return mPosHome;
+    }
+
+    void setPosHome(double value) noexcept {
+        mPosHome = value;
+    }
+
+    double getSafePos() const noexcept {
+        return mSafePosition;
+    }
+
+    void setSafePos(double value) noexcept {
+        mSafePosition = value;
+    }
+
 private:
 
     template<SpeedUnits unit>
@@ -150,6 +181,10 @@ private:
     double mSpeedHomeBack = 10.0;
     // Direction home search
     HomeDirection mHomeDiretion{HomeDirection::Negative};
+    // Home position
+    double mPosHome{0.0};
+    // Distance for safe position after homing (mm) in opposite direction
+    double mSafePosition{0.0};
 };
 
 }
