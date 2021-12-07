@@ -100,7 +100,7 @@ Item {
         }
 
         SettingsLabel {
-            text: "Скорость HOME вперед, cм/мин:"
+            text: "Скорость HOME вперед, мм/мин:"
         }
 
         SettingsInput {
@@ -110,7 +110,7 @@ Item {
         }
 
         SettingsLabel {
-            text: "Скорость HOME назад, cм/мин:"
+            text: "Скорость HOME назад, мм/мин:"
         }
 
         SettingsInput {

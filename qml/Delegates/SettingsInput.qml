@@ -1,6 +1,5 @@
 import QtQuick 2.0
 import QtQuick.Dialogs 1.2
-import "../Dialogs" as DLG
 import "../Assets" as Assets
 import QtQuick.VirtualKeyboard 2.14
 
@@ -28,10 +27,7 @@ Item {
         color: Assets.Style.colorBackgroundLight
         radius: 5
         MouseArea {
-            anchors.fill: parent
-            onPressed: {
-                // bg.color = "gray"
-            }
+            anchors.fill: parent            
             onReleased: {                
                 let comp = Qt.createComponent("../Dialogs/DialogNumericInput.qml")
                 let obj = comp.createObject(root, {x:0, y:0})
