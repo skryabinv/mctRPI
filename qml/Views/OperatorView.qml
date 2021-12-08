@@ -5,30 +5,28 @@ import "../Assets" as Assets
 Item {
     id: root
 
-    Row {
-        anchors.fill: parent
-
-        Column {
-            Elems.DelayButtonExt {
-                keepChecked: false
-                text: "\uf015"
-                font.pixelSize: 24
-
-                implicitWidth: 100
-                implicitHeight: 100
-            }
-
-            Elems.DelayButtonExt {
-                text: "\uf04c"
-                font.pixelSize: 24
-
-                implicitWidth: 100
-                implicitHeight: 100
-            }
-
-
-        }
+    Elems.OperatorStatusPanel {
+        id: statusPanel
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
 
     }
+
+    Elems.OperatorSurfaceParametersPanel {
+        id: surfaceParametersPanel
+        anchors.top: statusPanel.bottom
+        anchors.left: root.left
+        anchors.bottom: root.bottom
+    }
+
+    Elems.OperatorProcessingControlPanel {
+        id: processingPanel
+        anchors.left: surfaceParametersPanel.right
+        anchors.top: statusPanel.bottom
+        anchors.right: root.right
+        anchors.bottom: root.bottom
+    }
+
 
 }

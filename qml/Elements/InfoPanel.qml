@@ -8,12 +8,14 @@ Item {
     property int modeHomeZ: boardController.isHomingDone("Z") ? InfoSymbol.Modes.Active : InfoSymbol.Modes.Alert
     property int modePlasma: boardController.getOutputState() ? InfoSymbol.Modes.Active : InfoSymbol.Modes.Inactive
     property int modeBusy: boardController.isBusy() ? InfoSymbol.Modes.Active : InfoSymbol.Modes.Inactive
+    implicitWidth: row.width
     Rectangle {
         anchors.fill: parent
         color: Assets.Style.colorBackgroundLight
-        border.width: 1        
+//        border.width: 1
         radius: 5
         Row {                        
+            id: row
             anchors.centerIn: parent
             spacing: 24
 

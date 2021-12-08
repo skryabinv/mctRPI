@@ -3,9 +3,6 @@ import QtQuick.Controls 2.12
 import "../Assets" as Assets
 
 Text {
-
-
-
     enum Modes {
         Inactive = 0,
         Active = 1,
