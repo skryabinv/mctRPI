@@ -6,6 +6,7 @@
 #include <exception>
 #include <initializer_list>
 #include <iostream>
+#include <thread>
 #include <QDebug>
 
 namespace core {
@@ -80,8 +81,7 @@ RtTaskSharedPtr Axis::createTaskFindHome()
     auto speed = speedSettings;
     auto gear = gearRatio;
 
-    auto func = [=](RtTask& self) {
-        // Forward moving
+    auto func = [speed, gear, out_dir, out_step, in_switch, step_decoder, this](RtTask& self) {
         speed.applyHomeDir(out_dir);
         auto inc = speed.getHomeIncrement();
         AccDecPulseGenerator gen_fwd{ gear.getMmsPerStep(),
@@ -91,7 +91,7 @@ RtTaskSharedPtr Axis::createTaskFindHome()
             if(self.isCanceled()) return true;
             auto sw_mask = in_switch.read();            
             if(!sw_mask) break;
-            auto mask = step_decoder.decodeLeftToRight(sw_mask);                        
+            auto mask = step_decoder.decodeLeftToRight(sw_mask);
             auto delay_func = gen_fwd.getDelayFuncUs<delay::ProxyDelay>();
             out_step.set(mask);
             delay_func();
@@ -100,7 +100,8 @@ RtTaskSharedPtr Axis::createTaskFindHome()
             ++gen_fwd;
             mPosInSteps += inc;
         }
-        // Backward moving
+
+
         speed.applyHomeDir(out_dir, true);
         inc = speed.getHomeIncrement(true);
         AccDecPulseGenerator gen_back{gear.getMmsPerStep(),
@@ -108,7 +109,7 @@ RtTaskSharedPtr Axis::createTaskFindHome()
                     speed.getAcceleration()};
         while (true) {
             if(self.isCanceled()) return true;
-            auto sw_mask = in_switch.read();            
+            auto sw_mask = in_switch.read();
             if(sw_mask == in_switch.mask()) break;
             auto mask = step_decoder.decodeLeftToRight(sw_mask);
             auto delay_func = gen_back.getDelayFuncUs<delay::ProxyDelay>();
@@ -127,7 +128,6 @@ RtTaskSharedPtr Axis::createTaskFindHome()
                 makeSharedGenericTask(std::move(func), "TaskAxisHoming"),
                 createTaskJog(0.1 * speedSettings.getHomeIncrement(true), speedSettings.getSafePos())
                 } );
-//    return makeSharedGenericTask(std::move(func), "TaskAxisHoming");
 }
 
 RtTaskSharedPtr Axis::createTaskMoveTo(double speedFraction, double position, bool checkLimits)

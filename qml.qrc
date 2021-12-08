@@ -24,5 +24,6 @@
         <file alias="Elements/DelayButtonExt.qml">qml/Elements/DelayButtonExt.qml</file>
         <file alias="Elements/InfoPanel.qml">qml/Elements/InfoPanel.qml</file>
         <file alias="Elements/InfoSymbol.qml">qml/Elements/InfoSymbol.qml</file>
+        <file alias="Elements/OperatorButton.qml">qml/Elements/OperatorButton.qml</file>
     </qresource>
 </RCC>
