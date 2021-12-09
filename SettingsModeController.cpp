@@ -332,6 +332,16 @@ void SettingsModeController::setAxisSettings(const QString& axisName, const QVar
     setPosSafe(axisName, axisSettings["pos_safe"].toDouble());
 }
 
+QVariant SettingsModeController::getAppSettings() const
+{
+    return {};
+}
+
+void SettingsModeController::setAppSettings(const QVariantMap& settings)
+{
+    Q_UNUSED(settings)
+}
+
 void SettingsModeController::save() const
 {    
     auto path = QDir(QCoreApplication::applicationDirPath())

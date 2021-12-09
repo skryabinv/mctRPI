@@ -46,6 +46,9 @@ public:
     Q_INVOKABLE QVariant getAxisSettings(const QString& axisName) const;
     Q_INVOKABLE void setAxisSettings(const QString& axisName, const QVariantMap& axisSettings);
 
+    Q_INVOKABLE QVariant getAppSettings() const;
+    Q_INVOKABLE void setAppSettings(const QVariantMap& settings);
+
     Q_INVOKABLE void save() const;
     Q_INVOKABLE void load();
 

@@ -5,28 +5,20 @@ import "../Assets" as Assets
 Item {
     id: root
 
-    Elems.OperatorStatusPanel {
-        id: statusPanel
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-    }
-
-    Elems.OperatorSurfaceParametersPanel {
+    Elems.OperatorParametersPanel {
         id: surfaceParametersPanel
-        anchors.top: statusPanel.bottom
+        anchors.top: parent.top
         anchors.left: root.left
         anchors.bottom: root.bottom
     }
 
-    Elems.OperatorProcessingControlPanel {
-        id: processingPanel
+    Elems.OperatorControlsPanel {
+        id: statusPanel
         anchors.left: surfaceParametersPanel.right
-        anchors.top: statusPanel.bottom
-        anchors.right: root.right
-        anchors.bottom: root.bottom
-    }
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
 
+    }
 
 }

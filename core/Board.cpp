@@ -1,6 +1,6 @@
 #include "Board.h"
 #include "Axis.h"
-#include "ExternalOut.h"
+#include "OuputPort.h"
 #include "RtTaskMulti.h"
 #include <stdexcept>
 #include <utility>
@@ -14,7 +14,9 @@ Board::Board() {
     mAxisMap["X"] = std::make_unique<Axis>();
     mAxisMap["Y"] = std::make_unique<Axis>();
     mAxisMap["Z"] = std::make_unique<Axis>();
-    mOut = std::make_unique<ExternalOut>(gpio::pins::UNKNOWN);
+
+    mOuts["flash"] = std::make_unique<OuputPort>(0);
+
 }
 
 RtTaskSharedPtr Board::createHomeAllTask() const
@@ -37,9 +39,13 @@ Axis& Board::getAxis(const std::string& name) const
     return *it->second;
 }
 
-ExternalOut &Board::getExternalOut() const
+OuputPort &Board::getExternalOut(const std::string& name) const
 {
-    return *mOut;
+    auto it = mOuts.find(name);
+    if(it == mOuts.end()) {
+        throw std::invalid_argument("Wrong axis name");
+    }
+    return *it->second;
 }
 
 void Board::initInstance()

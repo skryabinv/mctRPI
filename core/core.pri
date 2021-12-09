@@ -9,8 +9,8 @@ HEADERS += \
     $$PWD/BitsDecoder.h \
     $$PWD/Board.h \
     $$PWD/Delay.h \
-    $$PWD/ExternalOut.h \
     $$PWD/GPIO.h \
+    $$PWD/OuputPort.h \
     $$PWD/RtTask.h \
     $$PWD/RtTaskDispatcher.h \
     $$PWD/RtTaskGeneric.h \
