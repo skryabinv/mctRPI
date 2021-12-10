@@ -38,9 +38,8 @@ public:
     double getCoronaWidth() const noexcept {
         return mCoronaWidth;
     }
-    uint32_t getCoronaPin() const noexcept;
-    OutputPort& getCoronaOutput() const;
-    RtTaskSharedPtr createTaskMoveToInitialPos() const noexcept;
+    uint32_t getCoronaPin() const noexcept;    
+    RtTaskSharedPtr createTaskMoveToInitialPos() const noexcept;    
     RtTaskSharedPtr createTaskProcess(double xRange,
                                       double yRange,
                                       double height,

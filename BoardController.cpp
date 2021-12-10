@@ -96,6 +96,25 @@ bool BoardController::getOutputState() const
     return false;
 }
 
+bool BoardController::startTreater(double xRange, double yRange, double height,
+                                       int repeatsCount, double speedFactor)
+{
+    qDebug() << __FUNCTION__
+             << xRange << yRange << height
+             << repeatsCount << speedFactor;
+    return false;
+}
+
+bool BoardController::moveToHomePos()
+{
+    return false;
+}
+
+bool BoardController::moveToInitialPos()
+{
+    return false;
+}
+
 BoardController &BoardController::getInstance()
 {
     static BoardController instance;

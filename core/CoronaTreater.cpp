@@ -22,11 +22,6 @@ uint32_t CoronaTreater::getCoronaPin() const noexcept
     return mCoronaOutputPort->getPin();
 }
 
-OutputPort& CoronaTreater::getCoronaOutput() const {
-    assert(mCoronaOutputPort != nullptr);
-    return *mCoronaOutputPort;
-}
-
 RtTaskSharedPtr CoronaTreater::createTaskMoveToInitialPos() const noexcept
 {
     return {};

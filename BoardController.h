@@ -17,6 +17,10 @@ public:
     Q_INVOKABLE bool setOutputEnabled(bool value);
     Q_INVOKABLE bool isBusy() const;
     Q_INVOKABLE bool getOutputState() const;
+    Q_INVOKABLE bool startTreater(double xRange, double yRange, double height,
+                                      int repeatsCount, double speedFactor);
+    Q_INVOKABLE bool moveToHomePos();
+    Q_INVOKABLE bool moveToInitialPos();
     static BoardController& getInstance();
 signals:    
     void taskStarted();

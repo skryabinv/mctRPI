@@ -16,6 +16,14 @@ static constexpr const char* Positive{"positive"};
 static constexpr const char* Negative{"negative"};
 }
 
+namespace keys {
+
+}
+
+static inline QString getSettingsPath() {
+    return QDir(QCoreApplication::applicationDirPath())
+            .filePath(QStringLiteral(".config"));
+}
 
 
 template <typename ResType, typename HoldType = double>
@@ -26,8 +34,6 @@ static std::vector<ResType> toStdVector(const QVariantList& variantList) {
     }
     return result;
 }
-
-static constexpr const char* FilePath = ".config";
 
 SettingsModeController::SettingsModeController(QObject *parent) : QObject(parent)
 {
@@ -424,23 +430,13 @@ void SettingsModeController::setTreaterSettings(const QVariantMap& settings)
 }
 
 void SettingsModeController::save() const
-{    
-    auto path = QDir(QCoreApplication::applicationDirPath())
-            .filePath(FilePath);
-    saveToFile(path);
+{
+    saveToFile(getSettingsPath());
 }
 
 void SettingsModeController::load()
-{
-    auto path = QDir(QCoreApplication::applicationDirPath())
-            .filePath(FilePath);
-    if(QFileInfo(path).exists()) {
-        qDebug() << "Settings loaded from:" << path;
-    } else {
-        qDebug() << "Can't find .config file."
-                 << "Default settings will be loaded.";
-    }
-    loadFromFile(path);
+{    
+    loadFromFile(getSettingsPath());
 }
 
 QVariant SettingsModeController::toVariant() const
