@@ -2,7 +2,7 @@
 #include "core/Board.h"
 #include "core/Axis.h"
 #include "core/RtTaskDispatcher.h"
-#include "core/OuputPort.h"
+#include "core/OutputPort.h"
 #include "TaskAdapter.h"
 #include <QDebug>
 

@@ -40,14 +40,29 @@ public:
     Q_INVOKABLE void setSpeedHomingBackward(const QString& axisName, double value);
     Q_INVOKABLE void setHomeDirection(const QString& axisName, const QString &value);
     Q_INVOKABLE void setPosHome(const QString& axisName, double pos);
-    Q_INVOKABLE void setPosSafe(const QString& axisName, double value);
+    Q_INVOKABLE void setPosSafe(const QString& axisName, double value);  
+
+    // Treater settings
+
+    Q_INVOKABLE int getTreaterPin() const;
+    Q_INVOKABLE double getTreaterInitialPosX() const;
+    Q_INVOKABLE double getTreaterInitialPosY() const;
+    Q_INVOKABLE double getTreaterHeight() const;
+    Q_INVOKABLE double getTreaterCoronaWidth() const;
+
+    Q_INVOKABLE void setTreaterPin(uint32_t pin);
+    Q_INVOKABLE void setTreaterInitialPosX(double value);
+    Q_INVOKABLE void setTreaterInitialPosY(double value);
+    Q_INVOKABLE void setTreaterHeight(double value);
+    Q_INVOKABLE void setTreaterCoronaWidth(double value);
+
 
 
     Q_INVOKABLE QVariant getAxisSettings(const QString& axisName) const;
     Q_INVOKABLE void setAxisSettings(const QString& axisName, const QVariantMap& axisSettings);
 
-    Q_INVOKABLE QVariant getAppSettings() const;
-    Q_INVOKABLE void setAppSettings(const QVariantMap& settings);
+    Q_INVOKABLE QVariant getTreaterSettings() const;
+    Q_INVOKABLE void setTreaterSettings(const QVariantMap& settings);
 
     Q_INVOKABLE void save() const;
     Q_INVOKABLE void load();

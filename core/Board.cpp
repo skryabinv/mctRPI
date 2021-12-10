@@ -1,7 +1,8 @@
 #include "Board.h"
 #include "Axis.h"
-#include "OuputPort.h"
+#include "OutputPort.h"
 #include "RtTaskMulti.h"
+#include "CoronaTreater.h"
 #include <stdexcept>
 #include <utility>
 #include <initializer_list>
@@ -15,8 +16,7 @@ Board::Board() {
     mAxisMap["Y"] = std::make_unique<Axis>();
     mAxisMap["Z"] = std::make_unique<Axis>();
 
-    mOuts["flash"] = std::make_unique<OuputPort>(0);
-
+    mCoronaTreater = std::make_unique<CoronaTreater>();
 }
 
 RtTaskSharedPtr Board::createHomeAllTask() const
@@ -39,13 +39,24 @@ Axis& Board::getAxis(const std::string& name) const
     return *it->second;
 }
 
-OuputPort &Board::getExternalOut(const std::string& name) const
+OutputPort &Board::getExternalOut(const std::string& name) const
 {
     auto it = mOuts.find(name);
     if(it == mOuts.end()) {
         throw std::invalid_argument("Wrong axis name");
     }
     return *it->second;
+}
+
+CoronaTreater& Board::getCoronaTreater() const
+{
+    return *mCoronaTreater;
+}
+
+void Board::createExternalOut(const std::string& name)
+{
+    assert(!name.empty());
+    mOuts[name] = std::make_unique<OutputPort>();
 }
 
 void Board::initInstance()

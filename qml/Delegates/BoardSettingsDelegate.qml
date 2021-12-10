@@ -33,10 +33,8 @@ Item {
 
         SettingsInput {
             id: initialPosX
-            text: "0"
-            onTextChanged: {
-
-            }
+            text: settings.initial_pos_x.toFixed(1)
+            onTextChanged: settings.initial_pos_x = parseFloat(text)
         }
 
         SettingsLabel {
@@ -45,10 +43,8 @@ Item {
 
         SettingsInput {
             id: initialPosY
-            text: "0"
-            onTextChanged: {
-
-            }
+            text: settings.initial_pos_y.toFixed(1)
+            onTextChanged: settings.initial_pos_y = parseFloat(text)
         }
 
         SettingsLabel {
@@ -57,10 +53,20 @@ Item {
 
         SettingsInput {
             id: height
-            text: "0"
-            onTextChanged: {
+            text: settings.height.toFixed(1)
+            onTextChanged: settings.height = parseFloat(text)
+        }
 
-            }
+
+        SettingsLabel {
+            text: "Ширина разряда, мм:"
+        }
+
+        SettingsInput {
+            id: coronaWidth
+            text: settings.corona_width.toFixed(1)
+            onTextChanged: settings.corona_width = parseFloat(text)
+
         }
 
         SettingsLabel {
@@ -69,10 +75,8 @@ Item {
 
         SettingsInput {
             id: flashPort
-            text: "0"
-            onTextChanged: {
-
-            }
+            text: settings.corona_pin
+            onTextChanged: settings.corona_pin = parseInt(text)
         }
 
     }

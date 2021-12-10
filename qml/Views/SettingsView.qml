@@ -11,6 +11,7 @@ Rectangle {
     property var settingsAxisX: appController.settingsModeController.getAxisSettings("X")
     property var settingsAxisY: appController.settingsModeController.getAxisSettings("Y")
     property var settingsAxisZ: appController.settingsModeController.getAxisSettings("Z")
+    property var settingsTreater: appController.settingsModeController.getTreaterSettings()
 
     ListView {
         id: listView
@@ -66,6 +67,7 @@ Rectangle {
             DelegateChoice {
                 roleValue: "board";
                 delegate: DLG.BoardSettingsDelegate {
+                    settings: settingsTreater
                     width: listView.width
                 }
             }
@@ -145,6 +147,7 @@ Rectangle {
                         appController.settingsModeController.setAxisSettings("X", settingsAxisX)
                         appController.settingsModeController.setAxisSettings("Y", settingsAxisY)
                         appController.settingsModeController.setAxisSettings("Z", settingsAxisZ)
+                        appController.settingsModeController.setTreaterSettings(settingsTreater)
                         appController.settingsModeController.save();
                     }
                     onPressed: {

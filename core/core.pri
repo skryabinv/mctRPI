@@ -8,9 +8,10 @@ HEADERS += \
     $$PWD/AxisSpeedSettings.h \
     $$PWD/BitsDecoder.h \
     $$PWD/Board.h \
+    $$PWD/CoronaTreater.h \
     $$PWD/Delay.h \
     $$PWD/GPIO.h \
-    $$PWD/OuputPort.h \
+    $$PWD/OutputPort.h \
     $$PWD/RtTask.h \
     $$PWD/RtTaskDispatcher.h \
     $$PWD/RtTaskGeneric.h \
@@ -20,6 +21,7 @@ SOURCES += \
     $$PWD/AppInit.cpp \
     $$PWD/Axis.cpp \
     $$PWD/Board.cpp \
+    $$PWD/CoronaTreater.cpp \
     $$PWD/Delay.cpp \
     $$PWD/ExternalOut.cpp \
     $$PWD/GPIO.cpp \

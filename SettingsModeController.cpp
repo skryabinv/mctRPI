@@ -9,6 +9,7 @@
 #include <QStringLiteral>
 #include "core/Board.h"
 #include "core/Axis.h"
+#include "core/CoronaTreater.h"
 
 namespace HomeDirection {
 static constexpr const char* Positive{"positive"};
@@ -294,6 +295,76 @@ void SettingsModeController::setPosSafe(const QString &axisName, double value)
             .setSafePos(value);
 }
 
+int SettingsModeController::getTreaterPin() const
+{
+    return core::Board::getInstance()
+            .getCoronaTreater()
+            .getCoronaPin();
+}
+
+double SettingsModeController::getTreaterInitialPosX() const
+{
+    return core::Board::getInstance()
+            .getCoronaTreater()
+            .getInitalPosX();
+}
+
+double SettingsModeController::getTreaterInitialPosY() const
+{
+    return core::Board::getInstance()
+            .getCoronaTreater()
+            .getInitalPosY();
+}
+
+double SettingsModeController::getTreaterHeight() const
+{
+    return core::Board::getInstance()
+            .getCoronaTreater()
+            .getHeight();
+}
+
+double SettingsModeController::getTreaterCoronaWidth() const
+{
+    return core::Board::getInstance()
+            .getCoronaTreater()
+            .getCoronaWidth();
+}
+
+void SettingsModeController::setTreaterPin(uint32_t pin)
+{
+    core::Board::getInstance()
+            .getCoronaTreater()
+            .setCoronaPin(pin);
+}
+
+void SettingsModeController::setTreaterInitialPosX(double value)
+{
+    core::Board::getInstance()
+            .getCoronaTreater()
+            .setInitialPosX(value);
+}
+
+void SettingsModeController::setTreaterInitialPosY(double value)
+{
+    core::Board::getInstance()
+            .getCoronaTreater()
+            .setInitialPosY(value);
+}
+
+void SettingsModeController::setTreaterHeight(double value)
+{
+    core::Board::getInstance()
+            .getCoronaTreater()
+            .setHeight(value);
+}
+
+void SettingsModeController::setTreaterCoronaWidth(double value)
+{
+    core::Board::getInstance()
+            .getCoronaTreater()
+            .setCoronaWidth(value);
+}
+
 QVariant SettingsModeController::getAxisSettings(const QString& axisName) const
 {    
     QVariantMap axisSettings;
@@ -332,14 +403,24 @@ void SettingsModeController::setAxisSettings(const QString& axisName, const QVar
     setPosSafe(axisName, axisSettings["pos_safe"].toDouble());
 }
 
-QVariant SettingsModeController::getAppSettings() const
+QVariant SettingsModeController::getTreaterSettings() const
 {
-    return {};
+    QVariantMap result;
+    result["corona_pin"] = getTreaterPin();
+    result["corona_width"] = getTreaterCoronaWidth();
+    result["initial_pos_x"] = getTreaterInitialPosX();
+    result["initial_pos_y"] = getTreaterInitialPosY();
+    result["height"] = getTreaterHeight();
+    return result;
 }
 
-void SettingsModeController::setAppSettings(const QVariantMap& settings)
+void SettingsModeController::setTreaterSettings(const QVariantMap& settings)
 {
-    Q_UNUSED(settings)
+    setTreaterPin(settings["corona_pin"].toUInt());
+    setTreaterCoronaWidth(settings["corona_width"].toDouble());
+    setTreaterInitialPosX(settings["initial_pos_x"].toDouble());
+    setTreaterInitialPosY(settings["initial_pos_y"].toDouble());
+    setTreaterHeight(settings["height"].toDouble());
 }
 
 void SettingsModeController::save() const
@@ -353,7 +434,12 @@ void SettingsModeController::load()
 {
     auto path = QDir(QCoreApplication::applicationDirPath())
             .filePath(FilePath);
-    qDebug() << "Settings loaded from:" << path;
+    if(QFileInfo(path).exists()) {
+        qDebug() << "Settings loaded from:" << path;
+    } else {
+        qDebug() << "Can't find .config file."
+                 << "Default settings will be loaded.";
+    }
     loadFromFile(path);
 }
 
@@ -365,7 +451,7 @@ QVariant SettingsModeController::toVariant() const
     for(auto axisName: axisNames) {
         result[axisName] = getAxisSettings(axisName);
     }
-    // Сохранить настройки платы
+    result["treater_settings"] = getTreaterSettings();
     return result;
 }
 
@@ -378,6 +464,6 @@ void SettingsModeController::fromVariant(const QVariant& variant)
         QVariantMap axisSettings = map[axisName].toMap();
         setAxisSettings(axisName, axisSettings);
     }
-    // Считывание настроек платы
+    setTreaterSettings(map["treater_settings"].toMap());
 }
 
