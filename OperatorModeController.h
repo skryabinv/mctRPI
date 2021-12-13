@@ -21,11 +21,15 @@ public:
                                           double speedFactor);
 
     Q_INVOKABLE bool startTreater();
+    Q_INVOKABLE QVariant getProcessParameters();
+    Q_INVOKABLE bool setProcessParameters(const QVariant& parameters);
+    Q_INVOKABLE void cancel();
 
 signals:
 private:    
     void saveParameters(const QString& path);
     void loadParameters(const QString& path);
+    void loadDefaultParameters();
     void updateProcessParameters(const QVariantMap& processParameters);
     const QString mDescription = tr("Режим оператора");
     QVariantMap mProcessParameters;

@@ -45,13 +45,13 @@ Item {
             modeBusy = InfoSymbol.Modes.Inactive
         }
 
-        function onOutputStateChanged(value) {
-            if(value) {
-                modePlasma = InfoSymbol.Modes.Active
-            } else {
-                modePlasma = InfoSymbol.Modes.Inactive
-            }
-        }
+//        function onOutputStateChanged(value) {
+//            if(value) {
+//                modePlasma = InfoSymbol.Modes.Active
+//            } else {
+//                modePlasma = InfoSymbol.Modes.Inactive
+//            }
+//        }
 
         function onAxesHomingDone(axes) {
             if(axes.includes("X")) {

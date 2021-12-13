@@ -14,7 +14,8 @@ class CoronaTreater;
 class Board {
 public:
     ~Board();
-    RtTaskSharedPtr createHomeAllTask() const;    
+    RtTaskSharedPtr createTaskHomeAll() const;
+    RtTaskSharedPtr createTaskMoveToHome() const;
     Axis& getAxis(const std::string& name) const;
     OutputPort& getExternalOut(const std::string& name) const;
     CoronaTreater& getCoronaTreater() const;

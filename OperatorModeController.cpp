@@ -1,5 +1,6 @@
 #include "OperatorModeController.h"
 #include "BoardController.h"
+#include <stdexcept>
 #include <QDebug>
 #include <QFile>
 #include <QJsonDocument>
@@ -68,7 +69,6 @@ bool OperatorModeController::startTreater()
     assert(mProcessParameters.contains(keys::height));
     assert(mProcessParameters.contains(keys::repeats_count));
     assert(mProcessParameters.contains(keys::speed_factor));
-
     return BoardController::getInstance()
             .startTreater(
                 mProcessParameters[keys::x_range].toDouble(),
@@ -79,14 +79,30 @@ bool OperatorModeController::startTreater()
             );
 }
 
+QVariant OperatorModeController::getProcessParameters()
+{
+    return mProcessParameters;
+}
+
+bool OperatorModeController::setProcessParameters(const QVariant& parameters)
+{
+    mProcessParameters = parameters.toMap();
+    qDebug() << __FUNCTION__ << mProcessParameters;
+    return true;
+}
+
+void OperatorModeController::cancel()
+{
+    BoardController::getInstance()
+            .cancel();
+}
+
 void OperatorModeController::saveParameters(const QString& path)
 {
     QFile file{path};
     if(file.open(QIODevice::WriteOnly)) {
         file.write(QJsonDocument::fromVariant(mProcessParameters).toJson());
-        file.close();
-    } else {
-        qDebug() << "Can't save process parameters file:" << path;
+        file.close();        
     }
 }
 
@@ -97,9 +113,12 @@ void OperatorModeController::loadParameters(const QString& path)
         auto doc = QJsonDocument::fromJson(file.readAll());
         mProcessParameters = doc.toVariant().toMap();
         file.close();
-    } else {
-        qDebug() << "Can't read process parameters file:" << path;
     }
+}
+
+void OperatorModeController::loadDefaultParameters()
+{
+    setProcessParameters(200.0, 200.0, 50.0, 1, 0.5);
 }
 
 

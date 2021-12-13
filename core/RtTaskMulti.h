@@ -11,6 +11,7 @@ public:
     RtTaskMulti(std::initializer_list<RtTaskSharedPtr> tasks, std::string description = {})
         : RtTask(std::move(description)),
           mTasks{tasks} {}
+    // TODO: Add construction from vector
     // RtTask interface
 private:
     bool runImpl() override;

@@ -5,6 +5,7 @@ import "../Assets" as Assets
 Controls.DelayButton {
     id: root
     property bool keepChecked: true
+    property alias color: bg.color
     contentItem: Text {
         id: textItem
         text: root.text
@@ -15,6 +16,7 @@ Controls.DelayButton {
         font: root.font
     }
     background: Rectangle {
+        id: bg
         anchors.fill: parent
         color: Assets.Style.colorBackgroundLight
         border.width: 1

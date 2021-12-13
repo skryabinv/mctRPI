@@ -10,6 +10,7 @@ Item {
     signal rejected()
     property string textData: ""    
     property var regExp: /^\d+\.?\d*$/
+    property alias title: titleText.text
 
     anchors.fill: parent
 
@@ -31,16 +32,34 @@ Item {
         id: bg
         anchors.centerIn: parent
         color: "black"
-        width: keyboard.implicitWidth + 50
+        width: Math.max(keyboard.implicitWidth, titleText.implicitWidth) + 50
         height: keyboard.implicitHeight + 50
 
         MouseArea {
             anchors.fill: parent
         }
 
+        Rectangle {
+            id: titleRect
+            height: titleText.implicitHeight + 10
+            width: parent.width
+            anchors.top: parent.top
+            color: Assets.Style.colorTextBackground
+            Text {
+                id: titleText
+                text: ""
+                anchors.centerIn: parent
+                color: Assets.Style.colorTextForeground
+                font.pixelSize: 18
+            }
+
+        }
+
         GridLayout {
             id: keyboard
-            anchors.centerIn: parent
+            anchors.top: titleRect.bottom
+            anchors.topMargin: 10
+            anchors.horizontalCenter: parent.horizontalCenter
             columns: 3
             columnSpacing: 10
             rowSpacing: 10

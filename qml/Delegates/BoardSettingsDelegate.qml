@@ -28,53 +28,63 @@ Item {
         columns: 4
 
         SettingsLabel {
+            id: lblInitialPosX
             text: "Начальная позиция X, мм:"
         }
 
         SettingsInput {
             id: initialPosX
+            title: lblInitialPosX.text
             text: settings.initial_pos_x.toFixed(1)
             onTextChanged: settings.initial_pos_x = parseFloat(text)
         }
 
         SettingsLabel {
+            id: lblInitialPosY
             text: "Начальная позиция Y, мм:"
         }
 
         SettingsInput {
             id: initialPosY
+            title: lblInitialPosY.text
             text: settings.initial_pos_y.toFixed(1)
             onTextChanged: settings.initial_pos_y = parseFloat(text)
         }
 
         SettingsLabel {
-            text: "Высота по умолчанию, мм:"
+            id: lblHeight
+            text: "Высота разряда, мм:"
         }
 
         SettingsInput {
             id: height
+            title: lblHeight.text
             text: settings.height.toFixed(1)
             onTextChanged: settings.height = parseFloat(text)
         }
 
 
         SettingsLabel {
+            id: lblWidth
             text: "Ширина разряда, мм:"
         }
 
         SettingsInput {
             id: coronaWidth
+            title: lblWidth.text
             text: settings.corona_width.toFixed(1)
             onTextChanged: settings.corona_width = parseFloat(text)
 
         }
 
         SettingsLabel {
+            id: lblPort
             text: "Порт разряда:"
         }
 
         SettingsInput {
             id: flashPort
+            title: lblPort.text
             text: settings.corona_pin
             onTextChanged: settings.corona_pin = parseInt(text)
         }

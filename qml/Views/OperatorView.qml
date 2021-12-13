@@ -5,20 +5,21 @@ import "../Assets" as Assets
 Item {
     id: root
 
-    Elems.OperatorParametersPanel {
-        id: surfaceParametersPanel
-        anchors.top: parent.top
-        anchors.left: root.left
-        anchors.bottom: root.bottom
-    }
-
     Elems.OperatorControlsPanel {
-        id: statusPanel
-        anchors.left: surfaceParametersPanel.right
+        id: statusPanel        
         anchors.top: parent.top
-        anchors.right: parent.right
+        anchors.left: parent.left
         anchors.bottom: parent.bottom
 
+    }
+
+    Elems.OperatorParametersPanel {
+        id: surfaceParametersPanel
+        processSettings: appController.operatorModeController.getProcessParameters()
+        anchors.left: statusPanel.right
+        anchors.top: parent.top
+        anchors.right: root.right
+        anchors.bottom: root.bottom
     }
 
 }

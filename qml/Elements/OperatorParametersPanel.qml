@@ -5,6 +5,7 @@ import "../Delegates" as Delegates
 
 Item {
     id: root
+    property var processSettings: ({})
     implicitWidth: 524
 
     Rectangle {
@@ -20,7 +21,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.bottom: parent.bottom
+        anchors.bottom: btnStart.top
         color: "transparent"
         radius: 5
 
@@ -29,11 +30,26 @@ Item {
             spacing: 10
             anchors.fill: parent
             model: [
-                "Ширина, мм:",
-                "Глубина, мм:",
-                "Высота, мм:",
-                "Количество проходов:",
-                "Скорость, %:"
+                {
+                    title: "Ширина, мм:",
+                    data: "x_range"
+                },
+                {
+                    title: "Глубина, мм:",
+                    data: "y_range"
+                },
+                {
+                    title: "Высота, мм:",
+                    data: "height"
+                },
+                {
+                    title: "Количество проходов:",
+                    data: "repeats_count"
+                },
+                {
+                    title: "Скорость, %:",
+                    data: "speed_factor"
+                }
             ]
             delegate: Rectangle {
                 id: item
@@ -48,14 +64,40 @@ Item {
                     anchors.verticalCenter: parent.verticalCenter
                     Delegates.SettingsLabel {
                         implicitWidth: item.width / 2 - 20
-                        text: modelData
+                        text: modelData.title
                     }
                     Delegates.SettingsInput {
+                        title: modelData.title
                         implicitWidth: item.width / 2 - 20
-                        text: "100.0"
+                        text: processSettings[modelData.data]
+                        onTextChanged: {
+                            processSettings[modelData.data] = text
+                        }
                     }
                 }
             }
+        }
+
+    }
+
+    DelayButtonExt {
+        id: btnStart
+        color: "forestgreen"
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.margins: 20
+
+
+        implicitHeight: 60
+        Layout.fillWidth: true
+        keepChecked: false
+        text: "СТАРТ"
+        font.pixelSize: 24
+
+        onActivated: {
+            appController.operatorModeController.setProcessParameters(root.processSettings)
+            appController.operatorModeController.startTreater();
         }
 
     }

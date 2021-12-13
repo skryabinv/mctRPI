@@ -3,6 +3,7 @@
 #include "core/Axis.h"
 #include "core/RtTaskDispatcher.h"
 #include "core/OutputPort.h"
+#include "core/CoronaTreater.h"
 #include "TaskAdapter.h"
 #include <QDebug>
 
@@ -22,13 +23,12 @@ double BoardController::getAxisPos(const QString &axis) const
 
 bool BoardController::homeAxis(const QString &axis)
 {
-    if(mCurrentTask->isDone()) {
+    if(isReady()) {
         mCurrentTask = wrapHomingTask(
                     core::Board::getInstance()
                     .getAxis(axis.toStdString())
                     .createTaskFindHome(),
-                    axis
-                    );
+                    axis);
         core::RtTaskDispatcher::getInstance()
                 .scheduleTask(mCurrentTask);
         return true;
@@ -37,13 +37,12 @@ bool BoardController::homeAxis(const QString &axis)
 }
 
 bool BoardController::homeAllAxis()
-{
-    if(mCurrentTask->isDone()) {
+{    
+    if(isReady()) {
         mCurrentTask = wrapHomingTask(
                     core::Board::getInstance()
-                    .createHomeAllTask(),
-                    QStringLiteral("XYZ")
-                    );
+                    .createTaskHomeAll(),
+                    QStringLiteral("XYZ"));
         core::RtTaskDispatcher::getInstance()
                 .scheduleTask(mCurrentTask);
         return true;
@@ -53,12 +52,11 @@ bool BoardController::homeAllAxis()
 
 bool BoardController::jogStart(const QString& axis, double speedFactor, double distance)
 {    
-    if(mCurrentTask->isDone()) {
+    if(isReady()) {
         mCurrentTask = wrapTask(
                     core::Board::getInstance()
                     .getAxis(axis.toStdString())
-                    .createTaskJog(speedFactor, distance)
-                                );
+                    .createTaskJog(speedFactor, distance));
         core::RtTaskDispatcher::getInstance()
                 .scheduleTask(mCurrentTask);
         return true;
@@ -78,17 +76,14 @@ bool BoardController::isHomingDone(const QString &axis) const
             .isHomingDone();
 }
 
-bool BoardController::setOutputEnabled(bool value)
-{
-    qDebug() << __FUNCTION__ << value;
-    Q_UNUSED(value)
-    emit outputStateChanged(value);
-    return true;
-}
-
 bool BoardController::isBusy() const
 {
     return !mCurrentTask->isDone();
+}
+
+bool BoardController::isReady() const
+{
+    return mCurrentTask->isDone();
 }
 
 bool BoardController::getOutputState() const
@@ -98,20 +93,47 @@ bool BoardController::getOutputState() const
 
 bool BoardController::startTreater(double xRange, double yRange, double height,
                                        int repeatsCount, double speedFactor)
-{
-    qDebug() << __FUNCTION__
-             << xRange << yRange << height
-             << repeatsCount << speedFactor;
+{   
+    if(isReady()) {
+        auto task = core::Board::getInstance()
+                .getCoronaTreater()
+                .createTaskProcess(xRange, yRange,
+                                   height,
+                                   repeatsCount,
+                                   speedFactor);
+        mCurrentTask = wrapTask(std::move(task));
+        core::RtTaskDispatcher::getInstance()
+                .scheduleTask(mCurrentTask);
+        return true;
+    }
     return false;
 }
 
 bool BoardController::moveToHomePos()
-{
+{    
+    if(isReady()) {
+        auto task = core::Board::getInstance()
+                .createTaskMoveToHome();
+        mCurrentTask = wrapTask(std::move(task));
+        core::RtTaskDispatcher::getInstance()
+                .scheduleTask(mCurrentTask);
+        return true;
+    }
     return false;
 }
 
 bool BoardController::moveToInitialPos()
 {
+    qDebug() << __FUNCTION__;
+    if(isReady()) {
+        auto task = core::Board::getInstance()
+                .getCoronaTreater()
+                .createTaskMoveToInitialPos();
+        mCurrentTask = wrapTask(std::move(task));
+        core::RtTaskDispatcher::getInstance()
+                .scheduleTask(mCurrentTask);
+        return true;
+    }
     return false;
 }
 

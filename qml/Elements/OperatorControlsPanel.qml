@@ -3,7 +3,8 @@ import QtQuick.Layouts 1.12
 import "../Assets" as Assets
 
 Item {
-    id: root    
+    id: root
+    implicitWidth: 500
     Rectangle {
         anchors.fill: parent
         color: Assets.Style.colorBackground
@@ -31,6 +32,9 @@ Item {
             keepChecked: false
             text: "Поиск HOME"
             font.pixelSize: 24
+            onActivated: {
+                appController.operatorModeController.findHome()
+            }
         }
 
         DelayButtonExt {
@@ -40,37 +44,33 @@ Item {
             keepChecked: false
             text: "В позицию XY HOME"
             font.pixelSize: 24
+            onActivated: {
+                appController.operatorModeController.moveToHomePos()
+            }
         }
 
         DelayButtonExt {
-            id: btnParkingZone
+            id: btnInitialPos
             implicitHeight: btnHome.implicitHeight
             Layout.fillWidth: true
             keepChecked: false
             text: "В начальную позицию"
             font.pixelSize: 24
+            onActivated: {
+                appController.operatorModeController.moveToInitialPos()
+            }
         }
 
         CancelButton {
             id: btnCancel
             Layout.fillWidth: true
             implicitHeight: 60
+            onPressed: {
+                console.log("canceled")
+            }
         }
     }
 
-    DelayButtonExt {
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.margins: 10
-
-        id: btnStart
-        implicitHeight: btnHome.implicitHeight
-        Layout.fillWidth: true
-        keepChecked: false
-        text: "Пуск"
-        font.pixelSize: 24
-    }
 
 
 }

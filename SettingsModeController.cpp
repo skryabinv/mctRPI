@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QCoreApplication>
 #include <QStringLiteral>
+#include <array>
 #include "core/Board.h"
 #include "core/Axis.h"
 #include "core/CoronaTreater.h"
@@ -17,6 +18,31 @@ static constexpr const char* Negative{"negative"};
 }
 
 namespace keys {
+
+// Axis settings keys
+
+static constexpr const char* limit_low = "limit_low";
+static constexpr const char* limit_high = "limit_high";
+static constexpr const char* dist_for_steps = "dist_for_steps";
+static constexpr const char* steps_for_dist = "steps_for_dist";
+static constexpr const char* port_step = "port_step";
+static constexpr const char* port_dir = "port_dir";
+static constexpr const char* port_home = "port_home";
+static constexpr const char* speed = "speed";
+static constexpr const char* time_to_speed = "time_to_speed";
+static constexpr const char* speed_homing_forward = "speed_homing_forward";
+static constexpr const char* speed_homing_backward = "speed_homing_backward";
+static constexpr const char* home_direction = "home_direction";
+static constexpr const char* pos_home = "pos_home";
+static constexpr const char* pos_safe = "pos_safe";
+
+// Treater keys
+
+static constexpr const char* corona_pin = "corona_pin";
+static constexpr const char* corona_width = "corona_width";
+static constexpr const char* initial_pos_x = "initial_pos_x";
+static constexpr const char* initial_pos_y = "initial_pos_y";
+static constexpr const char* height = "height";
 
 }
 
@@ -374,59 +400,59 @@ void SettingsModeController::setTreaterCoronaWidth(double value)
 QVariant SettingsModeController::getAxisSettings(const QString& axisName) const
 {    
     QVariantMap axisSettings;
-    axisSettings["limit_low"] = getLimitLow(axisName);
-    axisSettings["limit_high"] = getLimitHigh(axisName);
-    axisSettings["dist_for_steps"] = getDistForSteps(axisName);
-    axisSettings["steps_for_dist"] = getStepsForDist(axisName);
-    axisSettings["port_step"] = getPortStep(axisName);
-    axisSettings["port_dir"] = getPortDir(axisName);
-    axisSettings["port_home"] = getPortHome(axisName);
-    axisSettings["speed"] = getSpeed(axisName);
-    axisSettings["time_to_speed"] = getTimeToSpeed(axisName);
-    axisSettings["speed_homing_forward"] = getSpeedHomingForward(axisName);
-    axisSettings["speed_homing_backward"] = getSpeedHomingBackward(axisName);    
-    axisSettings["home_direction"] = getHomeDirection(axisName);
-    axisSettings["pos_home"] = getPosHome(axisName);    
-    axisSettings["pos_safe"] = getPosSafe(axisName);
+    axisSettings[keys::limit_low] = getLimitLow(axisName);
+    axisSettings[keys::limit_high] = getLimitHigh(axisName);
+    axisSettings[keys::dist_for_steps] = getDistForSteps(axisName);
+    axisSettings[keys::steps_for_dist] = getStepsForDist(axisName);
+    axisSettings[keys::port_step] = getPortStep(axisName);
+    axisSettings[keys::port_dir] = getPortDir(axisName);
+    axisSettings[keys::port_home] = getPortHome(axisName);
+    axisSettings[keys::speed] = getSpeed(axisName);
+    axisSettings[keys::time_to_speed] = getTimeToSpeed(axisName);
+    axisSettings[keys::speed_homing_forward] = getSpeedHomingForward(axisName);
+    axisSettings[keys::speed_homing_backward] = getSpeedHomingBackward(axisName);
+    axisSettings[keys::home_direction] = getHomeDirection(axisName);
+    axisSettings[keys::pos_home] = getPosHome(axisName);
+    axisSettings[keys::pos_safe] = getPosSafe(axisName);
     return axisSettings;
 }
 
 void SettingsModeController::setAxisSettings(const QString& axisName, const QVariantMap& axisSettings)
 {    
-    setLimitLow(axisName, axisSettings["limit_low"].toDouble());
-    setLimitHigh(axisName, axisSettings["limit_high"].toDouble());
-    setDistForSteps(axisName, axisSettings["dist_for_steps"].toDouble());
-    setStepsForDist(axisName, axisSettings["steps_for_dist"].toDouble());
-    setPortStep(axisName, axisSettings["port_step"].toList());
-    setPortDir(axisName, axisSettings["port_dir"].toList());
-    setPortHome(axisName, axisSettings["port_home"].toList());
-    setSpeed(axisName, axisSettings["speed"].toDouble());
-    setTimeToSpeed(axisName, axisSettings["time_to_speed"].toDouble());
-    setSpeedHomingForward(axisName, axisSettings["speed_homing_forward"].toDouble());
-    setSpeedHomingBackward(axisName, axisSettings["speed_homing_backward"].toDouble());    
-    setHomeDirection(axisName, axisSettings["home_direction"].toString());
-    setPosHome(axisName, axisSettings["pos_home"].toDouble());
-    setPosSafe(axisName, axisSettings["pos_safe"].toDouble());
+    setLimitLow(axisName, axisSettings[keys::limit_low].toDouble());
+    setLimitHigh(axisName, axisSettings[keys::limit_high].toDouble());
+    setDistForSteps(axisName, axisSettings[keys::dist_for_steps].toDouble());
+    setStepsForDist(axisName, axisSettings[keys::steps_for_dist].toDouble());
+    setPortStep(axisName, axisSettings[keys::port_step].toList());
+    setPortDir(axisName, axisSettings[keys::port_dir].toList());
+    setPortHome(axisName, axisSettings[keys::port_home].toList());
+    setSpeed(axisName, axisSettings[keys::speed].toDouble());
+    setTimeToSpeed(axisName, axisSettings[keys::time_to_speed].toDouble());
+    setSpeedHomingForward(axisName, axisSettings[keys::speed_homing_forward].toDouble());
+    setSpeedHomingBackward(axisName, axisSettings[keys::speed_homing_backward].toDouble());
+    setHomeDirection(axisName, axisSettings[keys::home_direction].toString());
+    setPosHome(axisName, axisSettings[keys::pos_home].toDouble());
+    setPosSafe(axisName, axisSettings[keys::pos_safe].toDouble());
 }
 
 QVariant SettingsModeController::getTreaterSettings() const
 {
     QVariantMap result;
-    result["corona_pin"] = getTreaterPin();
-    result["corona_width"] = getTreaterCoronaWidth();
-    result["initial_pos_x"] = getTreaterInitialPosX();
-    result["initial_pos_y"] = getTreaterInitialPosY();
-    result["height"] = getTreaterHeight();
+    result[keys::corona_pin] = getTreaterPin();
+    result[keys::corona_width] = getTreaterCoronaWidth();
+    result[keys::initial_pos_x] = getTreaterInitialPosX();
+    result[keys::initial_pos_y] = getTreaterInitialPosY();
+    result[keys::height] = getTreaterHeight();
     return result;
 }
 
 void SettingsModeController::setTreaterSettings(const QVariantMap& settings)
 {
-    setTreaterPin(settings["corona_pin"].toUInt());
-    setTreaterCoronaWidth(settings["corona_width"].toDouble());
-    setTreaterInitialPosX(settings["initial_pos_x"].toDouble());
-    setTreaterInitialPosY(settings["initial_pos_y"].toDouble());
-    setTreaterHeight(settings["height"].toDouble());
+    setTreaterPin(settings[keys::corona_pin].toUInt());
+    setTreaterCoronaWidth(settings[keys::corona_width].toDouble());
+    setTreaterInitialPosX(settings[keys::initial_pos_x].toDouble());
+    setTreaterInitialPosY(settings[keys::initial_pos_y].toDouble());
+    setTreaterHeight(settings[keys::height].toDouble());
 }
 
 void SettingsModeController::save() const
@@ -441,9 +467,8 @@ void SettingsModeController::load()
 
 QVariant SettingsModeController::toVariant() const
 {
-    QVariantMap result;
-    // Сохранение настроек осей
-    QString axisNames[] = { "X", "Y", "Z" };
+    QVariantMap result;    
+    std::array<QString, 3> axisNames { "X", "Y", "Z" };
     for(auto axisName: axisNames) {
         result[axisName] = getAxisSettings(axisName);
     }
@@ -453,9 +478,8 @@ QVariant SettingsModeController::toVariant() const
 
 void SettingsModeController::fromVariant(const QVariant& variant)
 {
-    QVariantMap map = variant.toMap();
-    // Считывание настроек осей
-    QString axisNames[] = { "X", "Y", "Z" };
+    QVariantMap map = variant.toMap();    
+    std::array<QString, 3> axisNames { "X", "Y", "Z" };
     for(auto axisName: axisNames) {
         QVariantMap axisSettings = map[axisName].toMap();
         setAxisSettings(axisName, axisSettings);

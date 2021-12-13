@@ -39,16 +39,17 @@ public:
         return mCoronaWidth;
     }
     uint32_t getCoronaPin() const noexcept;    
-    RtTaskSharedPtr createTaskMoveToInitialPos() const noexcept;    
+    RtTaskSharedPtr createTaskMoveToInitialPos() const;
     RtTaskSharedPtr createTaskProcess(double xRange,
                                       double yRange,
                                       double height,
-                                      int repeats, double speedFactor) const noexcept;
+                                      int repeats, double speedFactor) const;
 private:
     double mInitalPosX;
     double mInitalPosY;
     double mHeight;
     double mCoronaWidth;
+    double mSpeed = 0.5;
     std::unique_ptr<OutputPort> mCoronaOutputPort{};
 };
 

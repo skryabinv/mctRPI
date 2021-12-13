@@ -19,7 +19,7 @@ Board::Board() {
     mCoronaTreater = std::make_unique<CoronaTreater>();
 }
 
-RtTaskSharedPtr Board::createHomeAllTask() const
+RtTaskSharedPtr Board::createTaskHomeAll() const
 {
     auto result = std::make_shared<RtTaskMulti>(
                 std::initializer_list<RtTaskSharedPtr>{
@@ -28,6 +28,11 @@ RtTaskSharedPtr Board::createHomeAllTask() const
                     getAxis("Y").createTaskFindHome()
                 });
     return result;
+}
+
+RtTaskSharedPtr Board::createTaskMoveToHome() const
+{
+    return {};
 }
 
 Axis& Board::getAxis(const std::string& name) const

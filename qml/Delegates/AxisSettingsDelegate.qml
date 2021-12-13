@@ -8,6 +8,7 @@ Item {
     property string axisName: ""
     property var axisData: ({})
     property alias checked: titleDelegate.checked
+    readonly property string axisTitle: "Ось " + axisName + ": "
 
     implicitHeight: titleDelegate.implicitHeight + (titleDelegate.checked ? content.implicitHeight : 0)
     SettingsDelegate {
@@ -33,23 +34,27 @@ Item {
         // Нижнее ограничение
 
         SettingsLabel {
+            id: lblLimitLow
             text: "Мин. значение, мм:"            
         }
 
         SettingsInput {
             id: limitLow
+            title: axisTitle + lblLimitLow.text
             text: axisData.limit_low.toFixed(1)
             onTextChanged: axisData.limit_low = parseFloat(text)
         }
 
         // Верхнее ограничение
 
-        SettingsLabel {            
+        SettingsLabel {
+            id: lblLimitHigh
             text: "Макс. значение, мм:"
         }
 
         SettingsInput {
             id: limitHigh
+            title: axisTitle + lblLimitHigh.text
             text: axisData.limit_high.toFixed(1)
             onTextChanged: axisData.limit_high = parseFloat(text)
         }
@@ -57,22 +62,26 @@ Item {
         // Коэффициент передачи
 
         SettingsLabel {
+            id: lblDistForSteps
             text: "Перемещение, мм:"
         }
 
         SettingsInput {
             id: distForSteps
+            title: axisTitle + lblDistForSteps.text
             text: axisData.dist_for_steps.toFixed(1)
             onTextChanged: axisData.dist_for_steps = parseFloat(text)
 
         }
 
         SettingsLabel {
+            id: lblStepsForDist
             text: "Перемещение, шагов:"
         }
 
         SettingsInput {
             id: stepsForDist
+            title: axisTitle + lblStepsForDist.text
             text: axisData.steps_for_dist.toFixed(1)
             onTextChanged: axisData.steps_for_dist = parseFloat(text)
         }
@@ -80,41 +89,49 @@ Item {
         // Скорость
 
         SettingsLabel {
+            id: lblSpeed
             text: "Макс. скорость, мм/мин:"
         }
 
         SettingsInput {
             id: speed
+            title: axisTitle + lblSpeed.text
             text: axisData.speed.toFixed(1)
             onTextChanged: axisData.speed = parseFloat(text)
         }
 
         SettingsLabel {
+            id: lblTimeToSpeed
             text: "Время набора скорости, мс:"
         }
 
         SettingsInput {
             id: timeToSpeed
+            title: axisTitle + lblTimeToSpeed.text
             text: axisData.time_to_speed.toFixed(1)
             onTextChanged: axisData.time_to_speed = parseFloat(text)
         }
 
         SettingsLabel {
+            id: lblSpeedHomeForward
             text: "Скорость HOME вперед, мм/мин:"
         }
 
         SettingsInput {
-            id: speedHomeForward            
+            id: speedHomeForward
+            title: axisTitle + lblSpeedHomeForward.text
             text: axisData.speed_homing_forward.toFixed(1)
             onTextChanged: axisData.speed_homing_forward = parseFloat(text)
         }
 
         SettingsLabel {
+            id: lblSpeedHomeBackward
             text: "Скорость HOME назад, мм/мин:"
         }
 
         SettingsInput {
             id: speedHomeBackward            
+            title: axisTitle + lblSpeedHomeBackward.text
             text: axisData.speed_homing_backward.toFixed(1)
             onTextChanged: axisData.speed_homing_backward = parseFloat(text)
         }
@@ -122,11 +139,13 @@ Item {
         // Порт ввода-вывода
 
         SettingsLabel {
+            id: lblPortStep
             text: "Порт STEP:"
         }
 
         SettingsInput {
             id: portStep
+            title: axisTitle + lblPortStep.text
             text: axisData.port_step.join(".")
             onTextChanged: {
                 if(text !== axisData.port_step.join(".")) {
@@ -135,12 +154,14 @@ Item {
             }
         }
 
-        SettingsLabel {            
+        SettingsLabel {
+            id: lblPortDir
             text: "Порт DIR:"
         }
 
         SettingsInput {
             id: portDir
+            title: axisTitle + lblPortDir.text
             text: axisData.port_dir.join(".")
             onTextChanged: {
                 if(text !== axisData.port_dir.join(".")) {
@@ -150,11 +171,13 @@ Item {
         }
 
         SettingsLabel {
+            id: lblPortHome
             text: "Порт HOME:"
         }
 
         SettingsInput {
             id: portHome
+            title: axisTitle + lblPortHome.text
             text: axisData.port_home.join(".")
             onTextChanged: {
                 if(text !== axisData.port_home.join(".")) {
@@ -163,7 +186,7 @@ Item {
             }
         }        
 
-        SettingsLabel {
+        SettingsLabel {            
             text: "Направление поиска Home:"
         }
 
@@ -180,10 +203,12 @@ Item {
         }
 
         SettingsLabel {
+            id: lblPosHome
             text: "Координата HOME:"
         }
 
         SettingsInput {
+            title: axisTitle + lblPosHome.text
             text: axisData.pos_home
             onTextChanged: {
                 axisData.pos_home = parseFloat(text)
@@ -191,10 +216,12 @@ Item {
         }
 
         SettingsLabel {
+            id: lblPosSafe
             text: "Отъезд от HOME:"
         }
 
         SettingsInput {
+            title: axisTitle + lblPosSafe.text
             text: axisData.pos_safe
             onTextChanged: {
                 axisData.pos_safe = parseFloat(text)

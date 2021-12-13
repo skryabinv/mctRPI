@@ -6,6 +6,7 @@ import QtQuick.VirtualKeyboard 2.14
 Item {
     id: root
     property alias text: content.text
+    property string title: "title"
     property bool isInteger: false
     property bool dirty: false
     implicitWidth: Math.max(150, content.implicitWidth)
@@ -31,6 +32,7 @@ Item {
             onReleased: {                
                 let comp = Qt.createComponent("../Dialogs/DialogNumericInput.qml")
                 let obj = comp.createObject(root, {x:0, y:0})
+                obj.title = title
                 obj.show()
                 obj.accepted.connect((data)=>{text = data});
             }
