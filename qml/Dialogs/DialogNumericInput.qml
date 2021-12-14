@@ -9,8 +9,13 @@ Item {
     signal accepted(string value)
     signal rejected()
     property string textData: ""    
-    property var regExp: /^\d+\.?\d*$/
+    property bool isInteger: false
+    readonly property var regExpFloat: /^\d+\.?\d{0,3}$/
+    readonly property var regExpInt: /^\d+$/
     property alias title: titleText.text
+    property double minValue: 0.0
+    property double maxValue: 10000.0
+
 
     anchors.fill: parent
 
@@ -80,7 +85,7 @@ Item {
                     height: 80
                     width: 240 + 2 * keyboard.columnSpacing
                     color: Assets.Style.colorTextForeground
-                    font.pixelSize: 28
+                    font.pixelSize: 34
                     clip: true
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
@@ -100,10 +105,15 @@ Item {
                     }
                     Connections {
                         target: loader.item
-                        function onPressed(symbol) {
+                        function onPressed(symbol) {                            
+                            if(root.textData === "0") {
+                                if(symbol !== "0" && symbol !== ".") root.textData = ""
+                                else if(symbol === "0") return;
+                            }
                             let tmp = root.textData + symbol                            
-                            if(regExp.test(tmp))
+                            if(validate(tmp)) {
                                 root.textData = tmp
+                            }
                         }
                     }
                 }
@@ -125,7 +135,7 @@ Item {
                     function onPressed(symbol) {
                         let len = root.textData.length
                         if(len > 0) {
-                            root.textData = root.textData.substring(0, len - 1)
+                            root.textData = (root.textData.substring(0, len - 1))
                         }
                     }
                 }
@@ -149,6 +159,7 @@ Item {
                     function onPressed(symbol) {
                         hide()
                         if(root.textData.length > 0 && validate(root.textData)) {
+                            root.textData = parseFloat(root.textData)
                             accepted(root.textData)
                         }
                     }
@@ -199,7 +210,7 @@ Item {
             property alias fontName: text.font.family
             implicitWidth: 80;
             implicitHeight: 80
-            color: Assets.Style.colorTextBackground
+            color: mouseArea.pressed ? Qt.lighter(Assets.Style.colorTextBackground) : Assets.Style.colorTextBackground
             radius: 5
             Text {
                 id: text
@@ -209,6 +220,7 @@ Item {
                 font.pixelSize: 20
             }
             MouseArea {
+                id: mouseArea
                 anchors.fill: parent
                 onClicked: btn.pressed(symbol)
             }
@@ -226,6 +238,8 @@ Item {
     }   
 
     function validate(value) {        
-        return true
+        const test = isInteger ? regExpInt.test(value) : regExpFloat.test(value)
+        return test && minValue <= value && value <= maxValue
     }
+
 }

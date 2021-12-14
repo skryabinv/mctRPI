@@ -6,6 +6,7 @@ import "../Assets" as Assets
 
 Rectangle {
     id: root
+    implicitHeight: listView.implicitHeight
     color: Assets.Style.colorBackground
 
     property var settingsAxisX: appController.settingsModeController.getAxisSettings("X")

@@ -56,4 +56,24 @@ RtTaskSharedPtr CoronaTreater::createTaskProcess(double xRange, double yRange,
     return makeSharedGenericTask(std::move(task));
 }
 
+uint32_t CoronaTreater::getEnableTreaterPin() noexcept
+{
+    return mCoronaEnablePort->getPin();
+}
+
+uint32_t CoronaTreater::getDisableTreaterPin() noexcept
+{
+    return mCoronaDisablePort->getPin();
+}
+
+void CoronaTreater::setEnableTreaterPin(uint32_t value) noexcept
+{
+    mCoronaEnablePort->setPin(value);
+}
+
+void CoronaTreater::setDisableTreaterPin(uint32_t value) noexcept
+{
+    mCoronaDisablePort->setPin(value);
+}
+
 } // namespace core

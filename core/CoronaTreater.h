@@ -44,6 +44,28 @@ public:
                                       double yRange,
                                       double height,
                                       int repeats, double speedFactor) const;
+
+    // Two port treaters control: enable with delay, disable with delay
+
+    uint32_t getEnableTreaterPin() noexcept;
+
+    uint32_t getDisableTreaterPin() noexcept;
+
+    void setEnableTreaterPin(uint32_t value) noexcept;
+
+    void setDisableTreaterPin(uint32_t value) noexcept;
+
+    void setPortDelayMs(double value) noexcept {
+        mPortDelayMs = value;
+    }
+
+    double getPortDelayMs() const noexcept {
+        return mPortDelayMs;
+    }
+
+    // RtTaskSharedPtr createTaskEnableTreater();
+    // RtTaskSharedPtr createTaskDisableTreater();
+
 private:
     double mInitalPosX;
     double mInitalPosY;
@@ -51,6 +73,12 @@ private:
     double mCoronaWidth;
     double mSpeed = 0.5;
     std::unique_ptr<OutputPort> mCoronaOutputPort{};
+
+    // Ports for enables/disables
+
+    double mPortDelayMs{100.0};
+    std::unique_ptr<OutputPort> mCoronaEnablePort{};
+    std::unique_ptr<OutputPort> mCoronaDisablePort{};
 };
 
 } // namespace core

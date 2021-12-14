@@ -6,7 +6,7 @@ Item {
     property alias checked: titleDelegate.checked
     property var settings: ({})
 
-    implicitHeight: titleDelegate.height
+    implicitHeight: titleDelegate.height + (titleDelegate.checked ? content.height + 20 : 0)
     SettingsDelegate {
         id: titleDelegate
         anchors.left: parent.left
@@ -78,13 +78,25 @@ Item {
         }
 
         SettingsLabel {
-            id: lblPort
-            text: "Порт разряда:"
+            id: lblPortEnable
+            text: "Порт включения разряда:"
+        }
+
+        SettingsInput {
+            id: portEnable
+            title: lblPortEnable.text
+            text: settings.corona_pin
+            onTextChanged: settings.corona_pin = parseInt(text)
+        }
+
+        SettingsLabel {
+            id: lblPortDisable
+            text: "Порт выключения разряда:"
         }
 
         SettingsInput {
             id: flashPort
-            title: lblPort.text
+            title: lblPortDisable.text
             text: settings.corona_pin
             onTextChanged: settings.corona_pin = parseInt(text)
         }

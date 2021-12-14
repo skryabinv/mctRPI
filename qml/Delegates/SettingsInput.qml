@@ -19,9 +19,7 @@ Item {
             anchors.centerIn: parent
             font.pixelSize: 22
             color: Assets.Style.colorTextForeground
-            onTextChanged: {
-                root.dirty = true
-            }                        
+            onTextChanged: root.dirty = true
         }
         border.width: 2
         border.color: Assets.Style.colorTextBorder
@@ -34,7 +32,8 @@ Item {
                 let obj = comp.createObject(root, {x:0, y:0})
                 obj.title = title
                 obj.show()
-                obj.accepted.connect((data)=>{text = data});
+                obj.accepted.connect((data)=>{ text = data; obj.destroy() });
+                obj.rejected.connect(()=>{ obj.destroy() })
             }
         }
     }

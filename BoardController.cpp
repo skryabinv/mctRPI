@@ -94,6 +94,7 @@ bool BoardController::getOutputState() const
 bool BoardController::startTreater(double xRange, double yRange, double height,
                                        int repeatsCount, double speedFactor)
 {   
+    qDebug() << __FUNCTION__ << xRange << yRange << height << repeatsCount << speedFactor;
     if(isReady()) {
         auto task = core::Board::getInstance()
                 .getCoronaTreater()

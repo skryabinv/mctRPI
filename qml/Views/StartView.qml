@@ -92,14 +92,14 @@ Item {
     }
 
     RoundButton {
-        width: 60
+        width: 90
         height: width
         anchors.right: parent.right
         anchors.rightMargin: 20
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 20
         text: "\uf011"
-        font.pixelSize: 28
+        font.pixelSize: 38
         font.family: Assets.Style.fontAwesome
         onPressAndHold: {
             console.log("Try to power off...")

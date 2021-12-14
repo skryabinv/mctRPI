@@ -69,9 +69,9 @@ Item {
                     Delegates.SettingsInput {
                         title: modelData.title
                         implicitWidth: item.width / 2 - 20
-                        text: processSettings[modelData.data]
+                        text: Number.isInteger(parseFloat(processSettings[modelData.data])) ? processSettings[modelData.data] : processSettings[modelData.data].toFixed(3)
                         onTextChanged: {
-                            processSettings[modelData.data] = text
+                            processSettings[modelData.data] = parseFloat(text)
                         }
                     }
                 }
