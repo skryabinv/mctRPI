@@ -85,8 +85,8 @@ Item {
         SettingsInput {
             id: portEnable
             title: lblPortEnable.text
-            text: settings.corona_pin
-            onTextChanged: settings.corona_pin = parseInt(text)
+            text: settings.corona_enable_pin
+            onTextChanged: settings.corona_enable_pin = parseInt(text)
         }
 
         SettingsLabel {
@@ -97,9 +97,22 @@ Item {
         SettingsInput {
             id: flashPort
             title: lblPortDisable.text
-            text: settings.corona_pin
-            onTextChanged: settings.corona_pin = parseInt(text)
+            text: settings.corona_disable_pin
+            onTextChanged: settings.corona_disable_pin = parseInt(text)
         }
+
+        SettingsLabel {
+            id: lblPortTimeout
+            text: "Задержка вкл./выкл., мс:"
+        }
+
+        SettingsInput {
+            id: portTimeOut
+            title: lblPortTimeout.text
+            text: settings.corona_ports_delay_ms
+            onTextChanged: settings.corona_ports_delay_ms = parseInt(text)
+        }
+
 
     }
 

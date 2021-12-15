@@ -32,23 +32,38 @@ Item {
             model: [
                 {
                     title: "Ширина, мм:",
-                    data: "x_range"
+                    data: "x_range",
+                    min: 1,
+                    max: 380,
+                    integer: false
                 },
                 {
                     title: "Глубина, мм:",
-                    data: "y_range"
+                    data: "y_range",
+                    min: 1,
+                    max: 280,
+                    integer: false
                 },
                 {
                     title: "Высота, мм:",
-                    data: "height"
+                    data: "height",
+                    min: 1,
+                    max: 200,
+                    integer: false
                 },
                 {
                     title: "Количество проходов:",
-                    data: "repeats_count"
+                    data: "repeats_count",
+                    min: 1,
+                    max: 50,
+                    integer: true
                 },
                 {
                     title: "Скорость, %:",
-                    data: "speed_factor"
+                    data: "speed_factor",
+                    min: 5,
+                    max: 100,
+                    integer: true
                 }
             ]
             delegate: Rectangle {
@@ -68,6 +83,9 @@ Item {
                     }
                     Delegates.SettingsInput {
                         title: modelData.title
+                        minValue: modelData.min
+                        maxValue: modelData.max
+                        isInteger: modelData.integer
                         implicitWidth: item.width / 2 - 20
                         text: Number.isInteger(parseFloat(processSettings[modelData.data])) ? processSettings[modelData.data] : processSettings[modelData.data].toFixed(3)
                         onTextChanged: {

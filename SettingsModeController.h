@@ -44,19 +44,22 @@ public:
 
     // Treater settings
 
-    Q_INVOKABLE int getTreaterPin() const;
+
     Q_INVOKABLE double getTreaterInitialPosX() const;
     Q_INVOKABLE double getTreaterInitialPosY() const;
     Q_INVOKABLE double getTreaterHeight() const;
     Q_INVOKABLE double getTreaterCoronaWidth() const;
+    Q_INVOKABLE uint32_t getTreaterEnablePin() const;
+    Q_INVOKABLE uint32_t getTreaterDisablePin() const;
+    Q_INVOKABLE int getTreaterPortsDelayMs() const;
 
-    Q_INVOKABLE void setTreaterPin(uint32_t pin);
     Q_INVOKABLE void setTreaterInitialPosX(double value);
     Q_INVOKABLE void setTreaterInitialPosY(double value);
     Q_INVOKABLE void setTreaterHeight(double value);
     Q_INVOKABLE void setTreaterCoronaWidth(double value);
-
-
+    Q_INVOKABLE void setTreaterEnablePin(uint32_t pin);
+    Q_INVOKABLE void setTreaterDisablePin(uint32_t pin);
+    Q_INVOKABLE void setTreaterPortsDelayMs(double value);
 
     Q_INVOKABLE QVariant getAxisSettings(const QString& axisName) const;
     Q_INVOKABLE void setAxisSettings(const QString& axisName, const QVariantMap& axisSettings);

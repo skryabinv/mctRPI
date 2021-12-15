@@ -38,11 +38,14 @@ static constexpr const char* pos_safe = "pos_safe";
 
 // Treater keys
 
-static constexpr const char* corona_pin = "corona_pin";
 static constexpr const char* corona_width = "corona_width";
 static constexpr const char* initial_pos_x = "initial_pos_x";
 static constexpr const char* initial_pos_y = "initial_pos_y";
 static constexpr const char* height = "height";
+
+static constexpr const char* corona_enable_pin = "corona_enable_pin";
+static constexpr const char* corona_disable_pin = "corona_disable_pin";
+static constexpr const char* corona_ports_delay_ms = "corona_ports_delay_ms";
 
 }
 
@@ -327,13 +330,6 @@ void SettingsModeController::setPosSafe(const QString &axisName, double value)
             .setSafePos(value);
 }
 
-int SettingsModeController::getTreaterPin() const
-{
-    return core::Board::getInstance()
-            .getCoronaTreater()
-            .getCoronaPin();
-}
-
 double SettingsModeController::getTreaterInitialPosX() const
 {
     return core::Board::getInstance()
@@ -362,11 +358,25 @@ double SettingsModeController::getTreaterCoronaWidth() const
             .getCoronaWidth();
 }
 
-void SettingsModeController::setTreaterPin(uint32_t pin)
+uint32_t SettingsModeController::getTreaterEnablePin() const
 {
-    core::Board::getInstance()
+    return core::Board::getInstance()
             .getCoronaTreater()
-            .setCoronaPin(pin);
+            .getEnableTreaterPin();
+}
+
+uint32_t SettingsModeController::getTreaterDisablePin() const
+{
+    return core::Board::getInstance()
+            .getCoronaTreater()
+            .getDisableTreaterPin();
+}
+
+int SettingsModeController::getTreaterPortsDelayMs() const
+{
+    return core::Board::getInstance()
+            .getCoronaTreater()
+            .getPortDelayMs();
 }
 
 void SettingsModeController::setTreaterInitialPosX(double value)
@@ -395,6 +405,29 @@ void SettingsModeController::setTreaterCoronaWidth(double value)
     core::Board::getInstance()
             .getCoronaTreater()
             .setCoronaWidth(value);
+}
+
+void SettingsModeController::setTreaterEnablePin(uint32_t pin)
+{
+    core::Board::getInstance()
+            .getCoronaTreater()
+            .setEnableTreaterPin(pin);
+
+}
+
+void SettingsModeController::setTreaterDisablePin(uint32_t pin)
+{
+    core::Board::getInstance()
+            .getCoronaTreater()
+            .setDisableTreaterPin(pin);
+}
+
+void SettingsModeController::setTreaterPortsDelayMs(double value)
+{
+    core::Board::getInstance()
+            .getCoronaTreater()
+            .setPortDelayMs(value);
+
 }
 
 QVariant SettingsModeController::getAxisSettings(const QString& axisName) const
@@ -438,7 +471,9 @@ void SettingsModeController::setAxisSettings(const QString& axisName, const QVar
 QVariant SettingsModeController::getTreaterSettings() const
 {
     QVariantMap result;
-    result[keys::corona_pin] = getTreaterPin();
+    result[keys::corona_disable_pin] = getTreaterDisablePin();
+    result[keys::corona_enable_pin] = getTreaterEnablePin();
+    result[keys::corona_ports_delay_ms] = getTreaterPortsDelayMs();
     result[keys::corona_width] = getTreaterCoronaWidth();
     result[keys::initial_pos_x] = getTreaterInitialPosX();
     result[keys::initial_pos_y] = getTreaterInitialPosY();
@@ -447,8 +482,10 @@ QVariant SettingsModeController::getTreaterSettings() const
 }
 
 void SettingsModeController::setTreaterSettings(const QVariantMap& settings)
-{
-    setTreaterPin(settings[keys::corona_pin].toUInt());
+{    
+    setTreaterDisablePin(settings[keys::corona_disable_pin].toUInt());
+    setTreaterEnablePin(settings[keys::corona_enable_pin].toUInt());
+    setTreaterPortsDelayMs(settings[keys::corona_ports_delay_ms].toDouble());
     setTreaterCoronaWidth(settings[keys::corona_width].toDouble());
     setTreaterInitialPosX(settings[keys::initial_pos_x].toDouble());
     setTreaterInitialPosY(settings[keys::initial_pos_y].toDouble());

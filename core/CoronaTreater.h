@@ -24,7 +24,6 @@ public:
     void setCoronaWidth(double value) noexcept {
         mCoronaWidth = value;
     }
-    void setCoronaPin(uint32_t pin) noexcept;
 
     double getInitalPosX() const noexcept {
         return mInitalPosX;
@@ -38,7 +37,7 @@ public:
     double getCoronaWidth() const noexcept {
         return mCoronaWidth;
     }
-    uint32_t getCoronaPin() const noexcept;    
+
     RtTaskSharedPtr createTaskMoveToInitialPos() const;
     RtTaskSharedPtr createTaskProcess(double xRange,
                                       double yRange,
@@ -72,7 +71,6 @@ private:
     double mHeight;
     double mCoronaWidth;
     double mSpeed = 0.5;
-    std::unique_ptr<OutputPort> mCoronaOutputPort{};
 
     // Ports for enables/disables
 

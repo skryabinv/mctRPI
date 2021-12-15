@@ -158,7 +158,7 @@ Item {
                     target: loaderOk.item
                     function onPressed(symbol) {
                         hide()
-                        if(root.textData.length > 0 && validate(root.textData)) {
+                        if(root.textData.length > 0 && validate(root.textData) && parseFloat(root.textData) >= minValue) {
                             root.textData = parseFloat(root.textData)
                             accepted(root.textData)
                         }
@@ -239,7 +239,7 @@ Item {
 
     function validate(value) {        
         const test = isInteger ? regExpInt.test(value) : regExpFloat.test(value)
-        return test && minValue <= value && value <= maxValue
+        return test && value <= maxValue
     }
 
 }

@@ -8,6 +8,8 @@ Item {
     property alias text: content.text
     property string title: "title"
     property bool isInteger: false
+    property double minValue: 0
+    property double maxValue: 1e6
     property bool dirty: false
     implicitWidth: Math.max(150, content.implicitWidth)
     implicitHeight: content.height + 20
@@ -31,6 +33,9 @@ Item {
                 let comp = Qt.createComponent("../Dialogs/DialogNumericInput.qml")
                 let obj = comp.createObject(root, {x:0, y:0})
                 obj.title = title
+                obj.isInteger = isInteger
+                obj.minValue = minValue
+                obj.maxValue = maxValue
                 obj.show()
                 obj.accepted.connect((data)=>{ text = data; obj.destroy() });
                 obj.rejected.connect(()=>{ obj.destroy() })

@@ -10,21 +10,9 @@
 namespace core {
 
 CoronaTreater::CoronaTreater()
-    : mCoronaOutputPort{std::make_unique<OutputPort>()}
 {
-
-}
-
-void CoronaTreater::setCoronaPin(uint32_t pin) noexcept
-{
-    assert(mCoronaOutputPort != nullptr);
-    mCoronaOutputPort->setPin(pin);
-}
-
-uint32_t CoronaTreater::getCoronaPin() const noexcept
-{
-    assert(mCoronaOutputPort != nullptr);
-    return mCoronaOutputPort->getPin();
+    mCoronaEnablePort = std::make_unique<OutputPort>();
+    mCoronaDisablePort = std::make_unique<OutputPort>();
 }
 
 RtTaskSharedPtr CoronaTreater::createTaskMoveToInitialPos() const
