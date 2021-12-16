@@ -15,7 +15,8 @@ HEADERS += \
     $$PWD/RtTask.h \
     $$PWD/RtTaskDispatcher.h \
     $$PWD/RtTaskGeneric.h \
-    $$PWD/RtTaskMulti.h
+    $$PWD/RtTaskMulti.h \
+    $$PWD/RtTaskRepeated.h
 
 SOURCES += \
     $$PWD/AppInit.cpp \
@@ -28,4 +29,5 @@ SOURCES += \
     $$PWD/RtTask.cpp \
     $$PWD/RtTaskDispatcher.cpp \
     $$PWD/RtTaskGeneric.cpp \
-    $$PWD/RtTaskMulti.cpp
+    $$PWD/RtTaskMulti.cpp \
+    $$PWD/RtTaskRepeated.cpp

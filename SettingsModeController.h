@@ -52,6 +52,8 @@ public:
     Q_INVOKABLE uint32_t getTreaterEnablePin() const;
     Q_INVOKABLE uint32_t getTreaterDisablePin() const;
     Q_INVOKABLE int getTreaterPortsDelayMs() const;
+    Q_INVOKABLE double getTreaterSpeedFractionX() const;
+    Q_INVOKABLE double getTreaterSpeedFractionZ() const;
 
     Q_INVOKABLE void setTreaterInitialPosX(double value);
     Q_INVOKABLE void setTreaterInitialPosY(double value);
@@ -60,6 +62,8 @@ public:
     Q_INVOKABLE void setTreaterEnablePin(uint32_t pin);
     Q_INVOKABLE void setTreaterDisablePin(uint32_t pin);
     Q_INVOKABLE void setTreaterPortsDelayMs(double value);
+    Q_INVOKABLE void setTreaterSpeedFractionX(double value);
+    Q_INVOKABLE void setTreaterSpeedFractionZ(double value);
 
     Q_INVOKABLE QVariant getAxisSettings(const QString& axisName) const;
     Q_INVOKABLE void setAxisSettings(const QString& axisName, const QVariantMap& axisSettings);

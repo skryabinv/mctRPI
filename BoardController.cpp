@@ -2,6 +2,7 @@
 #include "core/Board.h"
 #include "core/Axis.h"
 #include "core/RtTaskDispatcher.h"
+#include "core/RtTaskMulti.h"
 #include "core/OutputPort.h"
 #include "core/CoronaTreater.h"
 #include "TaskAdapter.h"
@@ -93,8 +94,7 @@ bool BoardController::getOutputState() const
 
 bool BoardController::startTreater(double xRange, double yRange, double height,
                                        int repeatsCount, double speedFactor)
-{   
-    qDebug() << __FUNCTION__ << xRange << yRange << height << repeatsCount << speedFactor;
+{       
     if(isReady()) {
         auto task = core::Board::getInstance()
                 .getCoronaTreater()
@@ -110,11 +110,20 @@ bool BoardController::startTreater(double xRange, double yRange, double height,
     return false;
 }
 
-bool BoardController::moveToHomePos()
-{    
+bool BoardController::moveToZeroPos(const QString &axes, double speedFraction)
+{
     if(isReady()) {
-        auto task = core::Board::getInstance()
-                .createTaskMoveToHome();
+        std::vector<core::RtTaskSharedPtr> tasksList;
+        std::array<QString, 3> axisNames = {"X", "Y", "Z"};
+        for(const auto& axis: axisNames) {
+            if(axes.contains(axis)) {
+                auto task = core::Board::getInstance()
+                        .getAxis(axis.toStdString())
+                        .createTaskMoveTo(speedFraction, 0.0);
+                tasksList.push_back(std::move(task));
+            }
+        }
+        auto task = std::make_shared<core::RtTaskMulti>(std::move(tasksList));
         mCurrentTask = wrapTask(std::move(task));
         core::RtTaskDispatcher::getInstance()
                 .scheduleTask(mCurrentTask);
@@ -124,8 +133,7 @@ bool BoardController::moveToHomePos()
 }
 
 bool BoardController::moveToInitialPos()
-{
-    qDebug() << __FUNCTION__;
+{    
     if(isReady()) {
         auto task = core::Board::getInstance()
                 .getCoronaTreater()

@@ -102,6 +102,36 @@ Item {
         }
 
         SettingsLabel {
+            id: lblTreaterSpeedX
+            text: "Скорость переезда X, %"
+        }
+
+        SettingsInput {
+            id: treaterSpeedX
+            title: lblTreaterSpeedX.text
+            text: 100 * settings.corona_speed_x
+            onTextChanged: settings.corona_speed_x = parseFloat(text) / 100.0
+            minValue: 5
+            maxValue: 100
+            isInteger: true
+        }
+
+        SettingsLabel {
+            id: lblTreaterSpeedY
+            text: "Скорость переезда Z, %"
+        }
+
+        SettingsInput {
+            id: treaterSpeedZ
+            title: lblTreaterSpeedX.text
+            text: 100 * settings.corona_speed_z
+            onTextChanged: settings.corona_speed_z = parseFloat(text) / 100.0
+            minValue: 5
+            maxValue: 100
+            isInteger: true
+        }
+
+        SettingsLabel {
             id: lblPortTimeout
             text: "Задержка вкл./выкл., мс:"
         }
@@ -112,8 +142,6 @@ Item {
             text: settings.corona_ports_delay_ms
             onTextChanged: settings.corona_ports_delay_ms = parseInt(text)
         }
-
-
     }
 
 }

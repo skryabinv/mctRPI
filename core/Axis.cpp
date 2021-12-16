@@ -44,7 +44,7 @@ RtTaskSharedPtr Axis::createTaskJog(double speedFraction, double distance)
         outDir.setValue(speed > 0);
         int inc = speed > 0 ? 1 : -1;
         while (!self.isCanceled() && gen) {
-           auto delay = gen.getDelayFuncUs<delay::ProxyDelay>();
+           auto delay = gen.getDelayFuncUs<delay::ProxyDelay, 2>();
            outStep.clr();
            delay();
            outStep.set();
@@ -56,7 +56,7 @@ RtTaskSharedPtr Axis::createTaskJog(double speedFraction, double distance)
             // Deceleration
             gen.startDec();
             while (gen) {
-               auto delay = gen.getDelayFuncUs<delay::ProxyDelay>();
+               auto delay = gen.getDelayFuncUs<delay::ProxyDelay, 2>();
                outStep.clr();
                delay();
                outStep.set();
@@ -92,7 +92,7 @@ RtTaskSharedPtr Axis::createTaskFindHome()
             auto sw_mask = in_switch.read();            
             if(!sw_mask) break;
             auto mask = step_decoder.decodeLeftToRight(sw_mask);
-            auto delay_func = gen_fwd.getDelayFuncUs<delay::ProxyDelay>();
+            auto delay_func = gen_fwd.getDelayFuncUs<delay::ProxyDelay, 2>();
             out_step.set(mask);
             delay_func();
             out_step.clr(mask);
@@ -112,7 +112,7 @@ RtTaskSharedPtr Axis::createTaskFindHome()
             auto sw_mask = in_switch.read();
             if(sw_mask == in_switch.mask()) break;
             auto mask = step_decoder.decodeLeftToRight(sw_mask);
-            auto delay_func = gen_back.getDelayFuncUs<delay::ProxyDelay>();
+            auto delay_func = gen_back.getDelayFuncUs<delay::ProxyDelay, 2>();
             out_step.set(~mask);
             delay_func();
             out_step.clr(~mask);
@@ -130,7 +130,9 @@ RtTaskSharedPtr Axis::createTaskFindHome()
                 } );
 }
 
-RtTaskSharedPtr Axis::createTaskMoveTo(double speedFraction, double position, bool checkLimits)
+RtTaskSharedPtr Axis::createTaskMoveTo(double speedFraction,
+                                       double targetPosition,
+                                       bool checkLimits)
 {    
     auto out_dir = ports.getPortDir();
     auto out_step = ports.getPortStep();
@@ -141,8 +143,9 @@ RtTaskSharedPtr Axis::createTaskMoveTo(double speedFraction, double position, bo
 
     auto func = [=](RtTask& self) {
         if(!mHomingDone) return true;
-        auto dist = (checkLimits ? limits.clamp(position) : position) - getCurrentPos();
-        qDebug() << "Moving:" << position << getCurrentPos() << dist;
+        auto dist = (checkLimits ? limits.clamp(targetPosition) : targetPosition) - getCurrentPos();
+        if(dist == 0.0) return true;
+        int inc = dist < 0 ? -1 : 1;
         AccDecPulseGenerator gen{ std::abs(dist),
                     gratio.getMmsPerStep(),
                     sspeed.getSpeed<SpeedUnits::MM_PER_SEC>(speedFraction),
@@ -156,11 +159,16 @@ RtTaskSharedPtr Axis::createTaskMoveTo(double speedFraction, double position, bo
             out_step.clr();
             delay_func();
             ++gen;
-            ++mPosInSteps;
+            mPosInSteps += inc;
         }
         return true;
     };
     return makeSharedGenericTask(std::move(func), "TaskAxisMoveTo");
+}
+
+RtTaskSharedPtr Axis::createTaskMoveToZeroPos(double speedFraction)
+{
+    return createTaskMoveTo(speedFraction, 0.0);
 }
 
 } // namespace core

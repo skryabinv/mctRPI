@@ -12,7 +12,7 @@ Item {
 
 
     ColumnLayout {
-        spacing: 10
+        spacing: 20
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -42,10 +42,10 @@ Item {
             Layout.fillWidth: true
             implicitHeight: btnHome.height
             keepChecked: false
-            text: "В позицию XY HOME"
+            text: "В позицию X=0 Y=0"
             font.pixelSize: 24
             onActivated: {
-                appController.operatorModeController.moveToHomePos()
+                appController.operatorModeController.moveToZeroPos()
             }
         }
 
@@ -65,8 +65,8 @@ Item {
             id: btnCancel
             Layout.fillWidth: true
             implicitHeight: 60
-            onPressed: {
-                console.log("canceled")
+            onPressed: {                
+                appController.operatorModeController.cancel();
             }
         }
     }

@@ -44,10 +44,11 @@ bool OperatorModeController::moveToInitialPos()
             .moveToInitialPos();
 }
 
-bool OperatorModeController::moveToHomePos()
+bool OperatorModeController::moveToZeroPos()
 {
+    double speed = mProcessParameters[keys::speed_factor].toDouble() / 100.0;
     return BoardController::getInstance()
-            .moveToHomePos();
+            .moveToZeroPos("XY", speed);
 }
 
 bool OperatorModeController::setProcessParameters(double xRange, double yRange,

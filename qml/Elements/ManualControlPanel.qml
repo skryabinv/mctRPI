@@ -120,11 +120,11 @@ Item {
             title: "Перемещение"
             model: [
                 {
-                    text: "\uf060",
+                    text: "\uf068",
                     dir: -1
                 },
                 {
-                    text: "\uf061",
+                    text: "\uf067",
                     dir: 1
                 }
             ]
@@ -142,7 +142,7 @@ Item {
                     anchors.centerIn: parent
                     text: parent.text
                     color: Assets.Style.colorTextForeground
-                    font.pixelSize: 18
+                    font.pixelSize: 24
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }

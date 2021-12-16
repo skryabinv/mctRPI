@@ -11,6 +11,7 @@
 #include "core/Board.h"
 #include "core/Axis.h"
 #include "core/CoronaTreater.h"
+#include "core/OutputPort.h"
 
 namespace HomeDirection {
 static constexpr const char* Positive{"positive"};
@@ -46,6 +47,9 @@ static constexpr const char* height = "height";
 static constexpr const char* corona_enable_pin = "corona_enable_pin";
 static constexpr const char* corona_disable_pin = "corona_disable_pin";
 static constexpr const char* corona_ports_delay_ms = "corona_ports_delay_ms";
+
+static constexpr const char* corona_speed_x = "corona_speed_x";
+static constexpr const char* corona_speed_z = "corona_speed_z";
 
 }
 
@@ -348,7 +352,7 @@ double SettingsModeController::getTreaterHeight() const
 {
     return core::Board::getInstance()
             .getCoronaTreater()
-            .getHeight();
+            .getWorkingHeight();
 }
 
 double SettingsModeController::getTreaterCoronaWidth() const
@@ -377,6 +381,20 @@ int SettingsModeController::getTreaterPortsDelayMs() const
     return core::Board::getInstance()
             .getCoronaTreater()
             .getPortDelayMs();
+}
+
+double SettingsModeController::getTreaterSpeedFractionX() const
+{
+    return core::Board::getInstance()
+            .getCoronaTreater()
+            .getSpeedFractionX();
+}
+
+double SettingsModeController::getTreaterSpeedFractionZ() const
+{
+    return core::Board::getInstance()
+            .getCoronaTreater()
+            .getSpeedFractionZ();
 }
 
 void SettingsModeController::setTreaterInitialPosX(double value)
@@ -430,6 +448,20 @@ void SettingsModeController::setTreaterPortsDelayMs(double value)
 
 }
 
+void SettingsModeController::setTreaterSpeedFractionX(double value)
+{
+    core::Board::getInstance()
+            .getCoronaTreater()
+            .setSpeedFractionX(value);
+}
+
+void SettingsModeController::setTreaterSpeedFractionZ(double value)
+{
+    core::Board::getInstance()
+            .getCoronaTreater()
+            .setSpeedFractionZ(value);
+}
+
 QVariant SettingsModeController::getAxisSettings(const QString& axisName) const
 {    
     QVariantMap axisSettings;
@@ -478,6 +510,8 @@ QVariant SettingsModeController::getTreaterSettings() const
     result[keys::initial_pos_x] = getTreaterInitialPosX();
     result[keys::initial_pos_y] = getTreaterInitialPosY();
     result[keys::height] = getTreaterHeight();
+    result[keys::corona_speed_x] = getTreaterSpeedFractionX();
+    result[keys::corona_speed_z] = getTreaterSpeedFractionZ();
     return result;
 }
 
@@ -490,6 +524,8 @@ void SettingsModeController::setTreaterSettings(const QVariantMap& settings)
     setTreaterInitialPosX(settings[keys::initial_pos_x].toDouble());
     setTreaterInitialPosY(settings[keys::initial_pos_y].toDouble());
     setTreaterHeight(settings[keys::height].toDouble());
+    setTreaterSpeedFractionX(settings[keys::corona_speed_x].toDouble());
+    setTreaterSpeedFractionZ(settings[keys::corona_speed_z].toDouble());
 }
 
 void SettingsModeController::save() const
@@ -506,7 +542,7 @@ QVariant SettingsModeController::toVariant() const
 {
     QVariantMap result;    
     std::array<QString, 3> axisNames { "X", "Y", "Z" };
-    for(auto axisName: axisNames) {
+    for(const auto& axisName: axisNames) {
         result[axisName] = getAxisSettings(axisName);
     }
     result["treater_settings"] = getTreaterSettings();
@@ -517,7 +553,7 @@ void SettingsModeController::fromVariant(const QVariant& variant)
 {
     QVariantMap map = variant.toMap();    
     std::array<QString, 3> axisNames { "X", "Y", "Z" };
-    for(auto axisName: axisNames) {
+    for(const auto& axisName: axisNames) {
         QVariantMap axisSettings = map[axisName].toMap();
         setAxisSettings(axisName, axisSettings);
     }

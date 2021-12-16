@@ -23,7 +23,10 @@ public:
     }
     void setCoronaWidth(double value) noexcept {
         mCoronaWidth = value;
-    }
+    }    
+    void setSpeedFractionX(double value) noexcept;
+    void setSpeedFractionZ(double value) noexcept;
+    void setPortDelayMs(u_int32_t value) noexcept;
 
     double getInitalPosX() const noexcept {
         return mInitalPosX;
@@ -31,12 +34,22 @@ public:
     double getInitalPosY() const noexcept {
         return mInitalPosY;
     }
-    double getHeight() const noexcept {
+    double getWorkingHeight() const noexcept {
         return mHeight;
     }
     double getCoronaWidth() const noexcept {
         return mCoronaWidth;
     }
+    double getSpeedFractionX() const noexcept {
+        return mSpeedFractionX;
+    }
+    double getSpeedFractionZ() const noexcept{
+        return mSpeedfractionZ;
+    }
+    uint32_t getPortDelayMs() const noexcept {
+        return mPortDelayMs;
+    }
+
 
     RtTaskSharedPtr createTaskMoveToInitialPos() const;
     RtTaskSharedPtr createTaskProcess(double xRange,
@@ -54,14 +67,6 @@ public:
 
     void setDisableTreaterPin(uint32_t value) noexcept;
 
-    void setPortDelayMs(double value) noexcept {
-        mPortDelayMs = value;
-    }
-
-    double getPortDelayMs() const noexcept {
-        return mPortDelayMs;
-    }
-
     // RtTaskSharedPtr createTaskEnableTreater();
     // RtTaskSharedPtr createTaskDisableTreater();
 
@@ -70,11 +75,12 @@ private:
     double mInitalPosY;
     double mHeight;
     double mCoronaWidth;
-    double mSpeed = 0.5;
+    double mSpeedFractionX = 0.5;
+    double mSpeedfractionZ = 0.5;
 
     // Ports for enables/disables
 
-    double mPortDelayMs{100.0};
+    uint32_t mPortDelayMs{100};
     std::unique_ptr<OutputPort> mCoronaEnablePort{};
     std::unique_ptr<OutputPort> mCoronaDisablePort{};
 };

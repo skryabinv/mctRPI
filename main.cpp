@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
     QGuiApplication app(argc, argv);
-//    app.setOverrideCursor(Qt::BlankCursor);
+    app.setOverrideCursor(Qt::BlankCursor);
 
     AppController appController;
     QQmlApplicationEngine engine;

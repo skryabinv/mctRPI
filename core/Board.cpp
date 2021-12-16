@@ -30,11 +30,6 @@ RtTaskSharedPtr Board::createTaskHomeAll() const
     return result;
 }
 
-RtTaskSharedPtr Board::createTaskMoveToHome() const
-{
-    return {};
-}
-
 Axis& Board::getAxis(const std::string& name) const
 {
     auto it = mAxisMap.find(name);

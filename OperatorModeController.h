@@ -13,7 +13,7 @@ public:
     ~OperatorModeController() override;
     Q_INVOKABLE bool findHome();
     Q_INVOKABLE bool moveToInitialPos();
-    Q_INVOKABLE bool moveToHomePos();
+    Q_INVOKABLE bool moveToZeroPos();
     Q_INVOKABLE bool setProcessParameters(double xRange,
                                           double yRange,
                                           double height,

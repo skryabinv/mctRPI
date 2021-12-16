@@ -11,12 +11,12 @@ static bool configure_realtime(pthread_t thread_id) {
     if (pthread_setschedparam(thread_id, SCHED_FIFO, &sch)) {
         return false;
     }
-//    cpu_set_t cpu_set;
-//    CPU_ZERO(&cpu_set);
-//    CPU_SET(3, &cpu_set);
-//    if (pthread_setaffinity_np(thread_id, sizeof(cpu_set), &cpu_set)) {
-//        return false;
-//    }
+    cpu_set_t cpu_set;
+    CPU_ZERO(&cpu_set);
+    CPU_SET(3, &cpu_set);
+    if (pthread_setaffinity_np(thread_id, sizeof(cpu_set), &cpu_set)) {
+        return false;
+    }
     return true;
 }
 
