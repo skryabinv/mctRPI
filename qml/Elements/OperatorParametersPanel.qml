@@ -98,6 +98,15 @@ Item {
 
     }
 
+    TreaterProgress {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: btnStart.top
+        anchors.leftMargin: 15
+        anchors.rightMargin: 15
+        anchors.bottomMargin: 20
+    }
+
     DelayButtonExt {
         id: btnStart
         color: "forestgreen"
@@ -105,8 +114,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: 20
-
-
         implicitHeight: 60
         Layout.fillWidth: true
         keepChecked: false

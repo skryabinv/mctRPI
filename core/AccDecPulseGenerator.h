@@ -2,7 +2,7 @@
 
 #include <cassert>
 #include <cmath>
-#include <iostream>
+#include <cstdint>
 
 namespace core {
 
@@ -69,7 +69,7 @@ public:
     }
 
     void startDec() {
-        pulse_counter_ = stop2_;
+        pulse_counter_ = std::max(stop2_, pulses_ - pulse_counter_);
         ++(*this);
     }
 
@@ -96,7 +96,6 @@ private:
     void calc_stops() noexcept {
         double s1 = 0.5 * speed_ * speed_ / acc_ / dist_per_pulse_;
         double s2 = 0.5 * speed_ * speed_ / dec_ / dist_per_pulse_;
-        std::cout << __FUNCTION__ << " " << s1 << " " << s2 << std::endl;
         if(s1 + s2 >= pulses_) {
             // Скорость не будет достигнута с заданными параметрами
             stop1_ = static_cast<uint32_t>(dec_ * pulses_ / (dec_ + acc_));
@@ -106,7 +105,6 @@ private:
             stop1_ = static_cast<uint32_t>(s1);
             stop2_ = pulses_ - static_cast<uint32_t>(s2);
         }
-        std::cout << __FUNCTION__ << " : " << stop1_ << " " << stop2_ << std::endl;
     }
     // Счетчик импульсов
     uint32_t pulse_counter_{0};

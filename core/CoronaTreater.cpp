@@ -2,6 +2,7 @@
 #include "Board.h"
 #include "Axis.h"
 #include "OutputPort.h"
+#include "Delay.h"
 #include "RtTaskMulti.h"
 #include "RtTaskGeneric.h"
 #include "RtTaskProcess.h"
@@ -12,17 +13,17 @@ namespace core {
 
 CoronaTreater::CoronaTreater()
 {
-    mCoronaEnablePort = std::make_unique<OutputPort>();
-    mCoronaDisablePort = std::make_unique<OutputPort>();
+    mPortCoronaOn = std::make_unique<OutputPort>();
+    mPortCoronaOff = std::make_unique<OutputPort>();
 }
 
 void CoronaTreater::setSpeedFractionX(double value) noexcept {
-//    assert(0.0 < value && value <= 1.0);
+    assert(0.0 < value && value <= 1.0);
     mSpeedFractionX = value;
 }
 
 void CoronaTreater::setSpeedFractionZ(double value) noexcept{
-//    assert(0.0 < value && value <= 1.0);
+    assert(0.0 < value && value <= 1.0);
     mSpeedfractionZ = value;
 }
 
@@ -32,89 +33,93 @@ void CoronaTreater::setPortDelayMs(u_int32_t value) noexcept
     mPortDelayMs = value;
 }
 
-int CoronaTreater::getStripesCount(double xRange) const noexcept
+int CoronaTreater::getStripesCount(double rangeX) const noexcept
 {
-    return static_cast<int>(std::ceil(xRange / getCoronaWidth())) + 1;
+    return static_cast<int>(std::ceil(rangeX / getCoronaWidth())) + 1;
 }
 
-RtTaskSharedPtr CoronaTreater::createTaskMoveToInitialPos() const
+RtTaskSharedPtr CoronaTreater::createTaskMoveToInitialPos()
 {
-    auto xTask = Board::getInstance()
+    auto taskX = Board::getInstance()
             .getAxis("X")
             .createTaskMoveTo(mSpeedFractionX, getInitalPosX(), true);
-    auto yTask = Board::getInstance()
+    auto taskY = Board::getInstance()
             .getAxis("Y")
             .createTaskMoveTo(mSpeedFractionX, getInitalPosY(), true);
     return std::make_shared<RtTaskMulti>(
-        std::initializer_list<RtTaskSharedPtr>{xTask,
-                                               yTask}
+        std::initializer_list<RtTaskSharedPtr>{taskX,
+                                               taskY}
     );
 }
 
-std::shared_ptr<RtTaskProcess> CoronaTreater::createTaskProcess(double xRange, double yRange,
-                                                 double height,
-                                                 int repeats, double speedFraction) const
+std::shared_ptr<RtTaskProcess> CoronaTreater::createTaskProcess(double rangeX,
+                                                                double rangeY,
+                                                                double height,
+                                                                int repeats,
+                                                                double speedFraction)
 {
 
-    return std::make_shared<RtTaskProcess>(*this, xRange, yRange,
-                                           height,
-                                           repeats,
-                                           speedFraction);
-
-//    std::vector<RtTaskSharedPtr> tasksList;
-//    auto stripesCount = std::ceil(xRange / getCoronaWidth()) + 1;
-
-//    tasksList.push_back(createTaskMoveToInitialPos());
-//    tasksList.push_back(
-//                Board::getInstance()
-//                .getAxis("Z")
-//                .createTaskMoveTo(getSpeedFractionZ(),
-//                                  height + getWorkingHeight()));
-//    // Enable Port
-
-//    for(int i = 0; i < stripesCount; ++i) {
-//        auto dir = (i % 2 == 0) ? 1 : -1;
-//        tasksList.push_back(
-//                    Board::getInstance()
-//                    .getAxis("Y")
-//                    .createTaskJog(dir * speedFraction, yRange)
-//                    );
-//        if(i != stripesCount - 1) {
-//            tasksList.push_back(
-//                        Board::getInstance()
-//                        .getAxis("X")
-//                        .createTaskJog(getSpeedFractionX(),
-//                                       getCoronaWidth())
-//                        );
-//        }
-//    }
-
-//    // Disable Port
-
-//    tasksList.push_back(createTaskMoveToInitialPos());
-//    auto taskMulti = std::make_shared<RtTaskMulti>(std::move(tasksList));
-
-//    return std::make_shared<RtTaskRepeated>(std::move(taskMulti), repeats);
+    return std::make_shared<RtTaskProcess>(*this, rangeX, rangeY, height,
+                                           repeats, speedFraction);
 }
 
-uint32_t CoronaTreater::getEnableTreaterPin() noexcept
+RtTaskSharedPtr CoronaTreater::createTaskOn()
 {
-    return mCoronaEnablePort->getPin();
+    return createPortTask(true, getPortDelayMs());
 }
 
-uint32_t CoronaTreater::getDisableTreaterPin() noexcept
+RtTaskSharedPtr CoronaTreater::createTaskOff()
 {
-    return mCoronaDisablePort->getPin();
+    return createPortTask(false, getPortDelayMs());
 }
 
-void CoronaTreater::setEnableTreaterPin(uint32_t value) noexcept
+RtTaskSharedPtr CoronaTreater::createTaskOnOff(bool state)
 {
-    mCoronaEnablePort->setPin(value);
+    return state ? createTaskOn() : createTaskOff();
 }
 
-void CoronaTreater::setDisableTreaterPin(uint32_t value) noexcept
+uint32_t CoronaTreater::getPinOn() noexcept
 {
-    mCoronaDisablePort->setPin(value);
+    return mPortCoronaOn->getPin();
 }
+
+uint32_t CoronaTreater::getPinOff() noexcept
+{
+    return mPortCoronaOff->getPin();
+}
+
+void CoronaTreater::setPinOn(uint32_t value) noexcept
+{
+    mPortCoronaOn->setPin(value);
+}
+
+void CoronaTreater::setPinOff(uint32_t value) noexcept
+{
+    mPortCoronaOff->setPin(value);
+}
+
+RtTaskSharedPtr CoronaTreater::createPortTask(bool state, int delayMs)
+{
+    auto port = state ? mPortCoronaOn->getPort() : mPortCoronaOff->getPort();    
+    return makeSharedGenericTask([=](RtTask&) {
+        delay::ProxyDelay delay(1000 * delayMs);
+        port.set();
+        delay();
+        port.clr();
+        setCoronaState(state);
+        return true;
+    });
+}
+
+void CoronaTreater::setCoronaState(bool value)
+{
+    if(mCoronaState != value) {
+        mCoronaState = value;
+        if(mCoronaStateChangedListener) {
+            mCoronaStateChangedListener(value);
+        }
+    }
+}
+
 
 } // namespace core

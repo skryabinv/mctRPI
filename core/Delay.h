@@ -1,7 +1,8 @@
 #pragma once
 
 #include <cstdint>
-#include <functional>
+#include <iostream>
+
 #include "RtTask.h"
 
 namespace core {
@@ -12,18 +13,21 @@ namespace delay {
 RtTaskSharedPtr createCalibrationTask(bool value_to_return = true);
 
 // Задержка простым циклом ожидания
-void busyLoop(uint32_t us);
+void busyLoop(uint64_t us);
 
 // Вспомогательный-callable класс, инициализируемый
 // значением busy-задержки в мкс
 class ProxyDelay {
-public:
+public:    
     template<typename DelayType>
-    explicit ProxyDelay(DelayType us) noexcept
-        : mUs(us) {}
-    void operator()() const noexcept { busyLoop(mUs); }
+    explicit ProxyDelay(DelayType value) noexcept
+        : mUs(value) {
+    }
+    void operator()() const noexcept {
+        busyLoop(mUs);
+    }
 private:
-    const uint32_t mUs;
+    const uint64_t mUs;
 };
 
 }

@@ -366,14 +366,14 @@ uint32_t SettingsModeController::getTreaterEnablePin() const
 {
     return core::Board::getInstance()
             .getCoronaTreater()
-            .getEnableTreaterPin();
+            .getPinOn();
 }
 
 uint32_t SettingsModeController::getTreaterDisablePin() const
 {
     return core::Board::getInstance()
             .getCoronaTreater()
-            .getDisableTreaterPin();
+            .getPinOff();
 }
 
 int SettingsModeController::getTreaterPortsDelayMs() const
@@ -429,7 +429,7 @@ void SettingsModeController::setTreaterEnablePin(uint32_t pin)
 {
     core::Board::getInstance()
             .getCoronaTreater()
-            .setEnableTreaterPin(pin);
+            .setPinOn(pin);
 
 }
 
@@ -437,7 +437,7 @@ void SettingsModeController::setTreaterDisablePin(uint32_t pin)
 {
     core::Board::getInstance()
             .getCoronaTreater()
-            .setDisableTreaterPin(pin);
+            .setPinOff(pin);
 }
 
 void SettingsModeController::setTreaterPortsDelayMs(double value)

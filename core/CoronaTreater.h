@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 #include "RtTask.h"
 
 namespace core {
@@ -50,29 +51,40 @@ public:
     }
     uint32_t getPortDelayMs() const noexcept {
         return mPortDelayMs;
+    }    
+    bool getCoronaState() const noexcept {
+        return mCoronaState;
     }
-    int getStripesCount(double xRange) const noexcept;
+    int getStripesCount(double rangeX) const noexcept;
 
-    RtTaskSharedPtr createTaskMoveToInitialPos() const;
-    std::shared_ptr<RtTaskProcess> createTaskProcess(double xRange,
-                                      double yRange,
-                                      double height,
-                                      int repeats, double speedFactor) const;
+    RtTaskSharedPtr createTaskMoveToInitialPos();
+    std::shared_ptr<RtTaskProcess> createTaskProcess(double rangeX,
+                                                     double rangeY,
+                                                     double height,
+                                                     int repeats,
+                                                     double speedFactor);
+    RtTaskSharedPtr createTaskOn();
+    RtTaskSharedPtr createTaskOff();
+    RtTaskSharedPtr createTaskOnOff(bool state);
 
-    // Two port treaters control: enable with delay, disable with delay
+//     Two port treaters control: enable with delay, disable with delay
 
-    uint32_t getEnableTreaterPin() noexcept;
+    uint32_t getPinOn() noexcept;
+    uint32_t getPinOff() noexcept;
 
-    uint32_t getDisableTreaterPin() noexcept;
+    void setPinOn(uint32_t value) noexcept;
+    void setPinOff(uint32_t value) noexcept;
 
-    void setEnableTreaterPin(uint32_t value) noexcept;
-
-    void setDisableTreaterPin(uint32_t value) noexcept;
-
-    // RtTaskSharedPtr createTaskEnableTreater();
-    // RtTaskSharedPtr createTaskDisableTreater();
+    template<typename F>
+    void setCoronaStateChangedListener(F func) {
+        mCoronaStateChangedListener = std::move(func);
+    }
 
 private:
+    RtTaskSharedPtr createPortTask(bool state, int delayMs);
+
+    void setCoronaState(bool value);
+
     double mInitalPosX;
     double mInitalPosY;
     double mHeight;
@@ -83,8 +95,12 @@ private:
     // Ports for enables/disables
 
     uint32_t mPortDelayMs{100};
-    std::unique_ptr<OutputPort> mCoronaEnablePort{};
-    std::unique_ptr<OutputPort> mCoronaDisablePort{};
+    std::unique_ptr<OutputPort> mPortCoronaOn{};
+    std::unique_ptr<OutputPort> mPortCoronaOff{};
+    std::atomic_bool mCoronaState{};
+    // Calls from different threads
+    std::function<void(bool)> mCoronaStateChangedListener{};
+    // Add progress (atomic variable) from ProcessStateClass
 };
 
 } // namespace core

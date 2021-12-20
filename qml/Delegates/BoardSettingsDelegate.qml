@@ -137,6 +137,8 @@ Item {
         }
 
         SettingsInput {
+            minValue: 100
+            maxValue: 10000
             id: portTimeOut
             title: lblPortTimeout.text
             text: settings.corona_ports_delay_ms

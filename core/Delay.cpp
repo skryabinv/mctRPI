@@ -9,8 +9,8 @@ namespace core {
 namespace delay {
 
 // Наносекунд на итерацию
-static volatile size_t ns_per_iteration{1};
-static volatile size_t counter{0};
+static volatile uint64_t ns_per_iteration{1};
+static volatile uint64_t counter{0};
 
 RtTaskSharedPtr createCalibrationTask(bool value_to_return) {
     return makeSharedGenericTask([=](auto&) {
@@ -25,7 +25,7 @@ RtTaskSharedPtr createCalibrationTask(bool value_to_return) {
     }, "TaskCalibration");
 }
 
-void busyLoop(uint32_t us) {
+void busyLoop(uint64_t us) {
     // TODO: проверка на переполнение
     for(counter = (1000 * us) / ns_per_iteration; counter != 0; --counter) {}
 }

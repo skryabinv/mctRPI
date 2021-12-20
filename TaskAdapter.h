@@ -13,7 +13,7 @@ public:
 
 signals:
     void taskStarted();
-    void taskFinished(bool canceled);
+    void taskFinished(bool canceled);    
 
 
     // QObject interface
@@ -25,7 +25,7 @@ private:
     // RtTask interface
 private:
     bool runImpl() override;
-    void cancelImpl() override;
+    void cancelImpl() override;    
 };
 
 inline std::shared_ptr<TaskAdapter> createTaskAdapter(core::RtTaskSharedPtr task) {

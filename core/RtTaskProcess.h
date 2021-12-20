@@ -12,7 +12,7 @@ class RtTaskProcess : public RtTask
 {
 public:    
 
-    RtTaskProcess(const CoronaTreater& treater,
+    RtTaskProcess(CoronaTreater& treater,
                   double xRange, double yRange,
                   double height, int repeats,
                   double speedFraction);
@@ -31,7 +31,7 @@ private:
     double mHeight{};
     double mSpeedY;
     std::shared_ptr<RtTaskRepeated> mTask{};
-    std::shared_ptr<RtTaskRepeated> createTask(const CoronaTreater& treater, int repeats);
+    std::shared_ptr<RtTaskRepeated> createTask(CoronaTreater &treater, int repeats);
     auto getCurrentStripeIncFunc() { return [this](RtTask&) {
             mCurrentStripe++;
             return true;

@@ -25,11 +25,9 @@ public:
 private:
     Board();
     using board_ptr_t = std::unique_ptr<Board>;
-    using axis_ptr_t = std::unique_ptr<Axis>;
-    using out_ptr_t = std::unique_ptr<OutputPort>;
+    using axis_ptr_t = std::unique_ptr<Axis>;    
     inline static board_ptr_t sInstance;
-    std::unordered_map<std::string, axis_ptr_t> mAxisMap;
-    std::unordered_map<std::string, out_ptr_t> mOuts;    
+    std::unordered_map<std::string, axis_ptr_t> mAxisMap;    
     std::unique_ptr<CoronaTreater> mCoronaTreater;
 };
 

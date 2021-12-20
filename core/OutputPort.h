@@ -27,28 +27,12 @@ public:
     }
 
     auto getPort() const {
-        auto ports = { mPin };
-        return gpio::PortOut { ports.begin(), ports.end() };
-    }
-
-    RtTaskSharedPtr createTaskPortSet() {
-        if(!isValid()) {
-            throw std::logic_error("External output port should initialized first!");
+        if(isValid()) {
+            auto ports = { mPin };
+            return gpio::PortOut { ports.begin(), ports.end() };
+        } else {
+            throw std::logic_error("Pin value is not valid");
         }
-        return makeSharedGenericTask([port{getPort()}](auto&) {
-            port.set();
-            return true;
-        });
-    }
-
-    RtTaskSharedPtr createTaskPortClear() {
-        if(!isValid()) {
-            throw std::logic_error("External output port should initialized first!");
-        }
-        return makeSharedGenericTask([port{getPort()}](auto&) {
-            port.clr();
-            return true;
-        });
     }
 
 private:

@@ -10,7 +10,7 @@
 
 namespace core {
 
-RtTaskProcess::RtTaskProcess(const CoronaTreater &treater,
+RtTaskProcess::RtTaskProcess(CoronaTreater& treater,
                              double rangeX,
                              double rangeY,
                              double height,
@@ -51,7 +51,8 @@ double RtTaskProcess::getProgress() const
     }
 }
 
-std::shared_ptr<RtTaskRepeated> RtTaskProcess::createTask(const CoronaTreater &treater, int repeats)
+std::shared_ptr<RtTaskRepeated> RtTaskProcess::createTask(CoronaTreater &treater,
+                                                          int repeats)
 {
     std::vector<RtTaskSharedPtr> tasks;
     tasks.push_back(treater.createTaskMoveToInitialPos());
@@ -63,6 +64,9 @@ std::shared_ptr<RtTaskRepeated> RtTaskProcess::createTask(const CoronaTreater &t
                                   mHeight + treater.getWorkingHeight()));
     // Clear Stripes Counter
     tasks.push_back(makeSharedGenericTask(getCurrentStripeClearFunc()));
+    // Enable corona pin
+    tasks.push_back(treater.createTaskOn());
+
     for(int i = 0; i < mStripesCount; ++i) {
         auto dir = (i % 2 == 0) ? 1.0 : -1.0;
         // Process along X
@@ -80,6 +84,7 @@ std::shared_ptr<RtTaskRepeated> RtTaskProcess::createTask(const CoronaTreater &t
                                        treater.getCoronaWidth()));
         }
     }
+    tasks.push_back(treater.createTaskOff());
     tasks.push_back(treater.createTaskMoveToInitialPos());
     auto taskMulti = std::make_shared<RtTaskMulti>(std::move(tasks));
     return std::make_shared<RtTaskRepeated>(std::move(taskMulti), repeats);

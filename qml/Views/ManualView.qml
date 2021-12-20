@@ -67,8 +67,8 @@ Item {
             delay: 2000
             text: checked ? "Выключить разряд" : "Включить разряд"
             font.pixelSize: 28
-            onClicked: {
-                boardController.setOutputEnabled(checked)
+            onCheckedChanged: {
+                boardController.setTreaterEnabled(checked)
             }
         }        
 

@@ -5,6 +5,14 @@
 
 class QTimer;
 
+struct ProcessData {
+    double rangeX;
+    double rangeY;
+    double height;
+    int repeats;
+    double speedFactor;
+};
+
 class BoardController : public QObject
 {
     Q_OBJECT        
@@ -19,13 +27,15 @@ public:
     Q_INVOKABLE bool isBusy() const;
     Q_INVOKABLE bool isReady() const;
     Q_INVOKABLE bool getOutputState() const;
-    Q_INVOKABLE bool startTreater(double xRange, double yRange, double height,
-                                  int repeatsCount, double speedFactor,
+    Q_INVOKABLE bool startProcess(const ProcessData& data,
                                   // notify by signal with this timer
-                                  int progressTimeout = 0);
+                                  int progressIntervalMs = 0);
     // axes ("XYZ", "XY", etc)
     Q_INVOKABLE bool moveToZeroPos(const QString& axes, double speedFraction);
-    Q_INVOKABLE bool moveToInitialPos();    
+    Q_INVOKABLE bool moveToInitialPos();
+
+    Q_INVOKABLE bool setTreaterEnabled(bool value);
+
     static BoardController& getInstance();
 signals:    
     void taskStarted();
@@ -33,12 +43,17 @@ signals:
     // QString "XY", "XYZ", "X", etc
     void axesHomingDone(const QString& axes);
     void processProgressChanged(double progress);
+    void coronaStateChanged(bool value);
 private:
     core::RtTaskSharedPtr wrapTask(core::RtTaskSharedPtr task);
     core::RtTaskSharedPtr wrapHomingTask(core::RtTaskSharedPtr task,
                                          const QString& axes);
     core::RtTaskSharedPtr mCurrentTask{};
-    QTimer* mTimer;
+    QTimer* mProcessTimer;
 
+
+    // QObject interface
+public:
+    bool event(QEvent *event);
 };
 

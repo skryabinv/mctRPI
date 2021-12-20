@@ -7,11 +7,12 @@ Item {
     implicitHeight: title.height + bar.height
     property double ring: 10
     property double progress: 0.0
+    visible: false
 
     Rectangle {
         id: bar        
         height: 5
-        color: Assets.Style.colorBackgroundLight
+        color: Assets.Style.colorBackground
         anchors.left: parent.left
         anchors.leftMargin: 5
         anchors.right: parent.right
@@ -40,8 +41,9 @@ Item {
 
     Connections {
         target: boardController
-        function onProcessProgressChanged(value) {
+        function onProcessProgressChanged(value) {            
             progress = value
+            if(value === 0 && !visible) visible = true
         }
     }
 

@@ -4,9 +4,8 @@
 
 namespace Events {
 
-const QEvent::Type TaskStarted = static_cast<QEvent::Type>(QEvent::Type::User + 1);
-const QEvent::Type TaskFinished = static_cast<QEvent::Type>(QEvent::Type::User + 2);
-
+static constexpr QEvent::Type TaskStarted = static_cast<QEvent::Type>(QEvent::Type::User + 1);
+static constexpr QEvent::Type TaskFinished = static_cast<QEvent::Type>(QEvent::Type::User + 2);
 
 }
 

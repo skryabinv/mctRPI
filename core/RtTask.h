@@ -12,6 +12,7 @@ class RtTask
 public:
     RtTask(std::string description = {}, bool done = false)
         : mDescription{std::move(description)}, mDone{done} {}
+    virtual ~RtTask() = default;
     bool run();
     bool isCanceled() const noexcept { return mCanceled; }
     bool isDone() const noexcept { return mDone; }

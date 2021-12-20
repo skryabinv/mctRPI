@@ -19,7 +19,17 @@ constexpr const char* speed_factor = "speed_factor";
 
 static inline QString getParamsPath() {
     return QDir(QCoreApplication::applicationDirPath())
-            .filePath(".treater_parameters");
+            .filePath(QStringLiteral(".treater_parameters"));
+}
+
+static inline ProcessData processDataFromMap(const QVariantMap& map) {
+    ProcessData data;
+    data.rangeX = map[keys::x_range].toDouble();
+    data.rangeY = map[keys::y_range].toDouble();
+    data.height = map[keys::height].toDouble();
+    data.repeats = map[keys::repeats_count].toInt();
+    data.speedFactor = map[keys::speed_factor].toDouble() / 100.0;
+    return data;
 }
 
 OperatorModeController::OperatorModeController(QObject *parent) : QObject(parent)
@@ -48,7 +58,7 @@ bool OperatorModeController::moveToZeroPos()
 {
     double speed = mProcessParameters[keys::speed_factor].toDouble() / 100.0;
     return BoardController::getInstance()
-            .moveToZeroPos("XY", speed);
+            .moveToZeroPos(QStringLiteral("XY"), speed);
 }
 
 bool OperatorModeController::setProcessParameters(double xRange, double yRange,
@@ -66,14 +76,9 @@ bool OperatorModeController::setProcessParameters(double xRange, double yRange,
 bool OperatorModeController::startTreater()
 {
     return BoardController::getInstance()
-            .startTreater(
-                mProcessParameters[keys::x_range].toDouble(),
-                mProcessParameters[keys::y_range].toDouble(),
-                mProcessParameters[keys::height].toDouble(),
-                mProcessParameters[keys::repeats_count].toInt(),
-                mProcessParameters[keys::speed_factor].toDouble() / 100.0, // Percent to factor
-                100
-            );
+            .startProcess(
+                processDataFromMap(mProcessParameters), 250
+                );
 }
 
 QVariant OperatorModeController::getProcessParameters()

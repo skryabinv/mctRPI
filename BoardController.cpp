@@ -9,15 +9,27 @@
 #include "TaskAdapter.h"
 #include <QDebug>
 #include <QTimer>
+#include <QStringLiteral>
+#include <QEvent>
+#include <QCoreApplication>
+
+namespace Events {
+static constexpr QEvent::Type CoronaStateChanged = static_cast<QEvent::Type>(QEvent::Type::User + 3);
+}
 
 BoardController::BoardController(QObject *parent)
     : QObject(parent),
     mCurrentTask{std::make_shared<core::RtTask>("TaskEmpty", true)},
-    mTimer{new QTimer(this)}
+    mProcessTimer{new QTimer(this)}
 {
     // Stop timer if any task finished
     connect(this, &BoardController::taskFinished,
-            mTimer, &QTimer::stop);
+            mProcessTimer, &QTimer::stop);
+    core::Board::getInstance()
+            .getCoronaTreater()
+            .setCoronaStateChangedListener([this](bool){
+        QCoreApplication::postEvent(this, new QEvent(Events::CoronaStateChanged));        
+    });
 }
 
 double BoardController::getAxisPos(const QString &axis) const
@@ -97,23 +109,20 @@ bool BoardController::getOutputState() const
     return false;
 }
 
-bool BoardController::startTreater(double xRange, double yRange, double height,
-                                   int repeatsCount, double speedFactor,
-                                   int progressTimeout)
+bool BoardController::startProcess(const ProcessData& data,
+                                   int progressIntervalMs)
 {       
     if(isReady()) {
         auto task = core::Board::getInstance()
                 .getCoronaTreater()
-                .createTaskProcess(xRange, yRange,
-                                   height,
-                                   repeatsCount,
-                                   speedFactor);       
-        if(progressTimeout != 0) {
-            mTimer->disconnect();
-            mTimer->start(progressTimeout);
-            connect(mTimer, &QTimer::timeout, this, [task, this](){
-                auto progress =  task->getProgress();
-                emit processProgressChanged(progress);
+                .createTaskProcess(data.rangeX, data.rangeY,
+                                   data.height, data.repeats,
+                                   data.speedFactor);
+        if(progressIntervalMs != 0) {
+            mProcessTimer->disconnect();
+            mProcessTimer->start(progressIntervalMs);
+            connect(mProcessTimer, &QTimer::timeout, this, [task, this](){
+                emit processProgressChanged(task->getProgress());
             });
         }
         mCurrentTask = wrapTask(std::move(task));
@@ -128,7 +137,11 @@ bool BoardController::moveToZeroPos(const QString &axes, double speedFraction)
 {
     if(isReady()) {
         std::vector<core::RtTaskSharedPtr> tasksList;
-        std::array<QString, 3> axisNames = {"X", "Y", "Z"};
+        std::array<QString, 3> axisNames = {
+            QStringLiteral("X"),
+            QStringLiteral("Y"),
+            QStringLiteral("Z")
+        };
         for(const auto& axis: axisNames) {
             if(axes.contains(axis)) {
                 auto task = core::Board::getInstance()
@@ -158,6 +171,19 @@ bool BoardController::moveToInitialPos()
         return true;
     }
     return false;
+}
+
+bool BoardController::setTreaterEnabled(bool value)
+{    
+    if(isReady()) {
+        auto task = core::Board::getInstance()
+                .getCoronaTreater()
+                .createTaskOnOff(value);
+        mCurrentTask = wrapTask(task);
+        core::RtTaskDispatcher::getInstance()
+                .scheduleTask(mCurrentTask);
+    }
+    return true;
 }
 
 BoardController &BoardController::getInstance()
@@ -190,4 +216,15 @@ core::RtTaskSharedPtr BoardController::wrapHomingTask(core::RtTaskSharedPtr task
         emit taskFinished(canceled);
     });
     return result;
+}
+
+bool BoardController::event(QEvent *event)
+{
+    if(event->type() == Events::CoronaStateChanged) {
+        emit coronaStateChanged(core::Board::getInstance()
+                                .getCoronaTreater()
+                                .getCoronaState());
+        return true;
+    }
+    return false;
 }
