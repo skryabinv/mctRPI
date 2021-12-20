@@ -12,7 +12,7 @@ Item {
 
 
     ColumnLayout {
-        spacing: 20
+        spacing: 10
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -71,6 +71,12 @@ Item {
         }
     }
 
+    TreaterProgress {
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 75
+    }
 
 
 }

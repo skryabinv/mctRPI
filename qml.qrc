@@ -25,6 +25,7 @@
         <file alias="Elements/InfoPanel.qml">qml/Elements/InfoPanel.qml</file>
         <file alias="Elements/InfoSymbol.qml">qml/Elements/InfoSymbol.qml</file>
         <file alias="Elements/OperatorControlsPanel.qml">qml/Elements/OperatorControlsPanel.qml</file>
-        <file alias="Elements/OperatorParametersPanel.qml">qml/Elements/OperatorParametersPanel.qml</file>
+        <file alias="Elements/OperatorParametersPanel.qml">qml/Elements/OperatorParametersPanel.qml</file>  
+        <file alias="Elements/TreaterProgress.qml">qml/Elements/TreaterProgress.qml</file>
     </qresource>
 </RCC>

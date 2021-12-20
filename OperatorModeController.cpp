@@ -71,7 +71,8 @@ bool OperatorModeController::startTreater()
                 mProcessParameters[keys::y_range].toDouble(),
                 mProcessParameters[keys::height].toDouble(),
                 mProcessParameters[keys::repeats_count].toInt(),
-                mProcessParameters[keys::speed_factor].toDouble() / 100.0 // Percent to factor
+                mProcessParameters[keys::speed_factor].toDouble() / 100.0, // Percent to factor
+                100
             );
 }
 

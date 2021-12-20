@@ -4,7 +4,7 @@
 #include "OutputPort.h"
 #include "RtTaskMulti.h"
 #include "RtTaskGeneric.h"
-#include "RtTaskRepeated.h"
+#include "RtTaskProcess.h"
 #include <iostream>
 #include <QDebug>
 
@@ -32,6 +32,11 @@ void CoronaTreater::setPortDelayMs(u_int32_t value) noexcept
     mPortDelayMs = value;
 }
 
+int CoronaTreater::getStripesCount(double xRange) const noexcept
+{
+    return static_cast<int>(std::ceil(xRange / getCoronaWidth())) + 1;
+}
+
 RtTaskSharedPtr CoronaTreater::createTaskMoveToInitialPos() const
 {
     auto xTask = Board::getInstance()
@@ -46,60 +51,50 @@ RtTaskSharedPtr CoronaTreater::createTaskMoveToInitialPos() const
     );
 }
 
-RtTaskSharedPtr CoronaTreater::createTaskProcess(double xRange, double yRange,
+std::shared_ptr<RtTaskProcess> CoronaTreater::createTaskProcess(double xRange, double yRange,
                                                  double height,
                                                  int repeats, double speedFraction) const
 {
-    qDebug() << __FUNCTION__;
-    // Просчитать количество переездов
-    // Создать список
 
-    // MoveTo InitialPos
-    // Enable Corona
+    return std::make_shared<RtTaskProcess>(*this, xRange, yRange,
+                                           height,
+                                           repeats,
+                                           speedFraction);
 
-    // repeat xRange / width + 1
-        // JogY(yRange)
-        // JogX(Width)
+//    std::vector<RtTaskSharedPtr> tasksList;
+//    auto stripesCount = std::ceil(xRange / getCoronaWidth()) + 1;
 
-    // Disable Corona
-    // MoveToInitalPos
+//    tasksList.push_back(createTaskMoveToInitialPos());
+//    tasksList.push_back(
+//                Board::getInstance()
+//                .getAxis("Z")
+//                .createTaskMoveTo(getSpeedFractionZ(),
+//                                  height + getWorkingHeight()));
+//    // Enable Port
 
-    std::vector<RtTaskSharedPtr> tasksList;
-    auto stripesCount = xRange / getCoronaWidth();
+//    for(int i = 0; i < stripesCount; ++i) {
+//        auto dir = (i % 2 == 0) ? 1 : -1;
+//        tasksList.push_back(
+//                    Board::getInstance()
+//                    .getAxis("Y")
+//                    .createTaskJog(dir * speedFraction, yRange)
+//                    );
+//        if(i != stripesCount - 1) {
+//            tasksList.push_back(
+//                        Board::getInstance()
+//                        .getAxis("X")
+//                        .createTaskJog(getSpeedFractionX(),
+//                                       getCoronaWidth())
+//                        );
+//        }
+//    }
 
-    qDebug() << __FUNCTION__
-             << "Stripes:" << stripesCount
-             << "x_range:" << xRange
-             << "y_range:" << yRange;
+//    // Disable Port
 
+//    tasksList.push_back(createTaskMoveToInitialPos());
+//    auto taskMulti = std::make_shared<RtTaskMulti>(std::move(tasksList));
 
-    // GoTo initial pos
-    tasksList.push_back(createTaskMoveToInitialPos());
-    // GoTo Height
-    tasksList.push_back(
-                Board::getInstance()
-                .getAxis("Z")
-                .createTaskMoveTo(getSpeedFractionZ(),
-                                  height + getWorkingHeight()));
-    // Tasks for all stripes
-    for(int i = 0; i < stripesCount; ++i) {
-        auto dir = (i % 2 == 0) ? 1 : -1;
-        // move
-        tasksList.push_back(
-                    Board::getInstance()
-                    .getAxis("Y")
-                    .createTaskJog(dir * speedFraction, yRange)
-                    );
-        tasksList.push_back(
-                    Board::getInstance()
-                    .getAxis("X")
-                    .createTaskJog(getSpeedFractionX(),
-                                   getCoronaWidth())
-                    );
-    }
-    tasksList.push_back(createTaskMoveToInitialPos());
-    auto taskMulti = std::make_shared<RtTaskMulti>(std::move(tasksList));
-    return std::make_shared<RtTaskRepeated>(std::move(taskMulti), repeats);
+//    return std::make_shared<RtTaskRepeated>(std::move(taskMulti), repeats);
 }
 
 uint32_t CoronaTreater::getEnableTreaterPin() noexcept

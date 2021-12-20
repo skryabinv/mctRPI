@@ -14,12 +14,12 @@ public:
     RtTaskMulti(std::vector<RtTaskSharedPtr>&& tasks)
         : mTasks{std::move(tasks)} {}
     // TODO: Add construction from vector
-    // RtTask interface
+    // RtTask interface    
 private:
     bool runImpl() override;
     void cancelImpl() override;
 private:
-    std::vector<RtTaskSharedPtr> mTasks;
+    const std::vector<RtTaskSharedPtr> mTasks;
 };
 
 } // namespace core

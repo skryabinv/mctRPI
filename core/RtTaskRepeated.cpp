@@ -9,7 +9,7 @@ RtTaskRepeated::RtTaskRepeated(RtTaskSharedPtr task, int repeatsCount)
 
 bool RtTaskRepeated::runImpl()
 {
-    for(int i = 0; i < mRepeatsCount && !isCanceled(); ++i) {
+    for(mCurrentRepeat = 0; mCurrentRepeat < mRepeatsCount && !isCanceled(); ++mCurrentRepeat) {
         bool result = mTask->run();
         if(!result) return false;
     }

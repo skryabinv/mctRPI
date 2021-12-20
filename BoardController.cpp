@@ -3,16 +3,21 @@
 #include "core/Axis.h"
 #include "core/RtTaskDispatcher.h"
 #include "core/RtTaskMulti.h"
+#include "core/RtTaskProcess.h"
 #include "core/OutputPort.h"
 #include "core/CoronaTreater.h"
 #include "TaskAdapter.h"
 #include <QDebug>
+#include <QTimer>
 
 BoardController::BoardController(QObject *parent)
     : QObject(parent),
-    mCurrentTask{std::make_shared<core::RtTask>("TaskEmpty", true)}
+    mCurrentTask{std::make_shared<core::RtTask>("TaskEmpty", true)},
+    mTimer{new QTimer(this)}
 {
-
+    // Stop timer if any task finished
+    connect(this, &BoardController::taskFinished,
+            mTimer, &QTimer::stop);
 }
 
 double BoardController::getAxisPos(const QString &axis) const
@@ -93,7 +98,8 @@ bool BoardController::getOutputState() const
 }
 
 bool BoardController::startTreater(double xRange, double yRange, double height,
-                                       int repeatsCount, double speedFactor)
+                                   int repeatsCount, double speedFactor,
+                                   int progressTimeout)
 {       
     if(isReady()) {
         auto task = core::Board::getInstance()
@@ -101,7 +107,15 @@ bool BoardController::startTreater(double xRange, double yRange, double height,
                 .createTaskProcess(xRange, yRange,
                                    height,
                                    repeatsCount,
-                                   speedFactor);
+                                   speedFactor);       
+        if(progressTimeout != 0) {
+            mTimer->disconnect();
+            mTimer->start(progressTimeout);
+            connect(mTimer, &QTimer::timeout, this, [task, this](){
+                auto progress =  task->getProgress();
+                emit processProgressChanged(progress);
+            });
+        }
         mCurrentTask = wrapTask(std::move(task));
         core::RtTaskDispatcher::getInstance()
                 .scheduleTask(mCurrentTask);

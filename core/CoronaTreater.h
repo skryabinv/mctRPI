@@ -6,11 +6,13 @@
 namespace core {
 
 class OutputPort;
+class RtTaskProcess;
 
 // Corona treater: settings and task generation
 class CoronaTreater
 {
-public:
+public:    
+
     CoronaTreater();
     void setInitialPosX(double value) noexcept {
         mInitalPosX = value;
@@ -49,10 +51,10 @@ public:
     uint32_t getPortDelayMs() const noexcept {
         return mPortDelayMs;
     }
-
+    int getStripesCount(double xRange) const noexcept;
 
     RtTaskSharedPtr createTaskMoveToInitialPos() const;
-    RtTaskSharedPtr createTaskProcess(double xRange,
+    std::shared_ptr<RtTaskProcess> createTaskProcess(double xRange,
                                       double yRange,
                                       double height,
                                       int repeats, double speedFactor) const;
