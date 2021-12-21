@@ -13,8 +13,8 @@ class RtTaskProcess;
 class CoronaTreater
 {
 public:    
-
     CoronaTreater();
+    ~CoronaTreater();
     void setInitialPosX(double value) noexcept {
         mInitalPosX = value;
     }
@@ -67,8 +67,6 @@ public:
     RtTaskSharedPtr createTaskOff();
     RtTaskSharedPtr createTaskOnOff(bool state);
 
-//     Two port treaters control: enable with delay, disable with delay
-
     uint32_t getPinOn() noexcept;
     uint32_t getPinOff() noexcept;
 
@@ -82,7 +80,7 @@ public:
 
 private:
     RtTaskSharedPtr createPortTask(bool state, int delayMs);
-
+    void releaseCoronaState();
     void setCoronaState(bool value);
 
     double mInitalPosX;

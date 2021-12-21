@@ -2,7 +2,6 @@
 #include "RtTaskGeneric.h"
 #include <pthread.h>
 #include <sched.h>
-#include <iostream>
 #include <thread>
 
 // Сконфигурировать вызывающий поток как реал-тайм
@@ -50,8 +49,7 @@ bool RtTaskDispatcher::exec() {
     enum class status_t { init, done, error };
     std::atomic<status_t> status{status_t::init};
     mThread = std::async(std::launch::async, [this, &status](){
-        if(!configure_realtime(pthread_self())) {
-            std::cout << "Can't setup realtime thread" << std::endl;
+        if(!configure_realtime(pthread_self())) {            
             status = status_t::error;
         } else {
             status = status_t::done;
@@ -77,12 +75,10 @@ void RtTaskDispatcher::execImpl() {
         auto task = std::move(mQueue.front());
         mQueue.pop();
         lock.unlock();
-        mBusyFlag = true;
-        std::cout << "RunTask: " << task->getDescription() << std::endl;
+        mBusyFlag = true;        
         if(!task->run()) {
             break;
-        }
-        std::cout << "EndTask: " << task->getDescription() << std::endl;
+        }        
         mBusyFlag = false;
         lock.lock();
     }
@@ -109,8 +105,7 @@ void RtTaskDispatcher::waitForTask(RtTaskSharedPtr task) {
 }
 
 void RtTaskDispatcher::scheduleEndTask() {
-    scheduleTask(makeSharedGenericTask([](auto&){
-        std::cout << "EndTask" << std::endl;
+    scheduleTask(makeSharedGenericTask([](auto&){        
         return false;
     }));
 }

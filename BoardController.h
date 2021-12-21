@@ -23,7 +23,8 @@ public:
     Q_INVOKABLE bool homeAllAxis();
     Q_INVOKABLE bool jogStart(const QString &axis, double speedFactor, double distance);
     Q_INVOKABLE void cancel();
-    Q_INVOKABLE bool isHomingDone(const QString& axis) const;    
+    Q_INVOKABLE bool isHomingAllDone() const;
+    Q_INVOKABLE bool isHomingDone(const QString& axis) const;
     Q_INVOKABLE bool isBusy() const;
     Q_INVOKABLE bool isReady() const;
     Q_INVOKABLE bool getOutputState() const;
@@ -33,9 +34,7 @@ public:
     // axes ("XYZ", "XY", etc)
     Q_INVOKABLE bool moveToZeroPos(const QString& axes, double speedFraction);
     Q_INVOKABLE bool moveToInitialPos();
-
-    Q_INVOKABLE bool setTreaterEnabled(bool value);
-
+    Q_INVOKABLE bool setTreaterEnabled(bool value);    
     static BoardController& getInstance();
 signals:    
     void taskStarted();
@@ -50,7 +49,6 @@ private:
                                          const QString& axes);
     core::RtTaskSharedPtr mCurrentTask{};
     QTimer* mProcessTimer;
-
 
     // QObject interface
 public:

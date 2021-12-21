@@ -17,6 +17,19 @@ namespace Events {
 static constexpr QEvent::Type CoronaStateChanged = static_cast<QEvent::Type>(QEvent::Type::User + 3);
 }
 
+inline static const std::string& toStdAxisName(const QString& name) {
+    static const std::string empty{};
+    static const std::array<std::string, 3> axisNames{
+        std::string{"X"},
+        std::string{"Y"},
+        std::string{"Z"}
+    };
+    if(name == "X") return axisNames[0];
+    if(name == "Y") return axisNames[1];
+    if(name == "Z") return axisNames[2];
+    return empty;
+}
+
 BoardController::BoardController(QObject *parent)
     : QObject(parent),
     mCurrentTask{std::make_shared<core::RtTask>("TaskEmpty", true)},
@@ -35,7 +48,7 @@ BoardController::BoardController(QObject *parent)
 double BoardController::getAxisPos(const QString &axis) const
 {
     return core::Board::getInstance()
-            .getAxis(axis.toStdString())
+            .getAxis(toStdAxisName(axis))
             .getCurrentPos();
 }
 
@@ -44,7 +57,7 @@ bool BoardController::homeAxis(const QString &axis)
     if(isReady()) {
         mCurrentTask = wrapHomingTask(
                     core::Board::getInstance()
-                    .getAxis(axis.toStdString())
+                    .getAxis(toStdAxisName(axis))
                     .createTaskFindHome(),
                     axis);
         core::RtTaskDispatcher::getInstance()
@@ -68,13 +81,12 @@ bool BoardController::homeAllAxis()
     return false;
 }
 
-bool BoardController::jogStart(const QString& axis, double speedFactor, double distance)
-{    
+bool BoardController::jogStart(const QString& axisName, double speedFactor, double distance)
+{
     if(isReady()) {
-        mCurrentTask = wrapTask(
-                    core::Board::getInstance()
-                    .getAxis(axis.toStdString())
-                    .createTaskJog(speedFactor, distance));
+        auto& axisRef = core::Board::getInstance()
+                .getAxis(toStdAxisName(axisName));
+        mCurrentTask = wrapTask(axisRef.createTaskJog(speedFactor, distance));
         core::RtTaskDispatcher::getInstance()
                 .scheduleTask(mCurrentTask);
         return true;
@@ -85,12 +97,27 @@ bool BoardController::jogStart(const QString& axis, double speedFactor, double d
 void BoardController::cancel()
 {    
     mCurrentTask->cancel();
+    if(core::Board::getInstance()
+            .getCoronaTreater()
+            .getCoronaState()) {
+        auto taskTreaterOff = core::Board::getInstance()
+                .getCoronaTreater()
+                .createTaskOff();
+        core::RtTaskDispatcher::getInstance()
+                .scheduleTask(std::move(taskTreaterOff));
+    }
+}
+
+bool BoardController::isHomingAllDone() const
+{
+    return core::Board::getInstance()
+            .isHomingAllDone();
 }
 
 bool BoardController::isHomingDone(const QString &axis) const
 {
     return core::Board::getInstance()
-            .getAxis(axis.toStdString())
+            .getAxis(toStdAxisName(axis))
             .isHomingDone();
 }
 
@@ -112,7 +139,7 @@ bool BoardController::getOutputState() const
 bool BoardController::startProcess(const ProcessData& data,
                                    int progressIntervalMs)
 {       
-    if(isReady()) {
+    if(isReady() && isHomingAllDone()) {
         auto task = core::Board::getInstance()
                 .getCoronaTreater()
                 .createTaskProcess(data.rangeX, data.rangeY,
@@ -137,7 +164,7 @@ bool BoardController::moveToZeroPos(const QString &axes, double speedFraction)
 {
     if(isReady()) {
         std::vector<core::RtTaskSharedPtr> tasksList;
-        std::array<QString, 3> axisNames = {
+        static std::array<QString, 3> axisNames = {
             QStringLiteral("X"),
             QStringLiteral("Y"),
             QStringLiteral("Z")
@@ -145,7 +172,7 @@ bool BoardController::moveToZeroPos(const QString &axes, double speedFraction)
         for(const auto& axis: axisNames) {
             if(axes.contains(axis)) {
                 auto task = core::Board::getInstance()
-                        .getAxis(axis.toStdString())
+                        .getAxis(toStdAxisName(axis))
                         .createTaskMoveTo(speedFraction, 0.0);
                 tasksList.push_back(std::move(task));
             }

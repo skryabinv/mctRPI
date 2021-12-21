@@ -7,6 +7,7 @@
 #include "RtTaskGeneric.h"
 #include "RtTaskProcess.h"
 #include <iostream>
+#include <thread>
 #include <QDebug>
 
 namespace core {
@@ -15,6 +16,11 @@ CoronaTreater::CoronaTreater()
 {
     mPortCoronaOn = std::make_unique<OutputPort>();
     mPortCoronaOff = std::make_unique<OutputPort>();
+}
+
+CoronaTreater::~CoronaTreater()
+{
+    releaseCoronaState();
 }
 
 void CoronaTreater::setSpeedFractionX(double value) noexcept {
@@ -109,6 +115,13 @@ RtTaskSharedPtr CoronaTreater::createPortTask(bool state, int delayMs)
         setCoronaState(state);
         return true;
     });
+}
+
+void CoronaTreater::releaseCoronaState()
+{
+    mPortCoronaOff->getPort().set();
+    std::this_thread::sleep_for(std::chrono::milliseconds{500});
+    mPortCoronaOff->getPort().clr();
 }
 
 void CoronaTreater::setCoronaState(bool value)

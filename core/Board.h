@@ -13,21 +13,23 @@ class CoronaTreater;
 
 class Board {
 public:
+    inline static const std::string X{"X"};
+    inline static const std::string Y{"Y"};
+    inline static const std::string Z{"Z"};
     ~Board();
     RtTaskSharedPtr createTaskHomeAll() const;    
-    Axis& getAxis(const std::string& name) const;
-    OutputPort& getExternalOut(const std::string& name) const;
-    CoronaTreater& getCoronaTreater() const;
-    void createExternalOut(const std::string& name);
+    Axis& getAxis(const std::string& name) const;        
+    CoronaTreater& getCoronaTreater() const;    
+    bool isHomingAllDone() const;
     static void initInstance();
     // Ссылка на объект платы
     static Board& getInstance();
 private:
-    Board();
+    Board();    
     using board_ptr_t = std::unique_ptr<Board>;
     using axis_ptr_t = std::unique_ptr<Axis>;    
     inline static board_ptr_t sInstance;
-    std::unordered_map<std::string, axis_ptr_t> mAxisMap;    
+    std::array<axis_ptr_t, 3> mAxisMap;
     std::unique_ptr<CoronaTreater> mCoronaTreater;
 };
 
