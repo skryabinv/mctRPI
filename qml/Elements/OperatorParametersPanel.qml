@@ -34,21 +34,21 @@ Item {
                     title: "Ширина, мм:",
                     data: "x_range",
                     min: 1,
-                    max: 380,
+                    max: 550,
                     integer: false
                 },
                 {
                     title: "Глубина, мм:",
                     data: "y_range",
                     min: 1,
-                    max: 280,
+                    max: 400,
                     integer: false
                 },
                 {
                     title: "Высота, мм:",
                     data: "height",
                     min: 1,
-                    max: 200,
+                    max: 300,
                     integer: false
                 },
                 {

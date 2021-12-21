@@ -100,31 +100,31 @@ Rectangle {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
 
-            Rectangle {
-                id: bgClearChanges
-                width: 150
-                height: parent.height
-                color: panel.color
-                Text {
-                    anchors.centerIn: parent
-                    id: clearChanges
-                    font.family: Assets.Style.fontAwesome
-                    font.pixelSize: 36
-                    text: "\uf057"
-                    color: "red"
-                    verticalAlignment: Text.AlignVCenter
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    onPressed: {
-                        bgClearChanges.color = Assets.Style.colorBackgroundLight
-                    }
-                    onReleased: {
-                        bgClearChanges.color = panel.color
-                    }
-                }
+//            Rectangle {
+//                id: bgClearChanges
+//                width: 150
+//                height: parent.height
+//                color: panel.color
+//                Text {
+//                    anchors.centerIn: parent
+//                    id: clearChanges
+//                    font.family: Assets.Style.fontAwesome
+//                    font.pixelSize: 36
+//                    text: "\uf057"
+//                    color: "red"
+//                    verticalAlignment: Text.AlignVCenter
+//                }
+//                MouseArea {
+//                    anchors.fill: parent
+//                    onPressed: {
+//                        bgClearChanges.color = Assets.Style.colorBackgroundLight
+//                    }
+//                    onReleased: {
+//                        bgClearChanges.color = panel.color
+//                    }
+//                }
 
-            }
+//            }
 
             Rectangle {
                 id: bgSaveChanges

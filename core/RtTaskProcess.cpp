@@ -68,14 +68,11 @@ std::shared_ptr<RtTaskRepeated> RtTaskProcess::createTask(CoronaTreater &treater
     tasks.push_back(treater.createTaskOn());
 
     for(int i = 0; i < mStripesCount; ++i) {
-        auto dir = (i % 2 == 0) ? 1.0 : -1.0;
-        // Process along X
+        auto dir = (i % 2 == 0) ? 1.0 : -1.0;        
         tasks.push_back(Board::getInstance()
                         .getAxis("Y")
-                        .createTaskJog(dir * mSpeedY, mRangeY));
-        // Increment Stripes Counter
-        tasks.push_back(makeSharedGenericTask(getCurrentStripeIncFunc()));
-        // Moving along Y
+                        .createTaskJog(dir * mSpeedY, mRangeY));        
+        tasks.push_back(makeSharedGenericTask(getCurrentStripeIncFunc())); 
         if( i != mStripesCount - 1) {
             tasks.push_back(
                         Board::getInstance()

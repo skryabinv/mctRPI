@@ -43,7 +43,7 @@ Item {
         target: boardController
         function onProcessProgressChanged(value) {            
             progress = value
-            if(value === 0 && !visible) visible = true
+            visible = true
         }
     }
 
