@@ -65,18 +65,6 @@ RtTaskSharedPtr Axis::createTaskJog(double speedFraction, double distance)
         }, [this, inc]() {
             return mPosInSteps += inc;
         });
-
-
-
-//        while (!self.isCanceled() && gen) {
-//           auto delay = gen.getDelayFuncUs<delay::ProxyDelay, 2>();
-//           outStep.clr();
-//           delay();
-//           outStep.set();
-//           delay();
-//           ++gen;
-//           mPosInSteps += inc;
-//        }
         if(self.isCanceled() && gen) {
             // Deceleration
             gen.startDec();
@@ -85,16 +73,6 @@ RtTaskSharedPtr Axis::createTaskJog(double speedFraction, double distance)
             }, [this, inc]() {
                 return mPosInSteps += inc;
             });
-
-//            while (gen) {
-//               auto delay = gen.getDelayFuncUs<delay::ProxyDelay, 2>();
-//               outStep.clr();
-//               delay();
-//               outStep.set();
-//               delay();
-//               ++gen;
-//               mPosInSteps += inc;
-//            }
         }
         return true;
     };
@@ -131,7 +109,6 @@ RtTaskSharedPtr Axis::createTaskFindHome()
             ++gen_fwd;
             mPosInSteps += inc;
         }
-
 
         speed.applyHomeDir(out_dir, true);
         inc = speed.getHomeIncrement(true);

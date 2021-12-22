@@ -18,7 +18,6 @@ class BitsDecoder {
 public:
     template <typename It1, typename It2>
     BitsDecoder(It1 left_first, It1 left_last, It2 right_first) {
-        assert(left_last - left_first <= n);
         auto it1 = left_first;
         auto it2 = right_first;
         size_t counter{0};
@@ -40,8 +39,8 @@ public:
 private:
     template <int m, typename ArrayType>
     static uint32_t decodeImpl(const ArrayType& left,
-                                const ArrayType& right,
-                                uint32_t bits) noexcept {
+                               const ArrayType& right,
+                               uint32_t bits) noexcept {
         if constexpr (m < 0) return 0;
         else {
             return  (((bits >> left[m]) & 1) << right[m]) | decodeImpl<m - 1>(left, right, bits);
