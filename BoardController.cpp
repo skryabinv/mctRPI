@@ -38,6 +38,7 @@ BoardController::BoardController(QObject *parent)
     // Stop timer if any task finished
     connect(this, &BoardController::taskFinished,
             mProcessTimer, &QTimer::stop);
+    // Setup listener for corona treater
     core::Board::getInstance()
             .getCoronaTreater()
             .setCoronaStateChangedListener([this](bool){
@@ -81,11 +82,11 @@ bool BoardController::homeAllAxis()
     return false;
 }
 
-bool BoardController::jogStart(const QString& axisName, double speedFactor, double distance)
+bool BoardController::jogStart(const QString& axis, double speedFactor, double distance)
 {
     if(isReady()) {
         auto& axisRef = core::Board::getInstance()
-                .getAxis(toStdAxisName(axisName));
+                .getAxis(toStdAxisName(axis));
         mCurrentTask = wrapTask(axisRef.createTaskJog(speedFactor, distance));
         core::RtTaskDispatcher::getInstance()
                 .scheduleTask(mCurrentTask);

@@ -14,8 +14,8 @@ public:
     Q_INVOKABLE bool findHome();
     Q_INVOKABLE bool moveToInitialPos();
     Q_INVOKABLE bool moveToZeroPos();
-    Q_INVOKABLE bool setProcessParameters(double xRange,
-                                          double yRange,
+    Q_INVOKABLE bool setProcessParameters(double rangeX,
+                                          double rangeY,
                                           double height,
                                           int repeatsCount,
                                           double speedFactor);

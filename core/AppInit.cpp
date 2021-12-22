@@ -17,7 +17,8 @@ AppInit::AppInit()
 AppInit::~AppInit()
 {
     // Деинициализация
-    RtTaskDispatcher::getInstance().scheduleEndTask();
+    RtTaskDispatcher::getInstance().scheduleEndTask();    
+    system("shutdown -P now");
 }
 
 } // namespace core

@@ -11,6 +11,23 @@
 
 namespace core {
 
+template<typename StopingPredicate, typename PerStepFunc>
+static inline void move(AccDecPulseGenerator& gen,
+                        const gpio::PortOut& stepPort,
+                        StopingPredicate stop,
+                        PerStepFunc func) {
+    while (!stop() && gen) {
+        auto delay = gen.getDelayFuncUs<delay::ProxyDelay, 2>();
+        stepPort.clr();
+        delay();
+        stepPort.set();
+        delay();
+        ++gen;
+        func();
+    }
+}
+
+
 double Axis::getCurrentPos() const
 {    
     return gearRatio.getMmsForSteps(mPosInSteps);
@@ -41,29 +58,43 @@ RtTaskSharedPtr Axis::createTaskJog(double speedFraction, double distance)
                     sspeed.getAcceleration(),
                     sspeed.getDeceleration()
         };
-        outDir.setValue(speed > 0);
-        int inc = speed > 0 ? 1 : -1;
-        while (!self.isCanceled() && gen) {
-           auto delay = gen.getDelayFuncUs<delay::ProxyDelay, 2>();
-           outStep.clr();
-           delay();
-           outStep.set();
-           delay();
-           ++gen;           
-           mPosInSteps += inc;
-        }
+        auto inc = speed > 0 ? 1 : -1;
+        outDir.setValue(speed > 0);        
+        move(gen, outStep, [&self](){
+            return self.isCanceled();
+        }, [this, inc]() {
+            return mPosInSteps += inc;
+        });
+
+
+
+//        while (!self.isCanceled() && gen) {
+//           auto delay = gen.getDelayFuncUs<delay::ProxyDelay, 2>();
+//           outStep.clr();
+//           delay();
+//           outStep.set();
+//           delay();
+//           ++gen;
+//           mPosInSteps += inc;
+//        }
         if(self.isCanceled() && gen) {
             // Deceleration
             gen.startDec();
-            while (gen) {
-               auto delay = gen.getDelayFuncUs<delay::ProxyDelay, 2>();
-               outStep.clr();
-               delay();
-               outStep.set();
-               delay();
-               ++gen;
-               mPosInSteps += inc;
-            }
+            move(gen, outStep, [](){
+                return false;
+            }, [this, inc]() {
+                return mPosInSteps += inc;
+            });
+
+//            while (gen) {
+//               auto delay = gen.getDelayFuncUs<delay::ProxyDelay, 2>();
+//               outStep.clr();
+//               delay();
+//               outStep.set();
+//               delay();
+//               ++gen;
+//               mPosInSteps += inc;
+//            }
         }
         return true;
     };
@@ -152,15 +183,22 @@ RtTaskSharedPtr Axis::createTaskMoveTo(double speedFraction,
                     sspeed.getAcceleration(),
                     sspeed.getDeceleration() };
         out_dir.setValue(dist > 0);
-        while (!self.isCanceled() && gen) {
-            auto delay_func = gen.getDelayFuncUs<delay::ProxyDelay, 2>();
-            out_step.set();
-            delay_func();
-            out_step.clr();
-            delay_func();
-            ++gen;
-            mPosInSteps += inc;
-        }
+        move(gen, out_step, [&self](){
+            return self.isCanceled();
+        }, [this, inc]() {
+            return mPosInSteps += inc;
+        });
+
+
+//        while (!self.isCanceled() && gen) {
+//            auto delay_func = gen.getDelayFuncUs<delay::ProxyDelay, 2>();
+//            out_step.set();
+//            delay_func();
+//            out_step.clr();
+//            delay_func();
+//            ++gen;
+//            mPosInSteps += inc;
+//        }
         return true;
     };
     return makeSharedGenericTask(std::move(func), "TaskAxisMoveTo");

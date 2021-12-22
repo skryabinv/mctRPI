@@ -61,12 +61,14 @@ bool OperatorModeController::moveToZeroPos()
             .moveToZeroPos(QStringLiteral("XY"), speed);
 }
 
-bool OperatorModeController::setProcessParameters(double xRange, double yRange,
-                                                  double height, int repeatsCount,
+bool OperatorModeController::setProcessParameters(double rangeX,
+                                                  double rangeY,
+                                                  double height,
+                                                  int repeatsCount,
                                                   double speedFactor)
 {
-    mProcessParameters[keys::x_range] = xRange;
-    mProcessParameters[keys::y_range] = yRange;
+    mProcessParameters[keys::x_range] = rangeX;
+    mProcessParameters[keys::y_range] = rangeY;
     mProcessParameters[keys::height] = height;
     mProcessParameters[keys::repeats_count] = repeatsCount;
     mProcessParameters[keys::speed_factor] = speedFactor;    
